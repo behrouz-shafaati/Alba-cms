@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* === Base (Light Mode) === */
+    --background: 0 0% 100%; /* رنگ پس‌زمینه اصلی صفحه */
+    --foreground: 224 71.4% 4.1%; /* رنگ متن اصلی */
+
+    --card: 0 0% 100%; /* پس‌زمینه کارت‌ها */
+    --card-foreground: 224 71.4% 4.1%; /* رنگ نوشته داخل کارت */
+
+    --popover: 0 0% 100%; /* پس‌زمینه پاپ‌آپ‌ها و منوها */
+    --popover-foreground: 224 71.4% 4.1%; /* رنگ متن داخل پاپ‌آپ */
+
+    --primary: 142.1 76.2% 36.3%; /* رنگ اصلی (دکمه‌ها، لینک‌های مهم) */
+    --primary-foreground: 355.7 100% 97.3%; /* رنگ نوشته روی primary */
+
+    --secondary: 240 4.8% 95.9%; /* رنگ پس‌زمینه عناصر ثانویه */
+    --secondary-foreground: 240 5.9% 10%; /* رنگ متن در عناصر ثانویه */
+
+    --muted: 240 4.8% 95.9%; /* پس‌زمینه عناصر غیرفعال */
+    --muted-foreground: 240 3.8% 46.1%; /* رنگ متن غیرفعال */
+
+    --accent: 240 4.8% 95.9%; /* رنگ تأکیدی (hover، highlight) */
+    --accent-foreground: 240 5.9% 10%; /* رنگ نوشته روی accent */
+
+    --destructive: 0 84.2% 60.2%; /* رنگ دکمه‌های خطرناک (حذف، هشدار) */
+    --destructive-foreground: 0 0% 98%; /* رنگ متن روی destructive */
+
+    --border: 240 5.9% 90%; /* رنگ خطوط و حاشیه‌ها */
+    --input: 240 5.9% 90%; /* رنگ پس‌زمینه ورودی‌ها */
+    --ring: 142.1 76.2% 36.3%; /* رنگ حلقه فوکوس (focus ring) */
+
+    --radius: 0.5rem; /* گردی گوشه‌ها */
+  }
+
+  .dark {
+    /* === Dark Mode === */
+    --background: 224 71.4% 4.1%; /* پس‌زمینه اصلی تیره */
+    --foreground: 210 20% 98%; /* رنگ نوشته اصلی روشن */
+
+    --card: 224 71.4% 4.1%; /* پس‌زمینه کارت‌ها در حالت تاریک */
+    --card-foreground: 210 20% 98%; /* متن روی کارت در حالت تاریک */
+
+    --popover: 224 71.4% 4.1%; /* پس‌زمینه پاپ‌آپ‌ها */
+    --popover-foreground: 210 20% 98%; /* متن در پاپ‌آپ‌ها */
+
+    --primary: 142.1 70.6% 45.3%; /* رنگ اصلی روشن‌تر در حالت تاریک */
+    --primary-foreground: 144.9 80.4% 10%; /* متن تیره روی primary */
+
+    --secondary: 240 3.7% 15.9%; /* رنگ پس‌زمینه ثانویه تیره */
+    --secondary-foreground: 0 0% 98%; /* رنگ متن روشن ثانویه */
+
+    --muted: 0 0% 15%; /* پس‌زمینه غیرفعال در حالت تاریک */
+    --muted-foreground: 240 5% 64.9%; /* رنگ نوشته غیرفعال */
+
+    --accent: 12 6.5% 15.1%; /* رنگ تأکیدی برای hover در حالت تاریک */
+    --accent-foreground: 0 0% 98%; /* رنگ نوشته روی accent */
+
+    --destructive: 0 62.8% 30.6%; /* رنگ هشدار تیره‌تر */
+    --destructive-foreground: 0 85.7% 97.3%; /* متن روشن روی destructive */
+
+    --border: 240 3.7% 15.9%; /* رنگ خطوط در حالت تاریک */
+    --input: 240 3.7% 15.9%; /* رنگ پس‌زمینه inputها در حالت تاریک */
+    --ring: 142.4 71.8% 29.2%; /* رنگ حلقه فوکوس در حالت تاریک */
+  }
+}
+
+@layer utilities {
+  .ltr {
+    direction: ltr;
+  }
+}
+
+/* styles.css */
+.collapsibleDropdown {
+  overflow: hidden;
+}
+.collapsibleDropdown[data-state='open'] {
+  animation: slideDown 200ms ease-out;
+}
+.collapsibleDropdown[data-state='closed'] {
+  animation: slideUp 200ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+/* typography.css */
+h1 {
+  font-size: 2rem; /* ~40px */
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem; /* ~32px */
+  line-height: 1.3;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+h4 {
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+h5 {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+h6 {
+  font-size: 0.5rem;
+  line-height: 1.5;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+/* جدول */
+
+.tiptap .is-editor-empty:first-child::before {
+  @apply text-muted-foreground pointer-events-none;
+  content: attr(data-placeholder);
+  float: right;
+  height: 0;
+}
+
+.prose .selectedCell {
+  background-color: rgba(59, 130, 246, 0.2);
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+}
+
+.prose table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 14px;
+}
+
+.prose table th,
+.prose table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.prose table th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-inline-start: 1.5rem;
+}
+
+.prose ol {
+  list-style-type: persian;
+  padding-inline-start: 1.5rem;
+}
+
+.prose li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-size: 18px;
+}
+
+.embla {
+  max-width: 90rem;
+  /* margin: auto; */
+  --slide-spacing: 0.5rem;
+  --slide-size: 75%;
+}
+
+.embla__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+  transform: translate3d(0, 0, 0);
+}
+
+.parallax .embla {
+  max-width: 80rem;
+  margin: auto;
+  --slide-spacing: 0.5rem;
+  --slide-size: 80%;
+}
+
+.parallax .embla__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.parallax .embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+
+.parallax .embla__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+  transform: translate3d(0, 0, 0);
+}
+
+.parallax .embla__parallax {
+  border-radius: 0.5rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parallax .embla__parallax__layer {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.2s ease-out;
+}
+
+.parallax .embla__parallax__img {
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*======= Date picker ============*/
+.rmdp-container {
+  display: inline-block;
+  height: max-content;
+  width: 100%;
+}
+
+/*======= ThemeToggle ============*/
+:root,
+.light,
+.dark {
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+/* وقتی صفحه فقط mount شده، transition را غیرفعال کن */
+html[data-theme-ready='true'] :root,
+html[data-theme-ready='true'] .light,
+html[data-theme-ready='true'] .dark {
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+/*=======  Page Process Bar ============*/
+#nprogress .bar {
+  background: #01963f !important; /* رنگ آبی Tailwind */
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #01963f, 0 0 5px #01963f !important;
+}

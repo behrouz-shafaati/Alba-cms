@@ -1,0 +1,137 @@
+.editor {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.editor :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.editor h1 {
+  font-size: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.editor h2 {
+  font-size: 1.25rem;
+}
+
+.editor h3 {
+  font-size: 1.125rem;
+}
+
+.editor h4 {
+  font-size: 1rem;
+}
+
+.editor h5 {
+  font-size: 1.125rem;
+}
+
+.editor h6 {
+  font-size: 1rem;
+}
+
+.editor p {
+  margin: 1rem 0;
+}
+
+.editor a {
+  color: #3b82f6;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.editor a:hover {
+  color: #2563eb;
+}
+
+.editor blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  border-right: 4px solid #3b82f6;
+  font-style: italic;
+  border-radius: 0.5rem;
+}
+
+.editor ul,
+.editor ol {
+  padding-right: 1.5rem;
+  margin: 1rem 0;
+}
+
+.editor ul li,
+.editor ol li {
+  margin-bottom: 0.5rem;
+}
+
+.editor ul {
+  list-style-type: disc;
+}
+
+.editor ol {
+  list-style-type: decimal;
+}
+
+.editor img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.75rem;
+}
+
+.editor code {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  direction: ltr;
+}
+
+.editor pre {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.editor hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid;
+}
+
+/* چدول */
+
+/* وقتی کل سلول انتخاب بشه */
+.selectedCell {
+  background-color: rgba(59, 130, 246, 0.2);
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+}
+
+/* وقتی کاربر داره Drag می‌کنه برای انتخاب چند سلول */
+.ProseMirror .column-resize-handle {
+  background-color: rgba(59, 130, 246, 0.8);
+  width: 2px;
+  position: absolute;
+  top: 0;
+  bottom: -2px;
+  z-index: 20;
+}
+
+.tiptap-accordion-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+.accordion-header {
+  background: #f9fafb;
+}
+.accordion-title:focus {
+  outline: none;
+}
+.accordion-body {
+  background: white;
+}
