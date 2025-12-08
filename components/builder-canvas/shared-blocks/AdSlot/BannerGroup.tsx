@@ -8,6 +8,13 @@ import { useDeviceType } from '@/hooks/use-device-type'
 import { X } from 'lucide-react'
 import { BannerData, BannerManager } from '@/lib/bannerManager'
 
+// type AdSlotData = {
+//   aspect: string
+//   placement: string
+//   linkedCampaign: string | null
+//   fallbackBehavior: FallbackBehaviorType
+// }
+
 type BannerGroupProps = AdSlotWidgetProps &
   Block &
   React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
@@ -15,6 +22,7 @@ type BannerGroupProps = AdSlotWidgetProps &
 export default function BannerGroup({
   blockData,
   widgetName,
+  pageSlug,
   ...props
 }: BannerGroupProps) {
   const locale = 'fa'
@@ -81,6 +89,30 @@ export default function BannerGroup({
     }
   }, [])
 
+  //------- if was server component -------//
+  // let slots: Record<string, AdSlotData> = {}
+  // for (let i = 0; i < count; i++) {
+  //   const bannerSlotId = `${id}${i}`
+  //   slots[bannerSlotId] = {
+  //     aspect: settings?.aspect || defaultAspect,
+  //     placement: settings?.placement || 'all',
+  //     linkedCampaign: content?.linkedCampaign || 'none',
+  //     fallbackBehavior: settings?.fallbackBehavior || 'random',
+  //   }
+  // }
+
+  // const { banners, sendedAlready } = await campaignCtrl.getBanners({
+  //   adSlots: slots,
+  //   originPostSlug: pageSlug || '',
+  //   sendedAlready: [], // body.sendedAlready,
+  //   locale: 'fa',
+  // })
+
+  // // map by id
+  // const bannersMap = new Map(banners.map((b) => [b.slotId, b]))
+
+  //------- if was server component end -------//
+
   //  اگر قرار نیست نمایش داده شود → کاملاً رندر نشود
   if (!isVisible) return null
   if (countDontHaveBanner === count) return null
@@ -107,7 +139,7 @@ export default function BannerGroup({
               key={i}
               banerSlotId={slotId}
               blockData={blockData}
-              banner={banners?.[slotId]}
+              banner={banners[slotId]}
               {...props}
             />
           )

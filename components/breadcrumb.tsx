@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from 'lucide-react'
-import Link from 'next/link'
 import React from 'react'
+import { FastLink } from './FastLink'
 
 export type BreadCrumbType = {
   title: string
@@ -22,13 +22,13 @@ export function BreadCrumb({ items }: BreadCrumbPropsType) {
         return (
           <React.Fragment key={`${item.title}-${index}`}>
             <ChevronLeftIcon className="h-4 w-4" />
-            <Link
+            <FastLink
               href={item.link}
               className={` 
                font-medium ${className}`}
             >
               {item.title}
-            </Link>
+            </FastLink>
           </React.Fragment>
         )
       })}

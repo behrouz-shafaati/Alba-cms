@@ -333,11 +333,11 @@ class controller extends baseController {
       campaignId: string | null
     }[] = []
     /*
-adSlots = {
-  "6907444240428ecc324c5c940": { aspect: "4/1", placement: "all", linkedCampaign: null },
-  "6907444f40428ecc324c5c950": { aspect: "4/1", placement: "all", linkedCampaign: null },
-  "6907444f40428ecc324c5c951": { aspect: "4/1", placement: "all", linkedCampaign: null },
-}*/
+    adSlots = {
+      "6907444240428ecc324c5c940": { aspect: "4/1", placement: "all", linkedCampaign: null },
+      "6907444f40428ecc324c5c950": { aspect: "4/1", placement: "all", linkedCampaign: null },
+      "6907444f40428ecc324c5c951": { aspect: "4/1", placement: "all", linkedCampaign: null },
+    }*/
 
     for (const [slotId, slotData] of Object.entries(adSlots)) {
       const fallbackBehavior = slotData?.fallbackBehavior || 'random'

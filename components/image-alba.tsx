@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { getTranslation } from '@/lib/utils'
 import type { File as FileType } from '@/lib/entity/file/interface' // adjust path if needed
 // import { Skeleton } from './ui/skeleton'
-import Link from 'next/link'
+import { FastLink } from './FastLink'
 
 type ImageAlbaProps = {
   src?: string
@@ -78,13 +78,13 @@ export function ImageAlba({
   )
 
   return file?.href ? (
-    <Link
+    <FastLink
       href={file.href}
       target={file.target ?? '_blank'}
       rel="noopener noreferrer"
     >
       {imageElement}
-    </Link>
+    </FastLink>
   ) : (
     imageElement
   )

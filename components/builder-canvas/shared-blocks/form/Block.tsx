@@ -1,4 +1,3 @@
-'use server'
 // کامپوننت نمایشی بلاک
 import React from 'react'
 import { Block } from '../../../builder-canvas/types'
@@ -23,8 +22,6 @@ export default async function FormBlock({
   ...props
 }: FormBlockProps) {
   const locale = 'fa'
-  const { user } = await getSession()
-  console.log('#234897 props in formBlock:', props)
   const { content } = blockData
 
   const result = await getForms({
@@ -45,7 +42,6 @@ export default async function FormBlock({
   // فقط داده‌ی ساده به Form پاس بده
   return form ? (
     <Form
-      user={user}
       form={form}
       {...props}
       blockData={blockData}

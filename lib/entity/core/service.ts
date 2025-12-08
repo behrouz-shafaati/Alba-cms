@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import { Types } from 'mongoose'
 import { Id, Pagination, QueryFind, QueryResponse } from './interface'
 import dbConnect from '@/lib/dbConnect'
@@ -314,5 +313,13 @@ export default class service {
       totalPages,
       totalDocument: countTotalDocument,
     }
+  }
+
+  async bulkWrite(
+    operations: any,
+    { ordered }: { ordered: boolean } = { ordered: false }
+  ) {
+    await dbConnect()
+    return this.model.bulkWrite(operations, { ordered })
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import Link from 'next/link'
 import timeAgo from '@/lib/utils/timeAgo'
+import { FastLink } from '../FastLink'
 
 type PostCoverProps = {
   createdAt: any
@@ -10,7 +10,7 @@ type PostCoverProps = {
   styles?: any
 } & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
 
-export const PostMetaData = ({
+const PostMetaData = ({
   createdAt,
   author,
   readingDuration,
@@ -28,9 +28,9 @@ export const PostMetaData = ({
           </Avatar>
         </div>
         <div className="text-xs  flex flex-col justify-between">
-          <Link href={`/author/${author?.userName}`} className="flex gap-4">
+          <FastLink href={`/author/${author?.userName}`} className="flex gap-4">
             <span>{author?.name}</span>
-          </Link>
+          </FastLink>
           <span className="font-thin">
             خواندن {readingDuration} دقیقه . {timeAgo(createdAt)}
           </span>
@@ -39,3 +39,5 @@ export const PostMetaData = ({
     </div>
   )
 }
+
+export default PostMetaData

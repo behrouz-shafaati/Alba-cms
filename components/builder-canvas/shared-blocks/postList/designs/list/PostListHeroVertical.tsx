@@ -3,12 +3,12 @@ import { PostCover } from '@/components/post/cover'
 import { PostTitle } from '@/components/post/title'
 import { PostExcerpt } from '@/components/post/excerpt'
 import PostHorizontalCard from '../card/ArticalHorizontalCard'
-import Link from 'next/link'
 import getTranslation from '@/lib/utils/getTranslation'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { Block } from '@/components/builder-canvas/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {
   posts: Post[]
@@ -53,7 +53,7 @@ export const PostListHeroVertical = ({
       >
         {/* ستون اصلی — همیشه ستون مرجع ارتفاع */}
         <div className="relative overflow-hidden rounded-xl border bg-card">
-          <Link href={firstPost.href}>
+          <FastLink href={firstPost.href}>
             <PostCover
               file={firstPost.image}
               postType={firstPost.type}
@@ -62,7 +62,7 @@ export const PostListHeroVertical = ({
             />
             <PostTitle title={t.title} />
             <PostExcerpt content={t.excerpt} />
-          </Link>
+          </FastLink>
         </div>
 
         {/* ستون لیست — تطابق ارتفاع با چپ + اسکرول اگر بیشتر شد */}

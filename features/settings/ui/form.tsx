@@ -8,6 +8,7 @@ import { FormSMS } from './form-sms'
 import { FormEmail } from './form-email'
 import { FormAD } from './form-ad'
 import { FormUsers } from './form-users'
+import { FormWPEmigration } from '@/lib/emigration/wp/ui/form'
 
 type FormProps = {
   tab:
@@ -18,6 +19,7 @@ type FormProps = {
     | 'sms'
     | 'ad'
     | 'users'
+    | 'wp-emigration'
 }
 
 export default async function Form({ tab }: FormProps) {
@@ -38,6 +40,7 @@ export default async function Form({ tab }: FormProps) {
       {tab === 'sms' && <FormSMS settings={settings} />}
       {tab === 'email' && <FormEmail settings={settings} />}
       {tab === 'users' && <FormUsers settings={settings} />}
+      {tab === 'wp-emigration' && <FormWPEmigration settings={settings} />}
     </div>
   )
 }

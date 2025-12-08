@@ -1,11 +1,11 @@
 // کامپوننت نمایشی بلاک
 import React, { Suspense } from 'react'
-import Link from 'next/link'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { MoveLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
+import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {
   posts: Post[]
@@ -72,13 +72,13 @@ export const PostListColumn = ({
         </Suspense>
         <div className={`mt-2 `}>
           <div className="grid grid-cols-1 gap-2">{postItems}</div>
-          <Link
+          <FastLink
             href={showMoreHref}
             className="text-xs text-gray-600 dark:text-gray-300 font-normal flex flex-row items-center gap-2 w-full text-center justify-center p-4"
           >
             <span>مشاهده مطالب بیشتر</span>
             <MoveLeft size={20} className="text-primary" />
-          </Link>
+          </FastLink>
         </div>
       </div>
     </div>

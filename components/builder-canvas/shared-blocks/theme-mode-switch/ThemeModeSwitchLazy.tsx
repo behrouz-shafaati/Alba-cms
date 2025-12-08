@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 const ThemeModeSwitch = dynamic(() => import('./ThemeModeSwitch'), {
   ssr: false, // هیچ SSR اتفاق نمی‌افتد
   loading: () => (
-    <div className="py-2">
+    <div className="px-2">
       <Skeleton className="h-6 w-6 rounded-full" />
     </div>
   ),

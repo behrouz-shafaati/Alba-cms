@@ -4,7 +4,6 @@ import React, { useCallback } from 'react'
 import { Block } from '../../types'
 import computedStyles from '../../utils/computedStyles'
 import Image from 'next/image'
-import Link from 'next/link'
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { FileDetails } from '@/lib/entity/file/interface'
@@ -12,6 +11,7 @@ import LeftSliderButton from '@/components/ui/left-slider-button'
 import RightSliderButton from '@/components/ui/right-slider-button'
 import EmptyBlock from '../../components/EmptyBlock'
 import getTranslation from '@/lib/utils/getTranslation'
+import { FastLink } from '@/components/FastLink'
 
 type ImageSliderBlockProps = {
   widgetName: string
@@ -81,9 +81,9 @@ export const ImageSliderBlock = ({
     )
     return img.href ? (
       <div className="relative min-w-full" key={i}>
-        <Link href={img.href} target="_blank" rel="noopener noreferrer">
+        <FastLink href={img.href} target="_blank" rel="noopener noreferrer">
           {imageElement}
-        </Link>
+        </FastLink>
       </div>
     ) : (
       <div className="relative min-w-full" key={i}>

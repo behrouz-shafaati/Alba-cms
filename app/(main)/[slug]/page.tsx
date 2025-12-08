@@ -1,4 +1,6 @@
 export const dynamic = 'force-static'
+// export const dynamicParams = false // صفحه ی جدید با ری ولیدت هم نشان داده نمی شود
+export const revalidate = 86400 // 24 hours
 // export const dynamic = 'force-dynamic'
 import { PageRenderer } from '@/components/builder-canvas/pageRenderer'
 import pageCtrl from '@/features/page/controller'

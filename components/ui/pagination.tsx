@@ -2,12 +2,12 @@
 
 import { MoveLeft, MoveRight } from 'lucide-react'
 import clsx from 'clsx'
-import Link from 'next/link'
 import { generatePagination } from '@/lib/utils'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { LinkButton } from './link-button'
 import { Button } from './button'
 import { Suspense } from 'react'
+import { FastLink } from '../FastLink'
 
 function PaginationComponent({ totalPages }: { totalPages: number }) {
   const pathname = usePathname()
@@ -131,9 +131,9 @@ function PaginationArrow({
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link className={className} href={href}>
+    <FastLink className={className} href={href}>
       {icon}
-    </Link>
+    </FastLink>
   )
 }
 

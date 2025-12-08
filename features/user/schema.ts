@@ -1,6 +1,6 @@
-import { hashPassword } from '@/lib/utils'
 import mongoose, { Schema, model } from 'mongoose'
 import { UserSchema } from '@/features/user/interface'
+import hashPassword from '@/lib/utils/hashPassword'
 
 const TranslationsUserSchema = new Schema(
   {
@@ -43,6 +43,13 @@ const userSchema = new Schema<UserSchema>(
     language: String,
     darkMode: Boolean,
     active: { type: Boolean, default: true },
+    passwordNeedsReset: {
+      type: Boolean,
+      default: false,
+    },
+    metadata: {
+      type: Schema.Types.Mixed,
+    },
     deleted: { type: Boolean, default: false },
     translations: [TranslationsUserSchema],
   },
@@ -60,6 +67,7 @@ userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await hashPassword(this.password)
   }
+  this.email = this.email.toLowerCase()
   next()
 })
 
@@ -79,7 +87,11 @@ userSchema.pre('findOneAndUpdate', async function (next) {
     if (update.password) {
       update.password = hashed
     } else {
-      update.$set = { ...(update.$set || {}), password: hashed }
+      update.$set = {
+        ...(update.$set || {}),
+        password: hashed,
+        email: update.$set.email.toLowerCase(),
+      }
     }
 
     this.setUpdate(update)

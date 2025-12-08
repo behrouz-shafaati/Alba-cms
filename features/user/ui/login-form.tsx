@@ -8,8 +8,6 @@ import { KeyRound, UserIcon } from 'lucide-react'
 import Password from '@/components/form-fields/password'
 import SubmitButton from '@/components/form-fields/submit-button'
 import { ActionsState } from '@/types'
-import Image from 'next/image'
-import { getTranslation } from '@/lib/utils'
 import ImageAlba from '@/components/image-alba'
 
 function UserAuthFormComponent() {

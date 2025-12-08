@@ -7,13 +7,13 @@ import { PostBreadcrumb } from '@/components/post/breadcrumb'
 import { PostComments } from '@/components/post/comments'
 import { PostCommentForm } from '@/components/post/comment-form'
 import { PostContent } from '@/components/post/content'
-import { PostMetaData } from '@/components/post/meta-data'
 import { PostTitle } from '@/components/post/title'
 import ShareButtons from '@/components/share/share-buttons'
 import { Settings } from '@/features/settings/interface'
 import { PostTags } from '@/components/post/tags'
 import { PostAuthorCard } from '@/components/post/author-card'
 import { CommentsHeader } from '@/components/post/comments-header'
+import PostMetaDataLazy from '@/components/post/meta-data-lazy'
 
 type props = {
   locale?: string
@@ -52,7 +52,7 @@ const SinglePageBlog = ({
         />
       )}
       <div className="flex flex-col md:flex-row items-center justify-center md:justify-between overflow-hidden">
-        <PostMetaData
+        <PostMetaDataLazy
           author={post?.user}
           createdAt={post.createdAt}
           readingDuration={readingDuration}

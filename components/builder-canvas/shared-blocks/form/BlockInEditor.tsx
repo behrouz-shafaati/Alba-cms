@@ -73,13 +73,19 @@ export const FormBlockEditor = ({
     form?.translations?.[0] ||
     {}
 
-  const formContent = form?.content?.rows ? (
-    <RendererRows rows={form?.content?.rows} editroMode={true} {...props} />
-  ) : null
+  const formContent = (
+    <div>
+      پیش‌نمایش فرم: {translation?.title || form?.title || 'بدون عنوان'}
+    </div>
+  )
+
+  // این برای سرروره
+  // const formContent = form?.content?.rows ? (
+  //   <RendererRows rows={form?.content?.rows} editroMode={true} {...props} />
+  // ) : null
 
   return (
     <Form
-      user={user}
       form={form}
       {...props}
       blockData={blockData}

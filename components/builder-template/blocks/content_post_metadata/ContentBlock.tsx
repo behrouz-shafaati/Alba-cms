@@ -4,8 +4,8 @@ import React from 'react'
 import { Block } from '@/components/builder-canvas/types'
 
 import { User } from '@/features/user/interface'
-import { PostMetaData } from '@/components/post/meta-data'
 import computedStyles from '@/components/builder-canvas/utils/computedStyles'
+import PostMetaDataLazy from '@/components/post/meta-data-lazy'
 
 type ContentBlockProps = {
   content: { author: User; createdAt: string; readingDuration: number }
@@ -27,7 +27,7 @@ export const ContentBlock = ({
   const { author, createdAt, readingDuration } = content
   const { settings } = blockData
   return content ? (
-    <PostMetaData
+    <PostMetaDataLazy
       author={author}
       createdAt={createdAt}
       readingDuration={readingDuration}

@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 const Search = dynamic(() => import('./Block'), {
   ssr: false, // هیچ SSR اتفاق نمی‌افتد
   loading: () => (
-    <div className="py-2">
+    <div className="px-2">
       <Skeleton className="w-6 h-6 rounded-full" />
     </div>
   ),

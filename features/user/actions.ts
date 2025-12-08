@@ -9,12 +9,14 @@ import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
 import { revalidatePath } from 'next/cache'
 import { getSettings } from '../settings/controller'
 import { Settings } from '../settings/interface'
-import { comparePassword, encrypt } from '@/lib/utils'
 import verificationCtrl from '../verification/controller'
 import { cookies } from 'next/headers'
 import { getSession } from '@/lib/auth'
 import { User } from './interface'
 import { can } from '@/lib/utils/can.server'
+import verifyPassword from '@/lib/utils/verifyPassword'
+import hashPassword from '@/lib/utils/hashPassword'
+import { encrypt } from '@/lib/utils'
 
 const FormSchema = z.object({
   firstName: z
@@ -81,10 +83,8 @@ const SignupFormSchema = z.object({
     })
     .min(1, { message: 'لطفا موبال را وارد کنید.' }),
   password: z
-    .string({
-      required_error: 'لطفا رمز ورود را وارد کنید.',
-    })
-    .min(1, { message: 'لطفا رمز ورود را وارد کنید.' }),
+    .string({ required_error: 'لطفاً رمز ورود را وارد کنید.' })
+    .min(6, { message: 'رمز ورود باید حداقل ۶ کاراکتر باشد.' }),
   confirmPassword: z
     .string({
       required_error: 'لطفا تایید رمز ورود را وارد کنید.',
@@ -146,7 +146,7 @@ export async function loginAction(
     user = await userCtrl.findOne({
       filters: { $or: [{ email: identifier }, { mobile: identifier }] },
     })
-    console.log('#887 user:', user)
+    console.log('#88s7 user:', user)
     if (!user)
       return {
         values: rawValues,
@@ -154,13 +154,33 @@ export async function loginAction(
         success: false,
       }
 
-    const flgPasswordCorrect = await comparePassword(password, user.password)
-    if (!flgPasswordCorrect)
+    if (user?.passwordNeedsReset)
+      return {
+        values: rawValues,
+        message:
+          'لطفا ابتدا رمز عبور خود را از طریق ایمیل یا پیامک بازنشانی کنید.',
+        success: false,
+      }
+
+    const { isValid, needsRehash } = await verifyPassword(
+      password,
+      user.password
+    )
+    if (!isValid)
       return {
         values: rawValues,
         message: 'رمز ورود اشتباه است',
         success: false,
       }
+
+    // تبدیل هش وردپرس به bcrypt
+    if (needsRehash) {
+      const newHash = await hashPassword(password)
+      await userCtrl.findOneAndUpdate({
+        filters: { id: user.id },
+        params: { password: newHash },
+      })
+    }
 
     flgNeedVerification = await verificationCtrl.verificationRequired({ user })
   } catch (error) {

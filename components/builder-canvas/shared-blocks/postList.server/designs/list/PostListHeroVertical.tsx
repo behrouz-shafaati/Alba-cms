@@ -10,7 +10,7 @@ import { PostTitle } from '@/components/post/title'
 import PostHorizontalCard from '../card/ArticalHorizontalCard'
 import { PostExcerpt } from '@/components/post/excerpt'
 import { useDeviceType } from '@/hooks/use-device-type'
-import Link from 'next/link'
+import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {
   posts: Post[]
@@ -65,7 +65,7 @@ export const PostListHeroVertical = ({
       <div className="flex flex-col md:flex-row gap-4">
         {/* Right column — active item */}
         <div ref={mainRef} className="md:w-2/3 w-full h-fit overflow-hidden">
-          <Link href={firstPost?.href} className="w-full h-fit">
+          <FastLink href={firstPost?.href} className="w-full h-fit">
             <PostCover
               file={firstPost.image}
               postType={firstPost.type}
@@ -74,7 +74,7 @@ export const PostListHeroVertical = ({
             />
             <PostTitle title={firstPostTranslation.title} />
             <PostExcerpt content={firstPostTranslation.excerpt} />
-          </Link>
+          </FastLink>
         </div>
 
         {/* Left column — playlist list */}

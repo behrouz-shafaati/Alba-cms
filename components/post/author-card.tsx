@@ -2,7 +2,7 @@ import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { User } from '@/features/user/interface'
 import { getTranslation } from '@/lib/utils'
-import Link from 'next/link'
+import { FastLink } from '../FastLink'
 
 type PostCoverProps = {
   author: User
@@ -18,7 +18,7 @@ export const PostAuthorCard = ({
   return (
     <div style={styles} {...props}>
       <div className="p-7 border-t border-b">
-        <Link href={`/author/${author?.userName}`} className="flex gap-4">
+        <FastLink href={`/author/${author?.userName}`} className="flex gap-4">
           <div>
             <Avatar className="size-12 ring-background  ring-2">
               <AvatarImage
@@ -31,7 +31,7 @@ export const PostAuthorCard = ({
           <div className="text  flex flex-col justify-center">
             <span>{author?.name}</span>
           </div>
-        </Link>
+        </FastLink>
         <p className="pt-4 font-light">{translation?.about}</p>
       </div>
     </div>

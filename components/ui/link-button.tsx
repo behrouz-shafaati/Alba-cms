@@ -57,10 +57,10 @@
 
 // export { LinkButton, buttonVariants };
 
-import { cn } from '@/lib/utils';
-import { cva, type VariantProps } from 'class-variance-authority';
-import NextLink from 'next/link';
-import { forwardRef, type ComponentPropsWithoutRef } from 'react';
+import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { forwardRef, type ComponentPropsWithoutRef } from 'react'
+import { FastLink } from '../FastLink'
 
 const linkVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -89,26 +89,26 @@ const linkVariants = cva(
       size: 'default',
     },
   }
-);
+)
 
 // interface ExtendedLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>, LinkProps, VariantProps<typeof linkVariants> {}
 
 interface ExtendedLinkProps
-  extends ComponentPropsWithoutRef<typeof NextLink>,
+  extends ComponentPropsWithoutRef<any>,
     VariantProps<typeof linkVariants> {}
 
 const LinkButton = forwardRef<HTMLAnchorElement, ExtendedLinkProps>(
   ({ className, variant, ...restProps }: ExtendedLinkProps, ref) => {
     return (
-      <NextLink
+      <FastLink
         ref={ref}
         className={cn(linkVariants({ variant, className }))}
         {...restProps}
       />
-    );
+    )
   }
-);
+)
 
-LinkButton.displayName = 'LinkButton';
+LinkButton.displayName = 'LinkButton'
 
-export { LinkButton, linkVariants };
+export { LinkButton, linkVariants }

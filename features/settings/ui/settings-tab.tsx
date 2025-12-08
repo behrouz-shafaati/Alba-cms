@@ -29,6 +29,11 @@ const tabs = [
   },
   { href: '/dashboard/settings/sms', label: 'پیامک', icon: MessageCircle },
   { href: '/dashboard/settings/email', label: 'ایمیل', icon: Mail },
+  {
+    href: '/dashboard/settings/wp-emigration',
+    label: 'مهاجرت از ورد پرس',
+    icon: Mail,
+  },
 ]
 
 export function SettingsTabs() {

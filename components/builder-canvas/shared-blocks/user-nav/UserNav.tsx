@@ -13,7 +13,7 @@ import { computedStyles } from '../../utils/styleUtils'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { can } from '@/lib/utils/can.client'
-import Link from 'next/link'
+import { FastLink } from '@/components/FastLink'
 type props = {
   widgetName: string
   user: User
@@ -63,40 +63,35 @@ export function UserNav({ widgetName, blockData, user, ...props }: props) {
             <DropdownMenuSeparator />
             {canCreatePost && (
               <DropdownMenuItem>
-                <Link
+                <FastLink
                   href={'/dashboard/posts/create'}
                   className="w-full h-full"
                 >
                   افزودن مطلب
-                </Link>
+                </FastLink>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem>
-              <Link href={`/account/${user.id}`} className="w-full h-full">
+              <FastLink href={`/account/${user.id}`} className="w-full h-full">
                 پروفایل
-              </Link>
+              </FastLink>
             </DropdownMenuItem>
             {canDashboardView && (
               <DropdownMenuItem>
-                <Link href={'/dashboard'} className="w-full h-full">
+                <FastLink href={'/dashboard'} className="w-full h-full">
                   داشبورد
-                </Link>
+                </FastLink>
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
 
             <DropdownMenuItem>
-              <form
-                className="top-0 left-0 flex w-full h-full"
-                action={async () => {
-                  await fetch('/api/logout', {
-                    method: 'POST',
-                  })
-                  window.location.href = '/login' // یا هر صفحه‌ای که می‌خوای
-                }}
+              <FastLink
+                href="/logout"
+                className="w-full flex justify-between py-1.5 px-2"
               >
-                <button className="flex w-full h-full">خروج</button>
-              </form>
+                <span>خروج</span>
+              </FastLink>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

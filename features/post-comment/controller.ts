@@ -110,19 +110,44 @@ class controller extends baseController {
 
   async findAll(payload: QueryFind) {
     const postCommentsResult = await super.findAll(payload)
-    const postComments = buildCommentTree(
-      postCommentsResult.data.map((c) => {
-        return {
-          ...c,
-          translations: c.translations.map((translation) => ({
-            ...translation,
-            contentJson: renderTiptapJsonToHtml(
-              JSON.parse(translation.contentJson || '{}')
-            ),
-          })),
-        }
+
+    // اول همه Promise‌ها رو جمع کن
+    const translationPromises: Array<{
+      commentIndex: number
+      translationIndex: number
+      promise: Promise<string>
+    }> = []
+
+    postCommentsResult.data.forEach((comment, commentIndex) => {
+      comment.translations.forEach((translation, translationIndex) => {
+        translationPromises.push({
+          commentIndex,
+          translationIndex,
+          promise: renderTiptapJsonToHtml(
+            JSON.parse(translation.contentJson || '{}')
+          ),
+        })
       })
-    )
+    })
+
+    // همه رو یکجا اجرا کن
+    const results = await Promise.all(translationPromises.map((t) => t.promise))
+
+    // نتایج رو برگردون به ساختار اصلی
+    const processedComments = postCommentsResult.data.map((comment, ci) => ({
+      ...comment,
+      translations: comment.translations.map((translation, ti) => {
+        const resultIndex = translationPromises.findIndex(
+          (t) => t.commentIndex === ci && t.translationIndex === ti
+        )
+        return {
+          ...translation,
+          contentJson: results[resultIndex],
+        }
+      }),
+    }))
+
+    const postComments = buildCommentTree(processedComments)
 
     return { ...postCommentsResult, data: postComments }
   }

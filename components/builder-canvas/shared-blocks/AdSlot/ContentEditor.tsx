@@ -7,6 +7,7 @@ import Text from '@/components/form-fields/text'
 import Combobox from '@/components/form-fields/combobox'
 import { getAllCampaigns } from '@/features/campaign/actions'
 import { Campaign } from '@/features/campaign/interface'
+import Switch from '@/components/form-fields/switch'
 
 type Props = {
   initialData: any
@@ -39,6 +40,17 @@ export const ContentEditor = ({ initialData, savePage }: Props) => {
 
   return (
     <div key={campaignOptions?.length}>
+      <Switch
+        name="isLCP"
+        title="علامت‌گذاری به‌عنوان LCP"
+        defaultChecked={selectedBlock?.content?.isLCP ?? false}
+        onChange={(values) => {
+          update(selectedBlock?.id as string, 'content', {
+            ...selectedBlock?.content,
+            isLCP: values,
+          })
+        }}
+      />
       <Text
         title="عنوان جایگاه"
         name="title"

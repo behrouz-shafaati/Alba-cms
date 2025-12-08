@@ -10,6 +10,7 @@ import { ImageAlba } from '@/components/image-alba'
 import VideoEmbed from '@/components/video-embed/VideoEmbed'
 import fileCtrl from '@/lib/entity/file/controller'
 import AccordionRenderLazy from '../tiptap-renderers/AccordionRenderLazy'
+// import AdSlotBlock from '@/components/builder-canvas/shared-blocks/AdSlot/AdSlotBlock'
 import AdSlotBlockLazy from '@/components/builder-canvas/shared-blocks/AdSlot/AdSlotBlockLazy'
 
 // تابع کمکی: جمع‌آوری همه‌ی نودهای accordion (ترتیب درختی)

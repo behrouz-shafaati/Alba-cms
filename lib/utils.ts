@@ -61,24 +61,6 @@ export async function decrypt(input: string): Promise<any> {
   }
 }
 
-export const hashPassword = async (password: string) => {
-  const salt = await bcrypt.genSalt(10)
-  return bcrypt.hash(password, salt)
-}
-
-// پسورد کاربر رو مقایسه می‌کنیم
-export const comparePassword = async (
-  plainPassword: string,
-  hashedPassword: string
-) => {
-  try {
-    return await bcrypt.compare(plainPassword, hashedPassword)
-  } catch (err) {
-    console.error('Error comparing passwords:', err)
-    return false
-  }
-}
-
 export const haveAccess = (
   roles: string[] = [],
   AuthorizedRoles: string[] = []

@@ -22,6 +22,7 @@ export async function GET(req: Request) {
     const commentsResult = await getPostComments({
       filters: { post: postId },
     })
+
     return NextResponse.json(commentsResult)
   } catch (err) {
     console.error('Error fetching comments:', err)

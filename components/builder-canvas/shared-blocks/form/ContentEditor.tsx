@@ -36,10 +36,7 @@ export const ContentEditor = ({ initialData, savePage }: Props) => {
 
     fetchData()
   }, [])
-  console.log(
-    '#selectedBlock?.content?.formIdwsr :',
-    selectedBlock?.content?.formId
-  )
+
   return (
     <>
       <Combobox

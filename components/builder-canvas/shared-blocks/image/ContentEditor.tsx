@@ -41,7 +41,17 @@ export const ContentEditor = ({ initialData, savePage }: Props) => {
         showDeleteButton={true}
         allowedFileTypes={['image']}
       />
-
+      <Switch
+        name="isLCP"
+        title="علامت‌گذاری به‌عنوان LCP"
+        defaultChecked={selectedBlock?.settings?.isLCP ?? false}
+        onChange={(values) => {
+          update(selectedBlock?.id as string, 'settings', {
+            ...selectedBlock?.settings,
+            isLCP: values,
+          })
+        }}
+      />
       <Switch
         name="zoomable"
         title="قابلیت بزرگنمایی تصویر"

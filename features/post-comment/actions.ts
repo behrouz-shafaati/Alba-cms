@@ -371,5 +371,10 @@ export async function getPostComments(
 export async function getPostCommentsForClient(payload: QueryFind) {
   const commentApprovalRequired = await getSettings('commentApprovalRequired')
   if (commentApprovalRequired) payload.filters.status = 'approved'
-  return getPostComments(payload)
+  const commentsResult = await getPostComments(payload)
+  console.log(
+    '#@@423984367 commentsResult:',
+    commentsResult?.data[0]?.translations
+  )
+  return commentsResult
 }

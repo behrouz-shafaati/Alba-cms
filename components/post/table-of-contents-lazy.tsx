@@ -7,8 +7,7 @@ const TableOfContents = dynamic(() => import('./table-of-contents'), {
   ssr: false, // هیچ SSR اتفاق نمی‌افتد
   loading: () => (
     <div className="mx-1">
-      TableOfContents87
-      <Skeleton className="h-12 w-full rounded-md" />
+      <Skeleton className="h-[60px] my-4 w-full rounded-md" />
     </div>
   ),
 })

@@ -1,9 +1,9 @@
 import { getTranslation, timeAgo } from '@/lib/utils'
 import React from 'react'
 import { Tag } from '@/features/tag/interface'
-import Link from 'next/link'
 import { Button } from '../ui/button'
 import IconRenderer from '../builder-canvas/components/IconRenderer'
+import { FastLink } from '../FastLink'
 
 type PostCoverProps = {
   tags: Tag[]
@@ -18,7 +18,7 @@ export const PostTags = ({ tags, styles = {}, ...props }: PostCoverProps) => {
           const translation = getTranslation({ translations: t.translations })
           return (
             <Button variant="outline" size="sm" key={t.id} className="p-0">
-              <Link
+              <FastLink
                 href={`/archive/tags/${t.slug}`}
                 className="flex gap-1 h-full px-2 items-center"
               >
@@ -26,7 +26,7 @@ export const PostTags = ({ tags, styles = {}, ...props }: PostCoverProps) => {
                   <IconRenderer name={t.icon} className={`w-5 h-5`} />
                 )}
                 {translation?.title}
-              </Link>
+              </FastLink>
             </Button>
           )
         })}

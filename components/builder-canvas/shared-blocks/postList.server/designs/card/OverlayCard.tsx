@@ -1,9 +1,9 @@
+import { FastLink } from '@/components/FastLink'
 import { Post, PostTranslationSchema } from '@/features/post/interface'
 import { FileTranslationSchema } from '@/lib/entity/file/interface'
 import { timeAgo } from '@/lib/utils'
 import { CalendarPlus, MessageCircleMore } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 type Props = {
   post: Post
@@ -35,7 +35,7 @@ const PostOverlayCard = ({ post, direction = 'row', options }: Props) => {
     ({} as FileTranslationSchema)
 
   return (
-    <Link
+    <FastLink
       href={post.href}
       key={post.id}
       className={`group relative block overflow-hidden rounded-lg shadow-md transition-all duration-500 ${
@@ -84,7 +84,7 @@ const PostOverlayCard = ({ post, direction = 'row', options }: Props) => {
           )}
         </div>
       </div>
-    </Link>
+    </FastLink>
   )
 }
 

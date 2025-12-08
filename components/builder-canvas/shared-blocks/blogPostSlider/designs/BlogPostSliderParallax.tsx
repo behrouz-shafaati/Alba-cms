@@ -3,13 +3,13 @@
 import React from 'react'
 import { Block } from '../../../types'
 import Image from 'next/image'
-import Link from 'next/link'
 import Autoplay from 'embla-carousel-autoplay'
 import { Post, PostTranslationSchema } from '@/features/post/interface'
 import { Option } from '@/types'
 import { FileTranslationSchema } from '@/lib/entity/file/interface'
 import { EmblaCarouselParallax } from '@/components/embla-carousel/parallax'
 import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel'
+import { FastLink } from '@/components/FastLink'
 
 type BlogPostSliderProps = {
   options?: EmblaOptionsType
@@ -63,7 +63,7 @@ const BlogPostSliderParallax = ({
       >
         <div className="embla__parallax rounded-xl overflow-hidden shadow-md bg-white dark:bg-gray-900 ">
           <div className="embla__parallax__layer  flex-[0_0_100%] aspect-[3/2] sm:aspect-[16/11] lg:aspect-[21/14]">
-            <Link href={post.href} className="">
+            <FastLink href={post.href} className="">
               <Image
                 className="embla__slide__img embla__parallax__img "
                 src={post?.image?.srcMedium || '/image-placeholder-Medium.webp'}
@@ -82,7 +82,7 @@ const BlogPostSliderParallax = ({
               <div className="absolute bottom-0 w-full text-center p-4 text-gray-100 font-semibold z-10">
                 {translationPost?.title}
               </div>
-            </Link>
+            </FastLink>
           </div>
         </div>
       </div>

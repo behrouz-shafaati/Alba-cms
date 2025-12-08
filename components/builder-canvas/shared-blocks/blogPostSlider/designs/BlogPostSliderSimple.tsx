@@ -1,7 +1,6 @@
 'use client'
 // کامپوننت نمایشی بلاک
 import React, { useCallback, useEffect, useState } from 'react'
-import Link from 'next/link'
 import useEmblaCarousel from 'embla-carousel-react'
 import { Post } from '@/features/post/interface'
 import LeftSliderButton from '@/components/ui/left-slider-button'
@@ -14,6 +13,7 @@ import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel'
 import { Block } from '@/components/builder-canvas/types'
 import VerticalPostCard from '@/components/post/vertical-card'
 import Autoplay from 'embla-carousel-autoplay'
+import { FastLink } from '@/components/FastLink'
 
 type BlogPostSliderProps = {
   options?: EmblaOptionsType
@@ -95,27 +95,27 @@ const BlogPostSliderSimple = ({
           <span className="block px-4">{content.title}</span>
         </div>
         {settings?.showMoreLink != false && (
-          <Link
+          <FastLink
             href={`archive/${archiveUrl}?page=1&perPage=${posts.length || 6}`}
             className="text-xs text-gray-600 font-normal flex flex-row items-center gap-2"
           >
             <span>مشاهده همه</span>
             <ChevronLeft size={20} />
-          </Link>
+          </FastLink>
         )}
       </div>
       {content?.tags?.length > 0 && (
         <div className="p-4 flex flex-row gap-2">
           {content?.tags?.map((tag: Option) => {
             return (
-              <Link key={tag.slug} href={`archive/tags/${tag.slug}`}>
+              <FastLink key={tag.slug} href={`archive/tags/${tag.slug}`}>
                 <Badge
                   variant="outline"
                   className="p-2 text-xs text-gray-600 font-normal"
                 >
                   {tag.label}
                 </Badge>
-              </Link>
+              </FastLink>
             )
           })}
         </div>

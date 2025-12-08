@@ -33,16 +33,17 @@ export default function QueryParamLinks({
   items,
   className = '',
   onTagSelect,
-  selectedTag,
-}: // searchParams,
+}: // selectedTag,
+// searchParams,
 {
   paramKey?: string
   items: { label: string; slug: string }[]
   className?: string
   searchParams?: any
-  onTagSelect: (slug: string) => void // callback از parent
-  selectedTag: string
+  onTagSelect?: (slug: string) => void // callback از parent
+  selectedTag?: string
 }) {
+  const [selectedTag, setSelectedTag] = useState('')
   let selectedTagExistInItems = items.some((item) => item.slug === selectedTag)
 
   return (
@@ -50,7 +51,7 @@ export default function QueryParamLinks({
       {items?.map((item, index) => (
         <Badge
           key={item.slug}
-          onClick={() => onTagSelect(item.slug)}
+          onClick={() => setSelectedTag(item.slug)}
           variant="outline"
           className={cn(
             'p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer px-4',

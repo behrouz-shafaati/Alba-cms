@@ -44,7 +44,11 @@ export const ImageBlock = ({
       }}
     >
       {content?.srcSmall ? (
-        <ImageAlba file={content} zoomable={settings?.zoomable} />
+        <ImageAlba
+          file={content}
+          zoomable={settings?.zoomable || false}
+          isLCP={settings?.isLCP || false}
+        />
       ) : (
         // <Image
         //   src={content?.srcMedium}

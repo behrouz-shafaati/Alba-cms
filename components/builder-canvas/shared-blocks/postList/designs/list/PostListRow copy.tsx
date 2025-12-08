@@ -1,7 +1,6 @@
 'use client'
 // کامپوننت نمایشی بلاک
 import React, { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { ArrowLeft } from 'lucide-react'
@@ -12,6 +11,7 @@ import { getPosts } from '@/features/post/actions'
 import { getTagAction } from '@/features/tag/actions'
 // import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
 import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
+import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {
   posts: Post[]
@@ -96,13 +96,13 @@ export const PostListRow = ({
             {content?.title}
           </span>
         </div>
-        <Link
+        <FastLink
           href={showMoreHref}
           className="text-xs text-gray-600 dark:text-gray-300 font-normal flex flex-row items-center gap-2 w-fit text-center justify-center p-4"
         >
           <span>مشاهده همه</span>
           <ArrowLeft size={20} className="text-primary" />
-        </Link>
+        </FastLink>
       </div>
       <div>
         {/* <SelectableTags

@@ -3,7 +3,7 @@ import { FileTranslationSchema } from '@/lib/entity/file/interface'
 import { timeAgo } from '@/lib/utils'
 import { CalendarPlus, MessageCircleMore } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { FastLink } from '../FastLink'
 
 type VerticalcardProps = {
   post: Post
@@ -31,7 +31,7 @@ export default function VerticalPostCard({
     {}
   return (
     <div className="embla__slide flex-shrink-0 w-full grow-0 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/4 px-2">
-      <Link href={post.href}>
+      <FastLink href={post.href}>
         <div
           className={`rounded overflow-hidden bg-white dark:bg-gray-900 ${className}`}
         >
@@ -72,7 +72,7 @@ export default function VerticalPostCard({
             </div> */}
           </div>
         </div>
-      </Link>
+      </FastLink>
     </div>
   )
 }

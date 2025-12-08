@@ -1,10 +1,10 @@
 'use client'
 // کامپوننت نمایشی بلاک
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Block } from '../../types'
 import { AdSlotWidgetProps } from './type'
-import { BannerGroupFallback } from './BannerGroupFallback'
 import BannerGroup from './BannerGroup'
+import { BannerGroupFallback } from './BannerGroupFallback'
 
 type AdSlotBlockProps = AdSlotWidgetProps &
   Block &

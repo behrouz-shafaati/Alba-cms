@@ -4,7 +4,7 @@ import {
 } from '@/features/menu/interface'
 import HorizontalMenu from './designs/Horizontal'
 import VerticalMenu from './designs/Vertical'
-import MenuPrefetch from './MenuPrefetch'
+// import MenuPrefetch from './MenuPrefetch'
 
 interface MainMenuProps {
   blockData: {
@@ -38,7 +38,7 @@ function Menu({ blockData, widgetName, menu, ...props }: MainMenuProps) {
 
   return (
     <>
-      <MenuPrefetch items={items} />
+      {/* <MenuPrefetch items={items} /> */}
       {selectedMenu}
     </>
   )

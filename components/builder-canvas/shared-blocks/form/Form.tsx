@@ -9,7 +9,6 @@ import { User } from '@/features/user/interface'
 import { createFormSubmission } from '@/features/form-submission/actions'
 
 interface MainFormProps {
-  user: User | null
   blockData: {
     content: { formId: string }
     type: 'form'
@@ -21,7 +20,6 @@ interface MainFormProps {
 }
 
 function Form({
-  user,
   blockData,
   widgetName,
   form,
@@ -31,8 +29,6 @@ function Form({
   const [state, dispatch] = useActionState(createFormSubmission as any, {})
   if (!form) return null
   form.translations = form?.translations || []
-
-  const userRoles = user?.roles || []
 
   const { settings } = blockData
   const { className, ...restProps } = props

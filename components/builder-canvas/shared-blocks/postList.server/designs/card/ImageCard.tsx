@@ -1,11 +1,9 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import { FastLink } from '@/components/FastLink'
 import { Post, PostTranslationSchema } from '@/features/post/interface'
 import { FileTranslationSchema } from '@/lib/entity/file/interface'
 import { timeAgo } from '@/lib/utils'
 import { CalendarPlus, MessageCircleMore } from 'lucide-react'
 import Image from 'next/image'
-
-import Link from 'next/link'
 
 type Props = {
   post: Post
@@ -38,7 +36,7 @@ const PostImageCard = ({ post, options }: Props) => {
       key={post.id}
       className="flex-shrink-0 basis-[85vw] sm:basis-[45vw] md:basis-[23vw] xl:basis-[16vw] snap-start"
     >
-      <Link href={post.href}>
+      <FastLink href={post.href}>
         <div className="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-900">
           <div className="relative w-full h-52">
             {/* <Image
@@ -100,7 +98,7 @@ const PostImageCard = ({ post, options }: Props) => {
             </div> */}
           </div>
         </div>
-      </Link>
+      </FastLink>
     </div>
   )
 }

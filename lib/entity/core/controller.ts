@@ -16,7 +16,7 @@ import {
   QueryResult,
 } from './interface'
 // import logController from "@entity/log/controller";
-import { Types } from 'mongoose'
+import { MongooseBulkWriteResult, Types } from 'mongoose'
 import { getSession } from '@/middleware'
 // import { logEvents } from "@/middleware/logEvents";
 // import getPaginationFiltersFromQuery from "@/utils/getPagenationFiltersFromQuery";
@@ -166,7 +166,7 @@ export default class controller {
    *
    * @beta
    */
-  async findOne(payload: QueryFindOne) {
+  async findOne(payload: QueryFindOne): Promise<Object | null> {
     payload = { saveLog: false, populate: '', ...payload }
     let result: any
     // if (payload.saveLog) {
@@ -352,5 +352,12 @@ export default class controller {
 
   async aggregate(query: AggregateQueryArray, pagination?: Pagination) {
     return this.service.aggregate(query, pagination)
+  }
+
+  async bulkWrite(
+    operations: any,
+    { ordered }: { ordered: boolean } = { ordered: false }
+  ): Promise<MongooseBulkWriteResult> {
+    return this.service.bulkWrite(operations, { ordered })
   }
 }

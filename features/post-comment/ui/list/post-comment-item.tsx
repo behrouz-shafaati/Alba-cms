@@ -1,13 +1,11 @@
 // components/comments/CommentItem.tsx
-'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { MessageSquare, ThumbsUp, ThumbsDown, Reply } from 'lucide-react'
-import { useState } from 'react'
+// import { useState } from 'react'
 import { PostComment } from '../../interface'
-import { getTranslation, timeAgo } from '@/lib/utils'
-import { usePostCommentStore } from '../store/usePostCommentStore'
+import timeAgo from '@/lib/utils/timeAgo'
+import getTranslation from '@/lib/utils/getTranslation'
+import ReplayCOmmentButtonLazy from '../replay-Button-lazy'
 
 interface CommentItemProps {
   postComment: PostComment
@@ -15,8 +13,9 @@ interface CommentItemProps {
 }
 
 export function PostCommentItem({ postComment, depth = 0 }: CommentItemProps) {
-  const [showReplies, setShowReplies] = useState(true)
-  const { setReplayTo } = usePostCommentStore()
+  // const [showReplies, setShowReplies] = useState(true)
+  const showReplies = true
+
   const content = getTranslation({
     translations: postComment.translations,
     locale: postComment.locale,
@@ -54,14 +53,7 @@ export function PostCommentItem({ postComment, depth = 0 }: CommentItemProps) {
             <Button size="sm" variant="ghost" className="flex gap-1">
               <ThumbsDown size={16} /> 5
             </Button> */}
-            <Button
-              size="sm"
-              variant="ghost"
-              className="flex gap-1"
-              onClick={() => setReplayTo(postComment)}
-            >
-              <Reply size={16} /> پاسخ
-            </Button>
+            <ReplayCOmmentButtonLazy postComment={postComment} />
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-'use server'
 // رندر کردن بلاک‌ها از روی JSON
 // RenderRows.tsx
 import React from 'react'

@@ -12,7 +12,7 @@ export const CommentsHeader = () => {
         </h2>
       </div>
 
-      <p className="text-sm text-gray-700 dark:text-gray-300 max-w-md mx-auto leading-relaxed">
+      <p className="text-sm text-center text-gray-700 dark:text-gray-300 max-w-md mx-auto leading-relaxed">
         نظرت برامون خیلی ارزشمنده! تجربه یا دیدگاهت رو درباره این مطلب بنویس 🌱
       </p>
     </div>

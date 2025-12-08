@@ -1,10 +1,10 @@
+import { FastLink } from '@/components/FastLink'
 import highlightText from '@/components/highlight-text'
 import { Separator } from '@/components/ui/separator'
 import { Post, PostTranslationSchema } from '@/features/post/interface'
 import { FileTranslationSchema } from '@/lib/entity/file/interface'
 import timeAgo from '@/lib/utils/timeAgo'
 import Image from 'next/image'
-import Link from 'next/link'
 
 type Props = {
   post: Post
@@ -28,7 +28,7 @@ const PostHorizontalCard = ({ post, options, query = '' }: Props) => {
     post.image?.translations[0] ||
     {}
   return (
-    <Link key={post?.id} href={post?.href || '#'}>
+    <FastLink key={post?.id} href={post?.href || '#'}>
       <div className="grid grid-cols-[1fr_7rem] md:grid-cols-[1fr_200px] items-center md:items-start border-b py-2 gap-2">
         {/* عنوان و توضیح */}
         <div className="p-2">
@@ -76,7 +76,7 @@ const PostHorizontalCard = ({ post, options, query = '' }: Props) => {
           </div>
         </div>
       </div>
-    </Link>
+    </FastLink>
   )
 }
 

@@ -66,7 +66,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {/* Left spinner */}
         {loading && !leftSection && !rightSection && (
-          <Spinner className="mr-2" />
+          <Spinner className="mx-2" />
         )}
 
         {!loading && leftSection && <span className="mr-2">{leftSection}</span>}

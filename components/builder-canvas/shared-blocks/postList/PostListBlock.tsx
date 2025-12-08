@@ -41,7 +41,11 @@ export default async function PostListBlock({
   const { content, settings } = blockData
 
   // const selectedTag = searchParams?.tag
-  const selectedTag = settings?.showNewest ? '' : content?.tags?.[0].slug || ''
+  const selectedTag = searchParams?.tag
+    ? searchParams?.tag
+    : settings?.showNewest
+    ? ''
+    : content?.tags?.[0].slug || ''
   const flgSelectedTagExistInBlock = Array.isArray(content?.tags)
 
   let filters = {}

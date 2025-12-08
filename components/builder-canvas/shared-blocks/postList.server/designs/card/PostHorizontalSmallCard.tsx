@@ -1,10 +1,8 @@
+import { FastLink } from '@/components/FastLink'
 import highlightText from '@/components/highlight-text'
-import { Separator } from '@/components/ui/separator'
 import { Post, PostTranslationSchema } from '@/features/post/interface'
 import { FileTranslationSchema } from '@/lib/entity/file/interface'
-import { timeAgo } from '@/lib/utils'
 import Image from 'next/image'
-import Link from 'next/link'
 
 type Props = {
   post: Post
@@ -28,7 +26,7 @@ const PostHorizontalSmallCard = ({ post, options, query = '' }: Props) => {
     post.image?.translations[0] ||
     {}
   return (
-    <Link key={post.id} href={post.href} className="group">
+    <FastLink key={post.id} href={post.href} className="group">
       <div className="grid grid-cols-[72px_1fr] items-center md:items-start py-2 gap-2">
         {/* تصویر */}
         <div className="relative w-full h-full  aspect-square md:aspect-[4/3] overflow-hidden rounded-sm">
@@ -71,7 +69,7 @@ const PostHorizontalSmallCard = ({ post, options, query = '' }: Props) => {
           </div>
         </div> */}
       </div>
-    </Link>
+    </FastLink>
   )
 }
 

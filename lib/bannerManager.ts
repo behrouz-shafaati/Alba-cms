@@ -147,6 +147,7 @@ export class BannerManager {
           sendedAlready: this.sendedAlready,
         }),
       })
+      console.log('897263486 #BANNER FETCH RES:', res)
       if (!res.ok) {
         console.error('banner batch fetch failed', await res.text())
         // fallback: per-id fetch
@@ -163,7 +164,7 @@ export class BannerManager {
 
       // distribute results, if a slot missing -> null
       ids.forEach((id) => {
-        const cb = this.slots[id].cb
+        const cb = this.slots[id]?.cb
         const data = map.get(id) ?? null
         try {
           cb?.(data)

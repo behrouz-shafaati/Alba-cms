@@ -8,6 +8,7 @@ import { getTranslation } from '@/lib/utils'
 import { PageLoadingProgressBar } from '@/components/loading-page-progress-bar'
 import { PageLoadingProgressBarActivator } from '@/components/loading-page-progress-bar-activator'
 import { HydrationDebug } from '@/components/debug/HydrationDebug'
+import { Providers } from './providers'
 
 const iransans = localFont({
   src: [
@@ -70,6 +71,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://www.gstatic.com" />
+        <link rel="preconnect" href="https://static.cdn.asset.aparat.com" />
+        <link rel="preconnect" href="https://www.aparat.com" />
+        <link rel="preconnect" href="https://unpkg.com" />
+      </head>
       <body className={iransans.className}>
         <script
           dangerouslySetInnerHTML={{
@@ -78,10 +85,10 @@ export default function RootLayout({
         />
         <PageLoadingProgressBarActivator />
         <PageLoadingProgressBar />
-        {/* <Providers> */}
-        <main>{children}</main>
-        <HydrationDebug />
-        {/* </Providers> */}
+        <Providers>
+          <main>{children}</main>
+          <HydrationDebug />
+        </Providers>
         {/* اگر این تگ اسکریپت از Body‌خارج بشه Hydration رو افزایش میده */}
       </body>
     </html>

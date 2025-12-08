@@ -111,6 +111,19 @@ type UserBase = {
    */
   darkMode: boolean
 
+  passwordNeedsReset: boolean
+
+  /**
+   * example data for metadata:
+   * metadata: {
+   *     migratedFrom: 'wordpress',
+   *     wpId: wpId,
+   *     wpUserLogin: wpUser.user_login,
+   *     wpRegistered: wpUser.user_registered,
+   *     migratedAt: new Date(),
+   *   },
+   */
+  metadata: Record<string, any>
   /**
    * وضعیت فعال بودن حساب کاربر (در صورت فعال بودن true)
    */

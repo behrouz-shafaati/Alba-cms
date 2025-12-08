@@ -27,7 +27,7 @@ export const Block = ({
   const { id, settings } = blockData
   const { className, ...restProps } = props
 
-  console.log(settings?.title?.[locale] || settings.title?.fa || '')
+  console.log(settings?.title?.[locale] || settings?.title?.fa || '')
   return (
     <Text
       style={{

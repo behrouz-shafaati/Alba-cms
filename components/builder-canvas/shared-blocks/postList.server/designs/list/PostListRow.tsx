@@ -1,12 +1,12 @@
 // کامپوننت نمایشی بلاک
 import React, { Suspense } from 'react'
-import Link from 'next/link'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { ArrowLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
+import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {
   posts: Post[]
@@ -60,13 +60,13 @@ export const PostListRow = ({
             {content.title}
           </span>
         </div>
-        <Link
+        <FastLink
           href={showMoreHref}
           className="text-xs text-gray-600 dark:text-gray-300 font-normal flex flex-row items-center gap-2 w-fit text-center justify-center p-4"
         >
           <span>مشاهده همه</span>
           <ArrowLeft size={20} className="text-primary" />
-        </Link>
+        </FastLink>
       </div>
       <div>
         <Suspense fallback={<div>در حال بارگذاری...</div>}>

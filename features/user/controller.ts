@@ -85,7 +85,8 @@ class controller extends coreController {
 
     if (
       typeof payload?.params.mobile !== 'undefined' &&
-      payload?.params.mobile !== ''
+      payload?.params.mobile !== '' &&
+      payload?.params.mobile !== null
     )
       foundUser = await this.findOne({
         filters: { mobile: payload.params.mobile },
@@ -243,7 +244,10 @@ class controller extends coreController {
     userId: string
     password: string
   }) {
-    return this.findOneAndUpdate({ filters: userId, params: { password } })
+    return this.findOneAndUpdate({
+      filters: userId,
+      params: { password, passwordNeedsReset: false },
+    })
   }
 }
 

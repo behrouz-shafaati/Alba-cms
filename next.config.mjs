@@ -40,6 +40,7 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
       optimizeCss: true,
+      optimizePackageImports: ['lucide-react', '@radix-ui/*'],
     },
   },
   compiler: {
@@ -47,10 +48,10 @@ const nextConfig = {
     // removeConsole: process.env.NODE_ENV === 'production', // باعث میشه همه console.log ها در Production حذف بشن
   },
   // فشرده‌سازی
-  // compress: true,
+  compress: true,
 
   // تولید Source Map فقط در Dev
-  // productionBrowserSourceMaps: false,
+  productionBrowserSourceMaps: false,
 }
 
 // export default nextConfig

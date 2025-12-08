@@ -2,10 +2,10 @@
 // کامپوننت نمایشی بلاک
 import React from 'react'
 import { AdSlotWidgetProps } from './type'
-import { BannerData, BannerManager } from '@/lib/bannerManager'
+import { BannerData } from '@/lib/bannerManager'
 import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
-import Link from 'next/link'
+// import Link from 'next/link'
 
 type BannerProps = {
   banner: BannerData
@@ -22,36 +22,6 @@ export const Banner = ({
 }: BannerProps) => {
   const locale = 'fa'
   const { content, settings } = blockData
-
-  // const [banner, setBanner] = useState<BannerData | null | 'loading'>('loading')
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const manager = BannerManager.getInstance()
-  //     // register callback
-  //     const cb = (data: BannerData | null) => {
-  //       console.log('#23408273490 in banner data: ', data)
-  //       if (!data) {
-  //         setBanner(null)
-  //       } else {
-  //         setBanner(data)
-  //       }
-  //     }
-  //     manager.register({
-  //       id,
-  //       aspect: settings?.aspect || defaultAspect,
-  //       placement: settings?.placement || 'all',
-  //       linkedCampaign: content?.linkedCampaign || 'none',
-  //       fallbackBehavior: settings?.fallbackBehavior || 'random',
-  //       cb,
-  //     })
-
-  //     return () => {
-  //       manager.unregister(id)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [id])
-
   const linkClickHandler = async () => {
     try {
       if (banner !== 'loading' && banner?.campaignId)
@@ -120,6 +90,8 @@ export const Banner = ({
         alt={banner.file?.alt || 'تبلیغ'}
         fill
         className="object-cover w-full h-full"
+        priority={content?.isLCP || false} // برای تصویر LCP
+        loading={content?.isLCP ? 'eager' : 'lazy'}
       />
     )
     if (banner?.targetUrl)
@@ -129,13 +101,13 @@ export const Banner = ({
           style={{ aspectRatio: settings?.aspect || defaultAspect, flex: 1 }}
           aria-label={`banner-${id}`}
         >
-          <Link
+          <a
             href={banner?.targetUrl}
             className="w-full h-full"
             onClick={linkClickHandler}
           >
             {BannerImage}
-          </Link>
+          </a>
         </div>
       )
     return (

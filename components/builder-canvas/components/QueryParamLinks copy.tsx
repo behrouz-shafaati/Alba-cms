@@ -1,7 +1,7 @@
 'use client'
+import { FastLink } from '@/components/FastLink'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
 import { useState } from 'react'
 
 /**
@@ -46,7 +46,7 @@ export default function QueryParamLinks({
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {items?.map((item, index) => (
-        <Link
+        <FastLink
           href={`?${paramKey}=${item.slug}`}
           key={item.slug}
           scroll={false}
@@ -67,7 +67,7 @@ export default function QueryParamLinks({
           >
             {item.label}
           </Badge>
-        </Link>
+        </FastLink>
       ))}
     </div>
   )

@@ -5,9 +5,9 @@ import { Block } from '../../types'
 import { computedStyles } from '../../utils/styleUtils'
 import { Button } from '@/components/ui/button'
 import { buttonBlockDefaults } from './defaultSettings'
-import Link from 'next/link'
 import IconRenderer from '../../components/IconRenderer'
 import cn from '@/lib/utils/client/cn'
+import { FastLink } from '@/components/FastLink'
 
 type ButtonBlockProps = {
   widgetName: string
@@ -48,7 +48,7 @@ export const ButtonBlock = ({
       }}
       {...resProps}
     >
-      <Link
+      <FastLink
         href={settings?.href}
         className="flex flex-row gap-2 !text-inherit !no-underline !hover:no-underline"
       >
@@ -65,7 +65,7 @@ export const ButtonBlock = ({
             className={`w-5 h-5 ${settings?.iconColor}`}
           />
         )}
-      </Link>
+      </FastLink>
     </Button>
   )
 }

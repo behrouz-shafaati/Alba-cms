@@ -86,15 +86,12 @@ export async function UserNav() {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem>
-            <form
-              className="w-full flex  top-0 left-0 h-full"
-              action={async () => {
-                'use server'
-                await logout()
-              }}
+            <Link
+              href="/logout"
+              className="w-full flex justify-between py-1.5 px-2"
             >
-              <button className="w-full h-full flex">خروج</button>
-            </form>
+              <span>خروج</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
