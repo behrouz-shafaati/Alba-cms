@@ -1,4 +1,9 @@
-import { Create, QueryFind, Update } from '@/lib/entity/core/interface'
+import {
+  Create,
+  QueryFind,
+  QueryResponse,
+  Update,
+} from '@/lib/entity/core/interface'
 import baseController from '@/lib/entity/core/controller'
 import taxonomySchema from './schema'
 import taxonomyService from './service'
@@ -25,7 +30,9 @@ export default class taxonomyController extends baseController {
   }
 
   standardizationFilters(filters: any): any {
-    if (typeof filters != 'object') return {}
+    if (typeof filters != 'object') {
+      return { type: this.type }
+    }
     for (const [key, value] of Object.entries(filters)) {
       if (typeof value != 'string') continue
       if (
@@ -77,8 +84,16 @@ export default class taxonomyController extends baseController {
 
   async find(payload: QueryFind) {
     payload.filters = this.standardizationFilters(payload.filters)
+
     const result = await super.find(payload)
     return result
+  }
+
+  async findAll(payload: QueryFind): Promise<QueryResponse<any>> {
+    return super.findAll({
+      ...payload,
+      filters: this.standardizationFilters(payload.filters),
+    })
   }
 
   async create(payload: Create) {
