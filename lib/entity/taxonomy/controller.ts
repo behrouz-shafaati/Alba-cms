@@ -67,11 +67,11 @@ export default class taxonomyController extends baseController {
 
   makeCleanDataBeforeSave(data: any) {
     data.type = this.type
-    data.parent = data.parent == '' ? null : data.parent
-    data.parent = data.parent == 'null' ? null : data.parent
-    data.parent = data.parent == data?.id ? null : data.parent
+    data.parent = data?.parent == '' ? null : data?.parent
+    data.parent = data?.parent == 'null' ? null : data?.parent
+    data.parent = data?.parent == data?.id ? null : data?.parent
 
-    data.image = data.image == '' ? null : data.image
+    data.image = data?.image == '' ? null : data?.image
     return data
   }
 
@@ -102,14 +102,18 @@ export default class taxonomyController extends baseController {
     return super.findOneAndUpdate(payload)
   }
 
-  async taxonomyExist(title: string): Promise<boolean> {
-    const count = await this.countAll({ title, type: this.type })
+  async taxonomyExist(title: string, locale: string = 'fa'): Promise<boolean> {
+    const count = await this.countAll({
+      translations: { $elemMatch: { lang: locale, title } },
+      type: this.type,
+    })
     if (count == 0) return false
     return true
   }
 
   async ensureTaxonomyExist(
-    taxonomies: { value: string; label: string }[]
+    taxonomies: { value: string; label: string }[],
+    locale: string = 'fa'
   ): Promise<string[]> {
     const taxonomyIds = []
     for (let i = 0; i < taxonomies.length; i++) {
@@ -119,7 +123,11 @@ export default class taxonomyController extends baseController {
       else {
         const slug = slugify(taxonomy.label)
         const newTaxonomy = await this.create({
-          params: { title: taxonomy.label, slug, type: this.type },
+          params: {
+            translations: { lang: locale, title: taxonomy.label },
+            slug,
+            type: this.type,
+          },
         })
         taxonomyIds.push(newTaxonomy.id)
       }

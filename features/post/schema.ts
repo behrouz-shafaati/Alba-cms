@@ -40,21 +40,21 @@ const postSchema = new Schema<PostSchema>(
     translations: [PostTranslationSchema], // 👈 لیست ترجمه‌ها
     mainCategory: {
       type: Schema.Types.ObjectId,
-      ref: 'category',
+      ref: 'taxonomy',
       default: null,
       required: false,
     },
     categories: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'category',
+        ref: 'taxonomy',
         default: [],
       },
     ],
     tags: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'tag',
+        ref: 'taxonomy',
         default: [],
       },
     ],
@@ -88,24 +88,6 @@ postSchema.index(
     partialFilterExpression: { deleted: false },
   }
 )
-
-// تعداد کامنت‌ها (virtual)
-// postSchema.virtual('commentsCount', {
-//   ref: 'postComment', // نام collection
-//   localField: '_id', // فیلد محلی (Post._id)
-//   foreignField: 'post', // فیلد مرتبط در PostComment
-//   count: true, // مهم! فقط تعداد را برمی‌گرداند
-// })
-
-// const autoPopulate = function (next) {
-//   this.populate('image')
-//   this.populate('user')
-//   this.populate({
-//     path: 'tags',
-//     select: 'name slug',
-//   })
-//   next()
-// }
 
 postSchema.pre(['find', 'findOne', 'findOneAndUpdate'], function (next: any) {
   this.populate({

@@ -24,12 +24,13 @@ type Props = {
 export default function IconPicker({
   name,
   title = '',
-  defaultValue: value = '',
+  defaultValue = '',
   onChange,
 }: Props) {
   // const [value, setValue] = React.useState(defaultValue)
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
+  const [value, setValue] = useState(defaultValue)
 
   const filtered = useMemo(() => {
     if (!search) return ICON_NAMES
@@ -70,6 +71,7 @@ export default function IconPicker({
                   key={name}
                   type="button"
                   onClick={() => {
+                    setValue(name)
                     onChange?.(name)
                     setOpen(false)
                   }}

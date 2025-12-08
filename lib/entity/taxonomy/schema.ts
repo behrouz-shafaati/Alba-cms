@@ -41,6 +41,7 @@ const taxonomySchema = new Schema<TaxonomySchema>(
     slug: { type: String, required: true },
     translations: [TaxonomyTranslationSchema], // 👈 لیست ترجمه‌ها
     image: { type: Schema.Types.ObjectId, ref: 'file' },
+    icon: { type: String, default: '' },
     status: { type: String, enum: ['active', 'inactive'], default: 'active' },
     user: {
       type: Schema.Types.ObjectId,

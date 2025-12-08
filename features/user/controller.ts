@@ -47,7 +47,15 @@ class controller extends coreController {
         filters.$expr = {
           $regexMatch: {
             input: {
-              $concat: ['$firstName', '$email', '$lastName', '$mobile'],
+              $concat: [
+                { $ifNull: ['$firstName', ''] },
+                ' ',
+                { $ifNull: ['$lastName', ''] },
+                ' ',
+                { $ifNull: ['$email', ''] },
+                ' ',
+                { $ifNull: ['$mobile', ''] },
+              ],
             },
             regex: filters.query,
             options: 'i',
