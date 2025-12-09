@@ -2,6 +2,7 @@
 import React from 'react'
 import { useBuilderStore } from '@/components/builder-canvas/store/useBuilderStore'
 import FileUpload from '@/components/form-fields/file-upload'
+import Switch from '@/components/form-fields/switch'
 
 type Props = {
   initialData: any
@@ -40,6 +41,17 @@ export const ContentEditor = ({ initialData, savePage }: Props) => {
           })
         }}
         showDeleteButton={true}
+      />
+      <Switch
+        name="isLCP"
+        title="علامت‌گذاری به‌عنوان LCP"
+        defaultChecked={selectedBlock?.settings?.isLCP ?? false}
+        onChange={(values) => {
+          update(selectedBlock?.id as string, 'settings', {
+            ...selectedBlock?.settings,
+            isLCP: values,
+          })
+        }}
       />
     </>
   )

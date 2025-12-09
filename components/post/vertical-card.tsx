@@ -11,11 +11,13 @@ type VerticalcardProps = {
   options: {
     showExcerpt: boolean
   }
+  isLCP: boolean
 }
 export default function VerticalPostCard({
   className = '',
   post,
   options = { showExcerpt: true },
+  isLCP = false,
 }: VerticalcardProps) {
   const locale = 'fa'
   const translationPost: PostTranslationSchema =
@@ -46,6 +48,9 @@ export default function VerticalPostCard({
               blurDataURL={
                 post?.image?.blurDataURL || '/image-placeholder-Small.webp'
               } //  مسیر عکس خیلی کم‌کیفیت (LQIP یا base64)
+              priority={isLCP} // برای تصویر LCP
+              loading={isLCP ? 'eager' : 'lazy'}
+              fetchPriority={isLCP ? 'high' : 'auto'}
             />
           </div>
           <div className="p-4">

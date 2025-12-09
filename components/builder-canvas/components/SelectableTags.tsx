@@ -33,7 +33,7 @@ export default function SelectableTags({
 }: {
   items: { label: string; slug: string }[]
   className?: string
-  setSelectedTag: Dispatch<SetStateAction<string>>
+  setSelectedTag?: Dispatch<SetStateAction<string>>
 }) {
   const [selected, setSelected] = useState('')
 
@@ -45,7 +45,7 @@ export default function SelectableTags({
         <Badge
           key={index}
           onClick={() => {
-            setSelectedTag(item.slug)
+            setSelectedTag?.(item.slug)
             setSelected(item.slug)
           }}
           variant="outline"

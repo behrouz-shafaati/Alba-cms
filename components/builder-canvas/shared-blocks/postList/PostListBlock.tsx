@@ -6,6 +6,7 @@ import { getPosts } from '@/features/post/actions'
 import { getCategoryAction } from '@/features/category/actions'
 import PostList from './PostList'
 import { getTagAction } from '@/features/tag/actions'
+import { buildUrlFromFilters } from '@/lib/utils'
 
 type PostListBlockProps = {
   widgetName: string
@@ -39,6 +40,8 @@ export default async function PostListBlock({
   ...props
 }: PostListBlockProps) {
   const { content, settings } = blockData
+
+  console.log('#234897 in list block render')
 
   // const selectedTag = searchParams?.tag
   const selectedTag = searchParams?.tag
@@ -82,6 +85,49 @@ export default async function PostListBlock({
   ])
   const posts = result.data
   const randomMap = posts.map(() => Math.random() < 0.1)
+
+  // let queryParams = content?.tags || []
+  // if (settings?.showNewest == true)
+  //   queryParams = [{ label: 'تازه‌ها', slug: '' }, ...queryParams]
+
+  // const tagSlugs = content?.tags?.map((tag: Option) => tag.slug) || []
+  // const categorySlugs =
+  //   content?.categories?.map((category: Option) => category.slug) || []
+  // let showMoreHref = '/archive'
+
+  // if (tagSlugs.length > 0)
+  //   showMoreHref = showMoreHref + '/' + buildUrlFromFilters({ tags: tagSlugs })
+
+  // if (content?.usePageCategory && categorySlug) {
+  //   showMoreHref =
+  //     showMoreHref + '/' + buildUrlFromFilters({ categories: [categorySlug] })
+  // } else {
+  //   if (categorySlugs.length > 0)
+  //     showMoreHref =
+  //       showMoreHref + '/' + buildUrlFromFilters({ categories: categorySlugs })
+  // }
+
+  // if (
+  //   (!settings?.listDesign || settings?.listDesign == 'row') &&
+  //   (!settings?.cardDesign || settings?.cardDesign == 'image-card')
+  // ) {
+  //   console.log('### Rendering ListRowImageCard design ###')
+  //   const PostListRowImageCard = (await import('./designs/ListRowImageCard'))
+  //     .default
+  //   return (
+  //     <PostListRowImageCard
+  //       posts={posts}
+  //       blockData={blockData}
+  //       categorySlug={categorySlug}
+  //       randomMap={randomMap}
+  //       searchParams={searchParams}
+  //       filters={filters}
+  //       showMoreHref={showMoreHref}
+  //       {...props}
+  //     />
+  //   )
+  // }
+
   return (
     <PostList
       posts={posts}

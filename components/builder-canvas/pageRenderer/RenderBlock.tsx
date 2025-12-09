@@ -1,5 +1,4 @@
 'use server'
-import { registerAllBlocks } from '@/lib/block/register-all-blocks.server'
 import { getBlockRegistry } from '@/lib/block/singletonBlockRegistry'
 import { Block } from '../types'
 import { combineClassNames, getVisibilityClass } from '../utils/styleUtils'
@@ -24,8 +23,6 @@ const RenderBlock = async ({
   searchParams = {},
   ...rest
 }: RenderBlockProp) => {
-  // فقط در سرور اجرا می‌شود
-  registerAllBlocks()
   const blocks = await getBlockRegistry() // برای محتوا دار بودن این برای رسیدن به این کامپوننت هیچ کامپوننتی نباید از use client‌ استفاده کرده باشد
 
   const visibility = item.styles?.visibility

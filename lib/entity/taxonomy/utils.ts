@@ -1,9 +1,9 @@
-import { Taxonomy } from './interface'
+import { Taxonomy, TaxonomyType } from './interface'
 
 export function buildTaxonomyHref(taxonomy: Taxonomy, href: string = '') {
   if (!taxonomy) {
     const clean = href.replace(/\/$/, '') // حذف اسلش انتهایی
-    return `/taxonomy/${clean}`
+    return `/${clean}`
   }
   return buildTaxonomyHref(
     taxonomy?.parent,

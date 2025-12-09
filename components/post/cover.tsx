@@ -9,6 +9,7 @@ type PostCoverProps = {
   postType: 'article' | 'video'
   primaryVideoEmbedUrl: string | null
   styles?: any
+  isLCP: boolean
 } & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
 
 export const PostCover = ({
@@ -17,6 +18,7 @@ export const PostCover = ({
   postType,
   primaryVideoEmbedUrl,
   styles = {},
+  isLCP = true,
   ...props
 }: PostCoverProps) => {
   if (postType === 'video') {
@@ -28,7 +30,7 @@ export const PostCover = ({
       showCaption={false}
       style={styles}
       aspectRatio={aspectRatio}
-      isLCP={true}
+      isLCP={isLCP}
       {...props}
     />
   ) : (

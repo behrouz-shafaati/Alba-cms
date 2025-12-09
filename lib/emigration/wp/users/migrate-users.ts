@@ -5,7 +5,7 @@
 
 import { WPClient, WPUser, createWPClient } from '../wp-client'
 import {
-  UserMigrationOptions,
+  MigrationOptions,
   UserMigrationResult,
   MigrationRunResult,
   WP_ROLE_MAP,
@@ -18,7 +18,7 @@ import wpEmigrationCtrl from '../controller'
 import userCtrl from '@/features/user/controller'
 
 // تنظیمات پیش‌فرض
-const DEFAULT_OPTIONS: UserMigrationOptions = {
+const DEFAULT_OPTIONS: MigrationOptions = {
   batchSize: 100,
   concurrency: 5,
   dryRun: false,
@@ -30,12 +30,12 @@ const DEFAULT_OPTIONS: UserMigrationOptions = {
 export class UserMigration {
   private wpClient: WPClient
   private logService: typeof wpEmigrationCtrl
-  private options: UserMigrationOptions
+  private options: MigrationOptions
   private logger: (message: string) => void
 
   constructor(
     connectionData: { baseUrl: string; apiKey: string },
-    options: Partial<UserMigrationOptions> = {}
+    options: Partial<MigrationOptions> = {}
   ) {
     this.wpClient = createWPClient(connectionData)
     this.logService = wpEmigrationCtrl
@@ -300,7 +300,6 @@ export class UserMigration {
           console.log('') // New line after progress
         }
 
-        console.log('#872634 sdg wpUsersMap', wpUsersMap) // خط جدید بعد از پیشرفت
         // پردازش هر کاربر
         for (const [wpId, userOrError] of wpUsersMap) {
           if (userOrError instanceof Error) {
@@ -487,7 +486,7 @@ export class UserMigration {
 // ✅ Export factory function
 export function createUserMigration(
   connectionData: { baseUrl: string; apiKey: string },
-  options?: Partial<UserMigrationOptions>
+  options?: Partial<MigrationOptions>
 ): UserMigration {
   return new UserMigration(connectionData, options)
 }

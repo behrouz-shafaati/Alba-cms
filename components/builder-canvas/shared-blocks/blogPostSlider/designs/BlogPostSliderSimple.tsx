@@ -71,12 +71,14 @@ const BlogPostSliderSimple = ({
 
   const { onClick, ...restProps } = props
   const postSlids = posts.map((post, index) => {
+    const isLcp = index == 0 && settings?.isLCP
     return (
       <VerticalPostCard
         key={index}
         post={post}
         options={settings}
         className={'shadow'}
+        isLCP={isLcp}
       />
     )
   })

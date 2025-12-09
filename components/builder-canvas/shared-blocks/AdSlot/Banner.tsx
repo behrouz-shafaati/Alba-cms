@@ -92,6 +92,7 @@ export const Banner = ({
         className="object-cover w-full h-full"
         priority={content?.isLCP || false} // برای تصویر LCP
         loading={content?.isLCP ? 'eager' : 'lazy'}
+        fetchPriority={content?.isLCP ? 'high' : 'auto'}
       />
     )
     if (banner?.targetUrl)

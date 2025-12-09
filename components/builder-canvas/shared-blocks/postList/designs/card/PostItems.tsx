@@ -32,7 +32,6 @@ export default function PostItems({
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
     queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
-
   return (
     <>
       {!loading && posts.length == 0 ? (
@@ -42,6 +41,7 @@ export default function PostItems({
       ) : (
         (loading ? new Array(settings?.countOfPosts || 6).fill({}) : posts).map(
           (post, index) => {
+            const isLCP = index == 0 && settings?.isLCP
             adIndex += 1
             let flgShowBanner = false
             if (advertisingAfter == adIndex) {
@@ -58,7 +58,7 @@ export default function PostItems({
                     <PostOverlayCard
                       key={post.id}
                       post={post}
-                      options={settings}
+                      options={{ ...settings, isLCP }}
                       direction={settings?.listDesign}
                     />
                     {flgShowBanner && (
@@ -83,6 +83,7 @@ export default function PostItems({
                           post={post}
                           options={{ showExcerpt: false }}
                           className="border-b"
+                          isLCP={isLCP}
                         />
                       )
                     ) : loading ? (
@@ -92,6 +93,7 @@ export default function PostItems({
                         key={post.id}
                         post={post}
                         options={settings}
+                        isLCP={isLCP}
                       />
                     )}
                     {flgShowBanner && (
@@ -114,6 +116,7 @@ export default function PostItems({
                         key={post.id}
                         post={post}
                         options={settings}
+                        isLCP={isLCP}
                       />
                     )}
                     {flgShowBanner && (
@@ -136,6 +139,7 @@ export default function PostItems({
                         key={post.id}
                         post={post}
                         options={settings}
+                        isLCP={isLCP}
                       />
                     )}
                     {flgShowBanner && (

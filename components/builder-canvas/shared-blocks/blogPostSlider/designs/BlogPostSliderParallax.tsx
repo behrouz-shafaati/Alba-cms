@@ -41,7 +41,8 @@ const BlogPostSliderParallax = ({
   const locale = 'fa'
   const { content, settings } = blockData
   const plugins: EmblaPluginType[] = [Autoplay(pluginsConfig)]
-  const postSlids = posts.map((post) => {
+  const postSlids = posts.map((post, index) => {
+    const isLCP = index == 0 && settings?.isLCP
     const translationPost: PostTranslationSchema =
       post?.translations?.find(
         (t: PostTranslationSchema) => t.lang === locale
@@ -73,6 +74,9 @@ const BlogPostSliderParallax = ({
                 objectFit="cover"
                 placeholder="blur" //  فعال کردن حالت بلور
                 blurDataURL={post?.image?.blurDataURL || ''} //  مسیر عکس خیلی کم‌کیفیت (LQIP یا base64)
+                priority={isLCP} // برای تصویر LCP
+                loading={isLCP ? 'eager' : 'lazy'}
+                fetchPriority={isLCP ? 'high' : 'auto'}
               />
 
               {/* overlay گرادینت تاریک از پایین */}

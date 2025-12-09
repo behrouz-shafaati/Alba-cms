@@ -31,6 +31,7 @@ export const PostListHeroHorizontal = ({
   ...props
 }: PostListProps) => {
   const { settings } = blockData
+  if (!posts?.length) return null
   const firstPost = posts[0]
 
   return (
@@ -43,7 +44,7 @@ export const PostListHeroHorizontal = ({
             key={firstPost.id}
             post={firstPost}
             options={{
-              isLCP: true,
+              isLCP: settings?.isLCP,
               showExcerpt: false,
               titleClasses: '!text-4xl',
               aspectRatio: '16 / 9',

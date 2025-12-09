@@ -6,7 +6,7 @@ import { Option } from '@/types'
 import { ArrowLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import PostItems from '../card/PostItems'
+// import PostItems from '../card/PostItems'
 // import { getPosts } from '@/features/post/actions'
 // import { getTagAction } from '@/features/tag/actions'
 // import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
@@ -16,6 +16,9 @@ import SelectableTags from '@/components/builder-canvas/components/SelectableTag
 import { getPosts } from '@/features/post/actions'
 import { getTagAction } from '@/features/tag/actions'
 import { FastLink } from '@/components/FastLink'
+import PostImageCardSkeltone from './card/skeleton/ImageCardSkeleton'
+import PostImageCard from './card/ImageCard'
+import AdSlotBlock from '../../AdSlot/AdSlotBlock'
 
 type PostListProps = {
   posts: Post[]
@@ -39,7 +42,7 @@ type PostListProps = {
   } & Block
 } & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
 
-export const PostListRow = ({
+export const PostListRowImageCard = ({
   posts: initialPosts,
   showMoreHref,
   blockData,
@@ -50,7 +53,10 @@ export const PostListRow = ({
 }: PostListProps) => {
   const locale = 'fa'
   const { id, content, settings } = blockData
-  console.log('--- PostListRow Rendered --- settings:', settings)
+
+  const advertisingAfter = blockData?.settings?.advertisingAfter || 0
+  let adIndex = 0
+
   props.className = props?.className
     ? `${props?.className} w-full h-auto max-w-full`
     : 'w-full h-auto max-w-full'
@@ -78,7 +84,8 @@ export const PostListRow = ({
   const [loading, setLoading] = useState(false)
   const [selectedTag, setSelectedTag] = useState('')
   const [posts, setPosts] = useState(initialPosts)
-  // const posts = initialPosts
+  //   const posts = initialPosts
+  //   const loading = false
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,6 +117,7 @@ export const PostListRow = ({
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
     queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
+
   return (
     <div
       className=" relative w-full min-h-10  overflow-hidden "
@@ -145,12 +153,58 @@ export const PostListRow = ({
         <div className={`mt-2 `}>
           <ScrollArea className="">
             <div className="flex flex-row w-full gap-4 pb-4">
-              <PostItems
-                posts={posts}
-                blockData={blockData}
-                randomMap={randomMap}
-                loading={loading}
-              />
+              <>
+                {!loading && posts.length == 0 ? (
+                  <div className="w-full p-24 items-start text-center">
+                    داده ای وجود ندارد
+                  </div>
+                ) : (
+                  (loading
+                    ? new Array(settings?.countOfPosts || 6).fill({})
+                    : posts
+                  ).map((post, index) => {
+                    console.log('#index im map:', index)
+                    console.table([
+                      {
+                        src: post?.image?.srcMedium,
+                        isLCP: index == 0,
+                      },
+                    ])
+
+                    adIndex += 1
+                    let flgShowBanner = false
+                    if (advertisingAfter == adIndex) {
+                      flgShowBanner = true
+                      adIndex = 0
+                    }
+
+                    const flgShowVertical =
+                      randomMap?.[index] === true ? true : false
+                    return (
+                      <React.Fragment key={post.id}>
+                        {loading ? (
+                          <PostImageCardSkeltone />
+                        ) : (
+                          <PostImageCard
+                            key={post.id}
+                            post={post}
+                            options={settings}
+                            isLCP={index == 0}
+                          />
+                        )}
+                        {flgShowBanner && (
+                          <AdSlotBlock
+                            blockData={{
+                              id: `${id}${index}`,
+                              settings: { aspect: '4/1', countOfBanners: 1 },
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
+                    )
+                  })
+                )}
+              </>
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
@@ -160,4 +214,4 @@ export const PostListRow = ({
   )
 }
 
-export default PostListRow
+export default PostListRowImageCard

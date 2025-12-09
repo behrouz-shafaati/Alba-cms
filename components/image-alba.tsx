@@ -64,6 +64,7 @@ export function ImageAlba({
           // onClick={openZoom}
           priority={isLCP} // برای تصویر LCP
           loading={isLCP ? 'eager' : 'lazy'}
+          fetchPriority={isLCP ? 'high' : 'auto'}
           placeholder="blur" // ✅ فعال کردن حالت بلور
           blurDataURL={blurDataURL || srcSmall} // ✅ مسیر عکس خیلی کم‌کیفیت (LQIP یا base64)
         />
@@ -444,6 +445,7 @@ export function ImageAlba({
 //           onClick={openZoom}
 //           priority={isLCP} // برای تصویر LCP
 //           loading={isLCP ? 'eager' : 'lazy'}
+// fetchPriority={isLCP ? 'high' : 'auto'}
 //           placeholder="blur" // ✅ فعال کردن حالت بلور
 //           blurDataURL={blurDataURL || srcSmall} // ✅ مسیر عکس خیلی کم‌کیفیت (LQIP یا base64)
 //         />

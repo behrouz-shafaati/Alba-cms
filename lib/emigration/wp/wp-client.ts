@@ -3,6 +3,8 @@
  * src/lib/migration/wp-client.ts
  */
 
+import { WPClientConfig } from './interface'
+
 export interface WPUser {
   wpId: number
   userName: string
@@ -13,14 +15,6 @@ export interface WPUser {
   mobile: string | null
   roles: string[]
   registeredAt: string
-}
-
-export interface WPClientConfig {
-  baseUrl: string
-  apiKey: string
-  timeout?: number
-  retryAttempts?: number
-  retryDelay?: number
 }
 
 export class WPClient {
@@ -110,6 +104,13 @@ export class WPClient {
     throw lastError || new Error('Unknown error in WPClient')
   }
 
+  async get<T>(
+    endpoint: string,
+    params?: Record<string, string | number>
+  ): Promise<T> {
+    return this.request<T>(endpoint, params)
+  }
+
   /**
    * تابع کمکی برای تاخیر
    */
@@ -166,6 +167,51 @@ export class WPClient {
 
       const batchResults = await Promise.allSettled(
         batch.map((id) => this.getUser(id))
+      )
+
+      batchResults.forEach((result, index) => {
+        const wpId = batch[index]
+        if (result.status === 'fulfilled') {
+          results.set(wpId, result.value)
+        } else {
+          results.set(
+            wpId,
+            new Error(result.reason?.message || 'Unknown error')
+          )
+        }
+        completed++
+      })
+
+      if (onProgress) {
+        onProgress(completed, wpIds.length)
+      }
+
+      // Rate limiting - کمی صبر بین batch ها
+      if (i + concurrency < wpIds.length) {
+        await this.sleep(100)
+      }
+    }
+
+    return results
+  }
+  /**
+   * دریافت چند قخصس به صورت همزمان (با محدودیت concurrency)
+   */
+  async getBatch(
+    wpIds: number[],
+    baseUrl: 'users' | 'taxonomies',
+    concurrency: number = 5,
+    onProgress?: (completed: number, total: number) => void
+  ): Promise<Map<number, any | Error>> {
+    const results = new Map<number, any | Error>()
+    let completed = 0
+
+    // تقسیم به گروه‌های همزمان
+    for (let i = 0; i < wpIds.length; i += concurrency) {
+      const batch = wpIds.slice(i, i + concurrency)
+
+      const batchResults = await Promise.allSettled(
+        batch.map((id) => this.request<any>(`/${baseUrl}/${id}`))
       )
 
       batchResults.forEach((result, index) => {

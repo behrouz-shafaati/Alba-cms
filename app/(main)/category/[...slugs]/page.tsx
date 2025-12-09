@@ -12,8 +12,6 @@ import { Category } from '@/features/category/interface'
 import { getSettings } from '@/features/settings/controller'
 import RendererTemplate from '@/components/builder-canvas/templateRender/RenderTemplate.server'
 import CategoryDescription from '@/features/category/ui/component/Description'
-import pageCtrl from '@/features/page/controller'
-import postCtrl from '@/features/post/controller'
 
 interface PageProps {
   params: Promise<{ slugs: string[] }>
@@ -65,7 +63,8 @@ export default async function Page({ params, searchParams }: PageProps) {
   const locale = 'fa'
   const resolvedParams = await params
   const { slugs } = resolvedParams
-  const resolvedSearchParams = await searchParams
+  // const resolvedSearchParams = await searchParams
+  const resolvedSearchParams = {}
   // const { query = '', page = '1' } = resolvedSearchParams
   const categorySlug = decodeURIComponent(slugs[slugs.length - 1])
 
@@ -84,6 +83,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const category = categoryResult.data?.[0] || null
   const translation = getTranslation({ translations: category?.translations })
+
   if (template)
     return (
       <RendererTemplate

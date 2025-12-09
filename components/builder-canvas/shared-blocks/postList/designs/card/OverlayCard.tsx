@@ -57,6 +57,7 @@ const PostOverlayCard = ({ post, direction = 'row', options }: Props) => {
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1280px"
         priority={isLCP} // برای تصویر LCP
         loading={isLCP ? 'eager' : 'lazy'}
+        fetchPriority={isLCP ? 'high' : 'auto'}
         placeholder="blur" // ✅ فعال کردن حالت بلور
         blurDataURL={post?.image?.blurDataURL || ''} // ✅ مسیر عکس خیلی کم‌کیفیت (LQIP یا base64)
       />

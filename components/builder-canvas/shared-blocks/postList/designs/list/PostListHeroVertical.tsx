@@ -35,6 +35,7 @@ export const PostListHeroVertical = ({
   blockData,
   ...props
 }: PostListProps) => {
+  if (!posts?.length) return null
   const firstPost = posts[0]
   const t = getTranslation({ translations: firstPost.translations })
 
@@ -59,6 +60,7 @@ export const PostListHeroVertical = ({
               postType={firstPost.type}
               primaryVideoEmbedUrl={firstPost.primaryVideoEmbedUrl}
               zoomable={false}
+              isLCP={blockData?.settings?.isLCP || false}
             />
             <PostTitle title={t.title} />
             <PostExcerpt content={t.excerpt} />

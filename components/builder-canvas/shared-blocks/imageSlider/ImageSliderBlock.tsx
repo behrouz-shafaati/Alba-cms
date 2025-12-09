@@ -56,7 +56,7 @@ export const ImageSliderBlock = ({
   const { onClick, ...restProps } = props
   const images = content.map((img: FileDetails, i: number) => {
     const Translation = getTranslation({ translations: img?.translations })
-    const isLCP = i === 0
+    const isLCP = i === 0 && settings.isLCP
 
     const imageElement = (
       <Image
@@ -73,6 +73,7 @@ export const ImageSliderBlock = ({
         }}
         priority={isLCP} // برای تصویر LCP
         loading={isLCP ? 'eager' : 'lazy'}
+        fetchPriority={isLCP ? 'high' : 'auto'}
         className="block w-full h-auto"
         placeholder="blur"
         blurDataURL={img?.blurDataURL}

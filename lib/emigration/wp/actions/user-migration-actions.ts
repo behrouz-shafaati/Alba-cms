@@ -10,7 +10,7 @@ import { createWPClient } from '../wp-client'
 import {
   MigrationStats,
   MigrationRunResult,
-  UserMigrationOptions,
+  MigrationOptions,
   WpMigrationLog,
 } from '../interface'
 import wpEmigrationCtrl from '../controller'
@@ -77,7 +77,7 @@ export async function testWPConnectionAction(
 export async function startUserMigration(
   prevState: State,
   formData: FormData,
-  options?: Partial<UserMigrationOptions>
+  options?: Partial<MigrationOptions>
 ): Promise<ActionResponse<MigrationRunResult>> {
   const values: { baseUrl: string; apiKey: string } =
     Object.fromEntries(formData)
@@ -108,7 +108,7 @@ export async function startUserMigration(
 // ========================
 
 export async function dryRunUserMigration(
-  options?: Partial<UserMigrationOptions>
+  options?: Partial<MigrationOptions>
 ): Promise<ActionResponse<MigrationRunResult>> {
   try {
     const migration = createUserMigration({
@@ -136,7 +136,7 @@ export async function dryRunUserMigration(
 // ========================
 
 export async function retryFailedUsers(
-  options?: Partial<UserMigrationOptions>
+  options?: Partial<MigrationOptions>
 ): Promise<ActionResponse<MigrationRunResult>> {
   try {
     const migration = createUserMigration({

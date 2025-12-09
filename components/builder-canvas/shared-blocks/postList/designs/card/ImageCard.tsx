@@ -10,9 +10,17 @@ type Props = {
   options: {
     showExcerpt: boolean
   }
+  isLCP?: boolean
 }
 
-const PostImageCard = ({ post, options }: Props) => {
+const PostImageCard = ({ post, options, isLCP = false }: Props) => {
+  console.log('#in post card')
+  console.table([
+    {
+      src: post?.image?.srcMedium,
+      isLCP: isLCP,
+    },
+  ])
   const locale = 'fa'
   const translationPost: PostTranslationSchema =
     post?.translations?.find((t: PostTranslationSchema) => t.lang === locale) ||
@@ -70,6 +78,10 @@ const PostImageCard = ({ post, options }: Props) => {
               objectFit="cover"
               placeholder="blur"
               blurDataURL={post?.image?.blurDataURL || ''}
+              quality={80}
+              priority={isLCP}
+              fetchPriority={isLCP ? 'high' : 'auto'}
+              loading={isLCP ? 'eager' : 'lazy'}
             />
           </div>
           <div className="p-4">

@@ -12,9 +12,15 @@ type Props = {
     showExcerpt: boolean
   }
   query?: string
+  isLCP: boolean
 }
 
-const PostHorizontalCard = ({ post, options, query = '' }: Props) => {
+const PostHorizontalCard = ({
+  post,
+  options,
+  query = '',
+  isLCP = false,
+}: Props) => {
   const locale = 'fa'
   const translationPost: PostTranslationSchema =
     post?.translations?.find((t: PostTranslationSchema) => t.lang === locale) ||
@@ -55,6 +61,9 @@ const PostHorizontalCard = ({ post, options, query = '' }: Props) => {
               blurDataURL={
                 post?.image?.blurDataURL || '/image-placeholder-Small.webp'
               }
+              priority={isLCP} // برای تصویر LCP
+              loading={isLCP ? 'eager' : 'lazy'}
+              fetchPriority={isLCP ? 'high' : 'auto'}
             />
           )}
         </div>

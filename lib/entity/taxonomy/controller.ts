@@ -1,6 +1,7 @@
 import {
   Create,
   QueryFind,
+  QueryFindOne,
   QueryResponse,
   Update,
 } from '@/lib/entity/core/interface'
@@ -12,7 +13,7 @@ import { Taxonomy, TaxonomyType } from './interface'
 import { buildTaxonomyHref } from './utils'
 
 export default class taxonomyController extends baseController {
-  private type: string
+  private type: TaxonomyType
 
   /**
    * constructor function for controller.
@@ -80,6 +81,12 @@ export default class taxonomyController extends baseController {
 
     data.image = data?.image == '' ? null : data?.image
     return data
+  }
+
+  async findOne(payload: QueryFindOne) {
+    payload.filters = this.standardizationFilters(payload.filters)
+
+    return super.findOne(payload)
   }
 
   async find(payload: QueryFind) {
@@ -152,6 +159,7 @@ export default class taxonomyController extends baseController {
 
   async generateStaticParams() {
     const taxonomiesHomeSlugs = await this.getAllSlugs() // فرض کن فقط slug برمی‌گردونه
+    console.log('#32476 taxonomiesHomeSlugs:', taxonomiesHomeSlugs)
     return taxonomiesHomeSlugs
   }
 

@@ -90,6 +90,8 @@ export interface WPClientConfig {
   baseUrl: string
   apiKey: string
   timeout?: number
+  retryAttempts?: number
+  retryDelay?: number
 }
 
 /**
@@ -113,7 +115,7 @@ export interface MigrationStats {
 }
 
 // تنظیمات مهاجرت کاربران
-export interface UserMigrationOptions {
+export interface MigrationOptions {
   batchSize: number
   concurrency: number
   dryRun: boolean
