@@ -202,7 +202,7 @@ export class WPClient {
    */
   async getBatch(
     wpIds: number[],
-    baseUrl: 'users' | 'taxonomies' | 'posts',
+    baseUrl: 'users' | 'taxonomies' | 'posts' | 'post_comments',
     concurrency: number = 5,
     onProgress?: (completed: number, total: number) => void
   ): Promise<Map<number, any | Error>> {

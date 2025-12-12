@@ -42,6 +42,8 @@ type PostCommentBase = {
    */
   translations: [PostCommentTranslationSchema]
 
+  metadata: Record<string, any>
+
   /**
    *  نوع دیدگاه یا سوال
    */

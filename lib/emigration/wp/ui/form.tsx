@@ -20,6 +20,7 @@ import {
   startTaxonomyMigration,
 } from '../actions/taxonomy-migration-actions'
 import { startPostMigration } from '../posts/post-migration-actions'
+import { startPostCommentMigration } from '../post-comments/post-comment-migration-actions'
 
 interface SettingsFormProps {
   settings: Settings
@@ -95,6 +96,21 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
     console.log('handleStartEmigration result :', result)
     setLoading(false)
   }
+
+  const handleStartPostCommentEmigration = async (e: React.FormEvent) => {
+    setLoading(true)
+    e.preventDefault()
+    const formData = new FormData(formRef.current!)
+    formData.append('newBaseUrl', window.location.origin.replace(/\/+$/, ''))
+
+    const result = await startPostCommentMigration(state, formData, {
+      batchSize: 50,
+    })
+    setState((s) => ({ ...s, ...result }))
+    console.log('handleStart post comments Emigration result :', result)
+    setLoading(false)
+  }
+
   const handleTestHtmlToTipTap = async (e: React.FormEvent) => {
     setLoading(true)
     e.preventDefault()
@@ -179,7 +195,7 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
               role="button"
               onClick={handleStartEmigration}
             >
-              شروع مهاجرت
+              شروع مهاجرت کاربران
             </Button>
             <Button
               loading={loading}
@@ -196,6 +212,14 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
               onClick={handleStartPostEmigration}
             >
               شروع مهاجرت مطالب
+            </Button>
+            <Button
+              loading={loading}
+              type="button"
+              role="button"
+              onClick={handleStartPostCommentEmigration}
+            >
+              شروع مهاجرت دیدگاه‌های مطالب
             </Button>
             <Button
               loading={loading}

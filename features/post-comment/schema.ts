@@ -42,6 +42,9 @@ const postCommentSchema = new Schema<PostCommentSchema>(
       enum: ['comment', 'question'],
       default: 'comment',
     },
+    metadata: {
+      type: Schema.Types.Mixed,
+    },
     status: {
       type: String,
       enum: ['pending', 'approved', 'rejected'],
@@ -73,31 +76,11 @@ postCommentSchema
     })
     next()
   })
-  .pre('find', function (next: any) {
+  .pre(['find', 'findOneAndUpdate'], function (next: any) {
     this.populate('author')
     this.populate({
       path: 'post',
-      select: 'id href translations', // فقط translations رو بیار
-      transform: (doc: any) => {
-        if (!doc) return doc
-        doc = doc.toObject()
-
-        // 🔻 محدود کردن محتوای translations
-        doc.translations = (doc?.translations || []).map((t: any) => ({
-          lang: t.lang,
-          title: t.title,
-        }))
-
-        return doc
-      },
-    })
-    next()
-  })
-  .pre('findOneAndUpdate', function (next: any) {
-    this.populate('author')
-    this.populate({
-      path: 'post',
-      select: 'id href translations', // فقط translations رو بیار
+      select: 'id href slug translations', // فقط translations رو بیار
       transform: (doc: any) => {
         if (!doc) return doc
         doc = doc.toObject()

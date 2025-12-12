@@ -123,7 +123,7 @@ export interface WPClientConfig {
 export type MigrationStatus = 'pending' | 'success' | 'failed' | 'skipped'
 
 // نوع موجودیت (برای آینده)
-export type EntityType = 'user' | 'post' | 'comment' | 'term'
+export type EntityType = 'user' | 'post' | 'comment' | 'term' | 'post_comment'
 
 // آمار مهاجرت
 export interface MigrationStats {
