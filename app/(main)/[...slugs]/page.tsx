@@ -13,7 +13,6 @@ import {
   createPostHref,
   generateFAQSchema,
   generatePostSchema,
-  getReadingTime,
   buildBreadcrumbsArray,
 } from '@/features/post/utils'
 
@@ -30,6 +29,7 @@ import getTranslation from '@/lib/utils/getTranslation'
 // import PostCommentList from '@/features/post-comment/ui/list'
 import TableOfContents from '@/components/post/table-of-contents'
 import PostCommentListLazy from '@/features/post-comment/ui/list/PostCommentListLazy'
+import getReadingTime from '@/lib/utils/getReadingTime'
 // import TableOfContentsLazy from '@/components/post/table-of-contents-lazy'
 
 interface PageProps {
@@ -157,7 +157,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const readingDuration = getReadingTime(plainText)
 
   const metadata = {
-    author: post?.user,
+    author: post?.author || post?.user,
     createdAt: post.createdAt,
     readingDuration,
   }

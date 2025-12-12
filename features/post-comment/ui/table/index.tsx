@@ -36,7 +36,7 @@ export default async function PostCommentTable({
     },
     false
   )
-
+  console.log('#2340987 findResult:', findResult)
   return (
     <>
       <div className="flex items-start justify-between">

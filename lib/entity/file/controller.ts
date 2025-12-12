@@ -68,7 +68,7 @@ class controller extends c_controller {
   async saveFile(formData: FormData): Promise<FileDetails> {
     const file = formData.get('file') as File
 
-    const _id: string = formData.get('id') as string
+    const _id: string | null = formData.get('id') as string
     let title: string = formData.get('title') as string
     let alt: string = formData.get('alt') as string
     let description: string = formData.get('description') as string

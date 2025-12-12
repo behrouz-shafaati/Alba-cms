@@ -1,4 +1,5 @@
 import { Id, Model, SchemaModel } from '@/lib/entity/core/interface'
+import { WpTaxonomyType } from '@/lib/entity/taxonomy/interface'
 
 // import { Role } from "@entity/role/interface";
 /**
@@ -63,6 +64,26 @@ export interface WPUser {
   registered_at: string
   status: number
 }
+// taxonomy دریافتی از API وردپرس
+export interface WpTaxonomy {
+  wpId: number
+  name: string
+  slug: string
+  taxonomy: WpTaxonomyType
+  description: string
+  parent: number | null
+  ancestors: number[]
+  children: number[]
+  count: number
+  meta: WPTaxonomyMeta
+  link: string
+}
+
+interface WPTaxonomyMeta {
+  order?: string[]
+  product_count_product_cat?: string[]
+  [key: string]: string[] | undefined
+}
 
 // پاسخ لیست کاربران
 export interface WPUsersResponse {
@@ -116,6 +137,7 @@ export interface MigrationStats {
 
 // تنظیمات مهاجرت کاربران
 export interface MigrationOptions {
+  newBaseUrl: string
   batchSize: number
   concurrency: number
   dryRun: boolean

@@ -67,22 +67,24 @@ const PostImageCard = ({ post, options, isLCP = false }: Props) => {
               decoding="async"
               quality={80}
             /> */}
-            <Image
-              src={
-                post?.image?.srcMedium ||
-                '/assets/image-placeholder-Medium.webp'
-              }
-              sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, 1280px"
-              alt={translationImage?.alt || translationImage?.title}
-              layout="fill"
-              objectFit="cover"
-              placeholder="blur"
-              blurDataURL={post?.image?.blurDataURL || ''}
-              quality={80}
-              priority={isLCP}
-              fetchPriority={isLCP ? 'high' : 'auto'}
-              loading={isLCP ? 'eager' : 'lazy'}
-            />
+            {post?.image && (
+              <Image
+                src={
+                  post?.image?.srcMedium ||
+                  '/assets/image-placeholder-Medium.webp'
+                }
+                sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, 1280px"
+                alt={translationImage?.alt || translationImage?.title}
+                layout="fill"
+                objectFit="cover"
+                placeholder="blur"
+                blurDataURL={post?.image?.blurDataURL || ''}
+                quality={80}
+                priority={isLCP}
+                fetchPriority={isLCP ? 'high' : 'auto'}
+                loading={isLCP ? 'eager' : 'lazy'}
+              />
+            )}
           </div>
           <div className="p-4">
             <h3 className="text-sm font-semibold mb-2 leading-5 min-h-[2.5rem] line-clamp-2">

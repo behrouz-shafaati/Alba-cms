@@ -39,6 +39,9 @@ export type PostTranslationSchema = {
    */
   readingTime: number
 }
+
+export type PostStatus = 'published' | 'draft'
+
 /**
  * اطلاعات پایه مطلب که شامل فیلدهای اصلی مطلب می‌باشد
  */
@@ -60,10 +63,15 @@ type PostBase = {
   /**
    * وضعیت فعال بودن مطلب (در صورت فعال بودن true)
    */
-  status: 'published' | 'draft'
+  status: PostStatus
 
   // example: 'pen/مطلب-یک'
   href: string
+
+  // متادیتا
+  metadata: {
+    [key: string]: any // هر فیلد سفارشی دیگر
+  }
 
   /**
    * تاریخ انتشار

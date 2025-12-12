@@ -30,6 +30,13 @@ export type TaxonomyType =
   | 'product_tag'
   | 'brand'
   | 'attribute'
+export type WpTaxonomyType =
+  | 'category'
+  | 'post_tag'
+  | 'product_cat'
+  | 'product_tag'
+  | 'brand'
+  | 'attribute'
 
 /**
  * اطلاعات پایه دسته‌بندی که شامل فیلدهای اصلی دسته‌بندی می‌باشد

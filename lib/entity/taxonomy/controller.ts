@@ -9,7 +9,7 @@ import baseController from '@/lib/entity/core/controller'
 import taxonomySchema from './schema'
 import taxonomyService from './service'
 import { slugify } from '@/lib/utils'
-import { Taxonomy, TaxonomyType } from './interface'
+import { Taxonomy, TaxonomyType, WpTaxonomyType } from './interface'
 import { buildTaxonomyHref } from './utils'
 
 export default class taxonomyController extends baseController {

@@ -1,9 +1,10 @@
 import { BreadCrumb, BreadCrumbType } from '@/components/breadcrumb'
 import RenderedHtml from '@/components/tiptap-editor/render/RenderedHtml.server'
 import { PostComment, PostCommentTranslationSchema } from '../../interface'
-import { formatToJalali, getReadingTime } from '@/features/post/utils'
+import { formatToJalali } from '@/features/post/utils'
 import { getTranslation, timeAgo } from '@/lib/utils'
 import { ImageAlba } from '@/components/image-alba'
+import getReadingTime from '@/lib/utils/getReadingTime'
 
 type props = {
   locale?: string

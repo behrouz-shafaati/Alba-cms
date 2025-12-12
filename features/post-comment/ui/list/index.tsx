@@ -14,7 +14,7 @@ export default function PostCommentList({
   postCommentsResult,
 }: PostCommentTableProps) {
   const initialPostComments = postCommentsResult
-  const comments = postCommentsResult.data
+  const postComments = postCommentsResult.data
   // const { data: postComments, isLoading } = useCustomSWR({
   //   url: `/api/comments?post=${post.id}`,
   //   initialData: initialPostComments,
@@ -23,7 +23,7 @@ export default function PostCommentList({
   return (
     <>
       <div className="">
-        {(initialPostComments.data ?? []).map((postComment: PostComment) => {
+        {(postComments ?? []).map((postComment: PostComment) => {
           return (
             <PostCommentItem key={postComment.id} postComment={postComment} />
           )

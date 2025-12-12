@@ -1,8 +1,19 @@
 import { createWPTaxonomyClient, WPTaxonomyClient } from './wp-taxonomy-client'
 import wpEmigrationCtrl from '../controller'
-import { MigrationOptions, MigrationRunResult, WPUser } from '../interface'
+import {
+  MigrationOptions,
+  MigrationRunResult,
+  WpTaxonomy,
+  WPUser,
+} from '../interface'
 import taxonomyController from '@/lib/entity/taxonomy/controller'
-import { Taxonomy } from '@/lib/entity/taxonomy/interface'
+import {
+  Taxonomy,
+  TaxonomyType,
+  WpTaxonomyType,
+} from '@/lib/entity/taxonomy/interface'
+import { WPImageMigrationHelper } from '@/lib/html-to-tiptap/helpers/ImageMigrationHelper'
+import { HtmlToTiptapConverter } from '@/lib/html-to-tiptap/HtmlToTiptapConverter'
 
 // تنظیمات پیش‌فرض
 const DEFAULT_OPTIONS: MigrationOptions = {
@@ -14,7 +25,12 @@ const DEFAULT_OPTIONS: MigrationOptions = {
   skipExisting: true,
 }
 
-export class TaxonomyMigration {
+type TaxonomyItem = {
+  id: number
+  parent: number | null
+}
+
+export default class TaxonomyMigration {
   private wpClient: WPTaxonomyClient
   private logService: typeof wpEmigrationCtrl
 
@@ -32,6 +48,21 @@ export class TaxonomyMigration {
     this.logger = this.options.verbose ? console.log : () => {} // No-op if not verbose
   }
 
+  sortHierarchically(items: TaxonomyItem[]): TaxonomyItem[] {
+    const addedIds = new Set<number>()
+
+    function add(parentId: number | null): TaxonomyItem[] {
+      return items
+        .filter((item) => item.parent === parentId && !addedIds.has(item.id))
+        .flatMap((item) => {
+          addedIds.add(item.id)
+          return [item, ...add(item.id)]
+        })
+    }
+
+    return add(null)
+  }
+
   async startMigration() {
     const startedAt = new Date()
     const errors: Array<{ wpId: number; error: string }> = []
@@ -45,9 +76,16 @@ export class TaxonomyMigration {
 
     // ۱. دریافت همه ID ها از وردپرس
     this.logger('📋 دریافت لیست تاکسونومی از وردپرس...')
-    const allWpIds = await this.wpClient.getTaxonomyIds()
+    let allWpTaxonomies =
+      (await this.wpClient.getTaxonomyIds()) as TaxonomyItem[]
+    allWpTaxonomies = this.sortHierarchically(allWpTaxonomies)
+    console.log('#2394ss876 allWpTaxonomies :', allWpTaxonomies)
+    const allWpIds = allWpTaxonomies.map((taxonomy) => Number(taxonomy.id)) //استخراج ids
+    console.log('#2394876 allWpIds :', allWpIds)
     this.logger(`تعداد کل تاکسونومی در وردپرس: ${allWpIds.length}`)
 
+    // اگر داخل logService‌ نباشد یعنی هیچ تلاشی برای دریافت آن انجام نشده
+    this.logger(`فیلتر تاکسونومی‌های منتقل شده یا در حال پردازش...`)
     // ۲. فیلتر کردن موارد pending و failed
     const alreadySuccess = await this.logService.getIdMapping()
     const pendingIds = allWpIds.filter((id) => !alreadySuccess.has(id))
@@ -107,7 +145,10 @@ export class TaxonomyMigration {
           errors.push({ wpId, error: taxonomyOrError.message })
           failed++
         } else {
-          // مهاجرت کاربر
+          // مهاجرت تاکسونومی
+          console.log(
+            `start taxonomy migrate with id ${taxonomyOrError?.wpId} and type ${taxonomyOrError?.taxonomy}`
+          )
           const result = await this.migrateOneTaxonomy(taxonomyOrError)
 
           if (result.status === 'success') {
@@ -125,27 +166,17 @@ export class TaxonomyMigration {
       }
     }
 
-    return
-    for (const item of items) {
-      try {
-        const original = await this.wpClient.getTaxonomyById(item.id)
+    const result = this.buildResult(
+      startedAt,
+      processed,
+      success,
+      failed,
+      skipped,
+      errors
+    )
+    this.logger(cvsresult)
 
-        const saved = await this.saveTerm(original)
-
-        await this.logService.logServiceuccess({
-          itemId: original.wpId,
-          metadata: {
-            name: original.name,
-            taxonomy: original.taxonomy,
-          },
-        })
-      } catch (error: any) {
-        await this.logService.logFailure({
-          itemId: item.id,
-          error: error.message ?? 'Unknown error',
-        })
-      }
-    }
+    return result
   }
 
   async saveTerm(term: any) {
@@ -199,32 +230,37 @@ export class TaxonomyMigration {
     }
   }
 
-  /**
-   * ساخت metadata برای لاگ
-   */
-  private buildMetadata(wpUser: WPUser): any {
-    return {
-      userName: wpUser.userName?.toLowerCase(),
-      email: wpUser.email?.toLowerCase(),
-      firstName: wpUser.firstName || undefined,
-      lastName: wpUser.lastName || undefined,
-      mobile: wpUser.mobile || undefined,
-      roles: wpUser.roles,
+  mapToAlbaTaxonomyType(wpTaxonomyType: WpTaxonomyType): TaxonomyType {
+    const mapping: Record<WpTaxonomyType, TaxonomyType> = {
+      category: 'category',
+      post_tag: 'tag',
+      product_cat: 'product_cat',
+      product_tag: 'product_tag',
+      brand: 'brand',
+      attribute: 'attribute',
     }
+
+    return mapping[wpTaxonomyType]
   }
 
   /**
-   * بررسی وجود کاربر در MongoDB
+   * بررسی وجود taxonomy در MongoDB
    */
   private async checkExisting(
     wpTaxonomy: WPUser
   ): Promise<{ exists: boolean; mongoId?: string; reason?: string }> {
-    const taxonomyCtrl = new taxonomyController('category')
+    const taxonomyCtrl = new taxonomyController(
+      this.mapToAlbaTaxonomyType(wpTaxonomy.taxonomy)
+    )
     // بررسی با slug
+    const slug = wpTaxonomy.slug.toLowerCase()
     const bySlug = await taxonomyCtrl.findOne({
-      filters: { slug: wpTaxonomy.slug.toLowerCase() },
+      filters: { slug },
     })
     if (bySlug) {
+      console.log(
+        `#234908 taxonomy with wpId ${wpTaxonomy.wpId} have duplicate slug ${slug}`
+      )
       return {
         exists: true,
         mongoId: bySlug?.id.toString(),
@@ -250,25 +286,55 @@ export class TaxonomyMigration {
   /**
    * تبدیل کاربر WP به فرمت MongoDB
    */
-  private transformTaxonomy(wpTaxonomy: WPUser): Partial<Taxonomy> {
+  // example input :
+  //  {"wpId":17,"name":"agri","slug":"/acriculture","taxonomy":"product_cat","description":"","parent":null,"ancestors":[],"children":[],"count":2,"meta":{"order":["0"],"product_count_product_cat":["2"]},"link":"http://localhost/jewellery/product-category/%d8%af%d8%b3%d8%aa-%d8%a8%d9%86%d8%af/"}
+  private async transformTaxonomy(
+    wpTaxonomy: WpTaxonomy
+  ): Promise<Partial<Taxonomy | null>> {
+    const taxonomyType = this.mapToAlbaTaxonomyType(wpTaxonomy.taxonomy)
+    let parentId = null
+    if (wpTaxonomy.parent) {
+      const taxonomyCtrl = new taxonomyController(taxonomyType)
+      const parentResult = await taxonomyCtrl.findOne({
+        filters: {
+          type: taxonomyType,
+          'metadata.wpId': wpTaxonomy.parent,
+        },
+      })
+      if (!parentResult) return null
+      parentId = parentResult.id
+    }
+    const imageMigeration = new WPImageMigrationHelper()
+    const HtmlToTiptapjsonConverter = new HtmlToTiptapConverter({
+      defaultDir: 'rtl',
+      logErrors: true,
+      skipImages: false,
+      imageMigrationHelper: imageMigeration,
+    })
+    let description = {}
+    const convertResult = await HtmlToTiptapjsonConverter.convert(
+      wpTaxonomy.description
+    )
+    console.log('#8876 convert taxonomy description result:', convertResult)
+    if (convertResult?.success) description = convertResult.document
     return {
-      type: wpTaxonomy.albaType,
-      parent: wpTaxonomy.parent,
-      ancestors: wpTaxonomy.ancestors,
+      type: taxonomyType,
+      parent: parentId,
+      ancestors: [],
       level: 0,
       slug: wpTaxonomy.slug,
       translations: {
         lang: 'fa',
         title: wpTaxonomy.name,
-        description: wpTaxonomy.description,
+        description: JSON.stringify(description),
       },
-      image: wpTaxonomy.thumbnail,
+      // image: wpTaxonomy.thumbnail,
       icon: '',
       status: 'active',
       user: null,
       metadata: { wpId: wpTaxonomy.wpId }, // ذخیره ID اصلی برای مراجعات بعدی
       count: 0,
-      createdAt: new Date(wpTaxonomy.registeredAt),
+      createdAt: new Date(),
       updatedAt: new Date(),
     }
   }
@@ -280,7 +346,8 @@ export class TaxonomyMigration {
     wpTaxonomy: WPUser
   ): Promise<MigrationResult> {
     //   const metadata = this.buildMetadata(wpTaxonomy)
-
+    const metadata = wpTaxonomy
+    let newTaxonomy
     try {
       // بررسی وجود قبلی
       if (this.options.skipExisting) {
@@ -291,12 +358,15 @@ export class TaxonomyMigration {
             existing.reason || 'already exists',
             wpTaxonomy
           )
-          return {
+
+          const result = {
             wpId: wpTaxonomy.wpId,
             status: 'skipped',
             mongoId: existing.mongoId,
             skippedReason: existing.reason,
           }
+          console.log('234987 result:', result)
+          return result
         }
       }
 
@@ -311,31 +381,44 @@ export class TaxonomyMigration {
       }
 
       // تبدیل و ذخیره
-      const taxonomyCtrl = new taxonomyController('category')
+      const taxonomyCtrl = new taxonomyController(
+        this.mapToAlbaTaxonomyType(wpTaxonomy.taxonomy)
+      )
+      const taxonomyData = await this.transformTaxonomy(wpTaxonomy)
+      console.log(
+        `#88 transformed wpTaxonomy with id ${wpTaxonomy.wpId} =`,
+        wpTaxonomy
+      )
+      if (taxonomyData?.parent !== undefined) {
+        newTaxonomy = await taxonomyCtrl.create({ params: taxonomyData })
 
-      return
-      const taxonomyData = this.transformTaxonomy(wpTaxonomy)
-      const newTaxonomy = await taxonomyCtrl.create({ params: taxonomyData })
+        const mongoId = newTaxonomy.id.toString()
+        await this.logService.logSuccess(wpTaxonomy.wpId, mongoId, metadata)
 
-      const mongoId = newUser.id.toString()
-      await this.logService.logSuccess(wpUser.wpId, mongoId, metadata)
+        this.logger(`✓ Migrated: ${newTaxonomy.slug} -> ${mongoId}`)
 
-      this.logger(`✓ Migrated: ${wpUser.email} -> ${mongoId}`)
-
-      return {
-        wpId: wpUser.wpId,
-        status: 'success',
-        mongoId,
+        return {
+          wpId: wpTaxonomy.wpId,
+          status: 'success',
+          mongoId,
+        }
+      } else {
+        console.log('#2349867 -->Parent of ', taxonomyData)
+        console.log('#88 wpTaxonomy=', wpTaxonomy)
       }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error)
-      await this.logService.logFailure(wpUser.wpId, errorMessage, metadata)
+      await this.logService.logFailure(
+        newTaxonomy?.wpId,
+        errorMessage,
+        metadata
+      )
 
-      this.logger(`✗ Failed: ${wpUser.email} - ${errorMessage}`)
+      this.logger(`✗ Failed: ${newTaxonomy.slug} - ${errorMessage}`)
 
       return {
-        wpId: wpUser.wpId,
+        wpId: newTaxonomy.wpId,
         status: 'failed',
         error: errorMessage,
       }

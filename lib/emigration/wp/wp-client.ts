@@ -3,6 +3,7 @@
  * src/lib/migration/wp-client.ts
  */
 
+import { decodeUnicodeMessage } from '@/lib/utils/decode-unicode'
 import { WPClientConfig } from './interface'
 
 export interface WPUser {
@@ -82,8 +83,10 @@ export class WPClient {
 
         if (!response.ok) {
           const errorText = await response.text()
-          console.error('[WPClient] Error:', errorText)
-          throw new Error(`HTTP ${response.status}: ${errorText}`)
+          console.error('[WPClient] Error:', decodeUnicodeMessage(errorText))
+          throw new Error(
+            `HTTP ${response.status}: ${decodeUnicodeMessage(errorText)}`
+          )
         }
 
         const data = await response.json()
@@ -199,7 +202,7 @@ export class WPClient {
    */
   async getBatch(
     wpIds: number[],
-    baseUrl: 'users' | 'taxonomies',
+    baseUrl: 'users' | 'taxonomies' | 'posts',
     concurrency: number = 5,
     onProgress?: (completed: number, total: number) => void
   ): Promise<Map<number, any | Error>> {
@@ -211,7 +214,10 @@ export class WPClient {
       const batch = wpIds.slice(i, i + concurrency)
 
       const batchResults = await Promise.allSettled(
-        batch.map((id) => this.request<any>(`/${baseUrl}/${id}`))
+        batch.map((id) => {
+          console.log(`Fetching ${baseUrl} with ID:`, id)
+          return this.request<any>(`/${baseUrl}/${id}`)
+        })
       )
 
       batchResults.forEach((result, index) => {

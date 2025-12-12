@@ -2,11 +2,12 @@ import { Create, QueryFind, Update } from '@/lib/entity/core/interface'
 import baseController from '@/lib/entity/core/controller'
 import postCommentSchema from './schema'
 import postCommentService from './service'
-import { getReadingTime } from '../post/utils'
 import { getTranslation } from '@/lib/utils'
 import { buildCommentTree } from './utils'
 import { renderTiptapJsonToHtml } from '@/lib/renderTiptapToHtml'
-import { postComment } from './interface'
+import { PostComment, postComment } from './interface'
+import contentJson2PlainText from '@/lib/utils/contentJson2PlainText'
+import getReadingTime from '@/lib/utils/getReadingTime'
 
 class controller extends baseController {
   /**
@@ -76,41 +77,16 @@ class controller extends baseController {
         })
       : []
     const json = JSON.parse(translation.contentJson)
-    const plainText =
-      json.content
-        ?.filter((block: any) => block.type === 'paragraph')
-        ?.map((block: any) =>
-          block.content?.map((c: any) => c.text || '').join('')
-        )
-        .join('\n') || ''
+    const plainText = contentJson2PlainText(json)
 
     const readingTime = getReadingTime(plainText)
     return { ...data, readingTime }
   }
 
-  async find(payload: QueryFind, createCommantTree: boolean = true) {
-    payload.filters = this.standardizationFilters(payload.filters)
-    const result = await super.find(payload)
-
-    const postComments = result.data.map((c: postComment) => {
-      return {
-        ...c,
-        translations: c.translations.map((translation) => ({
-          ...translation,
-          contentJson: renderTiptapJsonToHtml(
-            JSON.parse(translation.contentJson || '{}')
-          ),
-        })),
-      }
-    })
-    if (!createCommantTree) return { ...result, data: postComments }
-    const postCommentsTree = buildCommentTree(postComments)
-    return { ...result, data: postCommentsTree }
-  }
-
-  async findAll(payload: QueryFind) {
-    const postCommentsResult = await super.findAll(payload)
-
+  async renderCommentsAndMakeCommentsTree(
+    rowPostComments: PostComment[],
+    createCommantTree: boolean = true
+  ) {
     // اول همه Promise‌ها رو جمع کن
     const translationPromises: Array<{
       commentIndex: number
@@ -118,7 +94,7 @@ class controller extends baseController {
       promise: Promise<string>
     }> = []
 
-    postCommentsResult.data.forEach((comment, commentIndex) => {
+    rowPostComments.forEach((comment, commentIndex) => {
       comment.translations.forEach((translation, translationIndex) => {
         translationPromises.push({
           commentIndex,
@@ -134,7 +110,7 @@ class controller extends baseController {
     const results = await Promise.all(translationPromises.map((t) => t.promise))
 
     // نتایج رو برگردون به ساختار اصلی
-    const processedComments = postCommentsResult.data.map((comment, ci) => ({
+    const processedComments = rowPostComments.map((comment, ci) => ({
       ...comment,
       translations: comment.translations.map((translation, ti) => {
         const resultIndex = translationPromises.findIndex(
@@ -146,9 +122,26 @@ class controller extends baseController {
         }
       }),
     }))
+    let postComments = processedComments
+    if (createCommantTree) postComments = buildCommentTree(processedComments)
+    return postComments
+  }
 
-    const postComments = buildCommentTree(processedComments)
+  async find(payload: QueryFind, createCommantTree: boolean = true) {
+    payload.filters = this.standardizationFilters(payload.filters)
+    const postCommentsResult = await super.find(payload)
+    const postComments = await this.renderCommentsAndMakeCommentsTree(
+      postCommentsResult.data,
+      createCommantTree
+    )
+    return { ...postCommentsResult, data: postComments }
+  }
 
+  async findAll(payload: QueryFind) {
+    const postCommentsResult = await super.findAll(payload)
+    const postComments = await this.renderCommentsAndMakeCommentsTree(
+      postCommentsResult.data
+    )
     return { ...postCommentsResult, data: postComments }
   }
 

@@ -15,6 +15,11 @@ import {
   testWPConnectionAction,
 } from '../actions/user-migration-actions'
 import { decodeUnicodeMessage } from '@/lib/utils/decode-unicode'
+import {
+  startConvertHtymlToJson,
+  startTaxonomyMigration,
+} from '../actions/taxonomy-migration-actions'
+import { startPostMigration } from '../posts/post-migration-actions'
 
 interface SettingsFormProps {
   settings: Settings
@@ -63,6 +68,51 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
     console.log('handleStartEmigration result :', result)
     setLoading(false)
   }
+  const handleStartTaxonomyEmigration = async (e: React.FormEvent) => {
+    setLoading(true)
+    e.preventDefault()
+    const formData = new FormData(formRef.current!)
+    // اگر داده‌ای نیاز دارید اضافه کنید
+    // formData.append('key', 'value')
+
+    const result = await startTaxonomyMigration(state, formData, {
+      batchSize: 50,
+    })
+    setState((s) => ({ ...s, ...result }))
+    console.log('handleStartEmigration result :', result)
+    setLoading(false)
+  }
+  const handleStartPostEmigration = async (e: React.FormEvent) => {
+    setLoading(true)
+    e.preventDefault()
+    const formData = new FormData(formRef.current!)
+    formData.append('newBaseUrl', window.location.origin.replace(/\/+$/, ''))
+
+    const result = await startPostMigration(state, formData, {
+      batchSize: 50,
+    })
+    setState((s) => ({ ...s, ...result }))
+    console.log('handleStartEmigration result :', result)
+    setLoading(false)
+  }
+  const handleTestHtmlToTipTap = async (e: React.FormEvent) => {
+    setLoading(true)
+    e.preventDefault()
+
+    const formData = new FormData(formRef.current!)
+    formData.append('newBaseUrl', window.location.origin)
+
+    const result = await startConvertHtymlToJson(formData)
+    setState((s) => ({ ...s, ...result }))
+
+    console.log('ConvertHtymlToJson result:', result)
+    console.log(
+      'ConvertHtymlToJson result jsonContent:',
+      JSON.parse(result?.data?.jsonContent)
+    )
+
+    setLoading(false)
+  }
 
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -73,7 +123,7 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
     if (state.message && state.message !== null)
       toast({
         variant: state?.testConnectionSuccess ? 'default' : 'destructive',
-        description: state.message,
+        description: decodeUnicodeMessage(state?.message || ''),
       })
     console.log('#state 5678 :', state)
   }, [state])
@@ -87,6 +137,11 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
         {/* <Separator /> */}
         <form ref={formRef} className="space-y-8 w-full">
           <h3 className="text-2xlg">مهاجرت از ورد پرس</h3>
+          <p>
+            توجه: برای مهاجرت موفق از ورد پرس باید پایگاه داده ی شما کاملا خالی
+            باشد. به عبارت دیگر بعد از بالا آمدن سایت اولین کاری که انجام مید
+            هید انجام مهاجرت باشد.
+          </p>
           <div className="md:grid md:grid-cols-3 gap-8">
             {/* baseUrl */}
             <Text
@@ -125,6 +180,30 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
               onClick={handleStartEmigration}
             >
               شروع مهاجرت
+            </Button>
+            <Button
+              loading={loading}
+              type="button"
+              role="button"
+              onClick={handleStartTaxonomyEmigration}
+            >
+              شروع مهاجرت تاکسونومی
+            </Button>
+            <Button
+              loading={loading}
+              type="button"
+              role="button"
+              onClick={handleStartPostEmigration}
+            >
+              شروع مهاجرت مطالب
+            </Button>
+            <Button
+              loading={loading}
+              type="button"
+              role="button"
+              onClick={handleTestHtmlToTipTap}
+            >
+              تست تبدیل HTML به TipTap
             </Button>
           </div>
 

@@ -65,6 +65,7 @@ export async function testConnectionAction(
     }
   } catch (error: any) {
     if (error.message === 'Forbidden') {
+      console.log('!s23s4d5:', error)
       return {
         testConnectionSuccess: false,
         status: 403,
@@ -75,13 +76,14 @@ export async function testConnectionAction(
 
     // Handle database error
     if (error instanceof z.ZodError) {
+      console.log('!23s4d5:', error)
       return {
         testConnectionSuccess: false,
         errors: error.flatten().fieldErrors,
       }
     }
     if (process.env.NODE_ENV === 'development') throw error
-    console.log('!2345:', error)
+    console.log('!23s45:', error)
     return {
       testConnectionSuccess: false,
       message: 'خطای پایگاه داده: تست اتصال ناموفق بود.',

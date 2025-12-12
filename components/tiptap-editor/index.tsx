@@ -72,7 +72,7 @@ export default function TiptapEditor({
     async function fetchData() {
       const defaultFileIds = JSON.parse(content)
         ?.content?.filter((block: any) => block.type === 'image')
-        .map((block: any) => block.attrs.id)
+        .map((block: any) => block?.attrs?.id)
       if (!defaultFileIds?.length) return
       try {
         const files = await getFiles(defaultFileIds)
@@ -131,6 +131,7 @@ export default function TiptapEditor({
       const json = editor?.getJSON()
       const text = JSON.stringify(json)
       SetContent(text)
+
       onChange?.(text)
     },
     immediatelyRender: false, //  مهم‌ترین بخش برای جلوگیری از SSR Hydration Error
@@ -172,6 +173,8 @@ export default function TiptapEditor({
     onChangeFiles,
     onLoading,
   }
+
+  console.log('#234234  in component')
 
   return (
     <div
@@ -258,42 +261,42 @@ export function replaceImageNodes(contentJson: any, files: FileDetails[]) {
   return updateNode(contentJson)
 }
 
-const updateFileDetails = (editor: any, fileDetails: FileDetails[]) => {
-  if (!editor) {
-    console.warn('#98765 Editor is not ready yet.')
-    return
-  }
-  console.warn('#98765 fileDetails:', fileDetails)
+// const updateFileDetails = (editor: any, fileDetails: FileDetails[]) => {
+//   if (!editor) {
+//     console.warn('#98765 Editor is not ready yet.')
+//     return
+//   }
+//   console.warn('#98765 fileDetails:', fileDetails)
 
-  if (!fileDetails || fileDetails.length === 0) {
-    return
-  }
+//   if (!fileDetails || fileDetails.length === 0) {
+//     return
+//   }
 
-  const fileMap = new Map<string, FileDetails>(
-    fileDetails.map((f) => [String(f.id), f])
-  )
+//   const fileMap = new Map<string, FileDetails>(
+//     fileDetails.map((f) => [String(f.id), f])
+//   )
 
-  editor
-    .chain()
-    .focus()
-    .command(({ tr, state }) => {
-      state.doc.descendants((node, pos) => {
-        // فقط نودهای image با id معتبر
-        if (node.type.name !== 'image' || !node.attrs?.id) return
+//   editor
+//     .chain()
+//     .focus()
+//     .command(({ tr, state }) => {
+//       state.doc.descendants((node, pos) => {
+//         // فقط نودهای image با id معتبر
+//         if (node.type.name !== 'image' || !node.attrs?.id) return
 
-        const file = fileMap.get(String(node.attrs.id))
-        if (!file) return
+//         const file = fileMap.get(String(node.attrs.id))
+//         if (!file) return
 
-        // اینجا تعیین می‌کنی کدوم فیلدهای attrs باید از FileDetails آپدیت بشه
-        const newAttrs = {
-          ...file,
-        }
+//         // اینجا تعیین می‌کنی کدوم فیلدهای attrs باید از FileDetails آپدیت بشه
+//         const newAttrs = {
+//           ...file,
+//         }
 
-        tr.setNodeMarkup(pos, node.type, newAttrs)
-      })
+//         tr.setNodeMarkup(pos, node.type, newAttrs)
+//       })
 
-      // حتماً true برگردون تا command موفق تلقی بشه
-      return true
-    })
-    .run()
-}
+//       // حتماً true برگردون تا command موفق تلقی بشه
+//       return true
+//     })
+//     .run()
+// }

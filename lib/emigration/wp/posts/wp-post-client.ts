@@ -1,5 +1,6 @@
 import { WPClient } from '../wp-client'
 import { MigrationOptions, WPClientConfig } from '../interface'
+import { GetPostIdsResponse } from './types'
 
 // تنظیمات پیش‌فرض
 const DEFAULT_OPTIONS: MigrationOptions = {
@@ -11,35 +12,31 @@ const DEFAULT_OPTIONS: MigrationOptions = {
   skipExisting: true,
 }
 
-export class WPTaxonomyClient extends WPClient {
+export class WPPostClient extends WPClient {
   constructor(config: WPClientConfig) {
-    console.log('#2394876 config in wp taxonomy client:', config)
+    console.log('#2394876 config in wp post client:', config)
     super(config)
   }
 
-  async getTaxonomyCount() {
-    return this.get(`/taxonomies/count`)
+  async getPostCount() {
+    return this.get(`/posts/count`)
   }
 
-  async getTaxonomyIds(): Promise<number[]> {
-    const result = await this.get<{ ids: number[] }>(`/taxonomies/ids`)
-    return result.ids
+  async getPostIds(): Promise<GetPostIdsResponse> {
+    const result = await this.get<GetPostIdsResponse>(`/posts/ids`)
+    return result
   }
 
-  async getTaxonomyById(id: number) {
-    return this.get(`/taxonomies/${id}`)
+  async getPostById(id: number) {
+    return this.get(`/posts/${id}`)
   }
 
-  async getTaxonomiesBatch(ids: number[]) {
-    return this.getBatch(ids, 'taxonomies')
-  }
-
-  async getHierarchy(tax: string) {
-    return this.get(`/taxonomies/hierarchy?taxonomy=${tax}`)
+  async getPostsBatch(ids: number[]) {
+    return this.getBatch(ids, 'posts')
   }
 }
 
-export function createWPTaxonomyClient({
+export function createWPPostClient({
   baseUrl,
   apiKey,
   timeout = 30000,
@@ -49,12 +46,12 @@ export function createWPTaxonomyClient({
   apiKey?: string
   timeout?: number
   retryAttempts?: number
-} = {}): WPTaxonomyClient {
+} = {}): WPPostClient {
   if (!baseUrl || !apiKey) {
     throw new Error('WP_API_BASE_URL و WP_API_KEY باید  تنظیم شوند')
   }
 
-  return new WPTaxonomyClient({
+  return new WPPostClient({
     baseUrl,
     apiKey,
     timeout: timeout,

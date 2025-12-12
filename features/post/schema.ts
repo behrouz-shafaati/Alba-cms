@@ -69,6 +69,10 @@ const postSchema = new Schema<PostSchema>(
       enum: ['article', 'video'],
       default: 'article',
     },
+    metadata: {
+      type: Schema.Types.Mixed,
+      default: {},
+    },
     status: {
       type: String,
       enum: ['draft', 'published'],

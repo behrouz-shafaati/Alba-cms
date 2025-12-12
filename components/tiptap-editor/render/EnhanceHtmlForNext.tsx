@@ -184,7 +184,7 @@ export default async function EnhanceHtmlForNext({
 
             return (
               <Tag
-                key={id}
+                key={domNode.id}
                 id={id}
                 dir={domNode.attribs.dir}
                 className="[--header-top:var(--header-top-mobile)] sm:[--header-top:var(--header-top-tablet)] md:[--header-top:var(--header-top-desktop)]"

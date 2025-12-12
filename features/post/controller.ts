@@ -5,16 +5,14 @@ import postSchema from './schema'
 import postService from './service'
 import categoryCtrl from '../category/controller'
 import tagCtrl from '../tag/controller'
-import {
-  createPostHref,
-  getReadingTime,
-  updateFileDetailsInContentJson,
-} from './utils'
+import { createPostHref, updateFileDetailsInContentJson } from './utils'
 import { Post } from './interface'
 import { Category } from '../category/interface'
 import { getTranslation, slugify } from '@/lib/utils'
 import { FileDetails } from '@/lib/entity/file/interface'
 import generateHumanId from '../user/utils/generateUsername'
+import getReadingTime from '@/lib/utils/getReadingTime'
+import contentJson2PlainText from '@/lib/utils/contentJson2PlainText'
 
 class controller extends baseController {
   /**
@@ -84,13 +82,7 @@ class controller extends baseController {
       locale: data.locale,
     })
     const json = JSON.parse(translation.contentJson)
-    const plainText =
-      json.content
-        ?.filter((block: any) => block.type === 'paragraph')
-        ?.map((block: any) =>
-          block.content?.map((c: any) => c.text || '').join('')
-        )
-        .join('\n') || ''
+    const plainText = contentJson2PlainText(json)
 
     const readingTime = getReadingTime(plainText)
     return { ...data, readingTime }
@@ -128,7 +120,10 @@ class controller extends baseController {
         if (block.type === 'image') {
           const image = block.attrs
           const imageFileData = await fileCtrl.findById({ id: image?.id })
-          return { type: 'image', attrs: imageFileData }
+          return {
+            type: 'image',
+            attrs: { id: imageFileData.id, srcMedium: imageFileData.srcMedium },
+          }
         }
         return block
       })

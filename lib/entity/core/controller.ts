@@ -217,8 +217,8 @@ export default class controller {
       //   log.save();
       // }
     } catch (error: any) {
-      console.log(error)
-      // logEvents(JSON.stringify(error), "mongoErr.log");
+      if (process.env.NODE_ENV !== 'production')
+        console.log('#234098 error in save data:', error)
       throw new Error('Error in save data.')
     }
     return result

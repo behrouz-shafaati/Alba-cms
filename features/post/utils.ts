@@ -1,5 +1,4 @@
 const jalaali = require('jalaali-js')
-import readingTime from 'reading-time'
 import { Category } from '../category/interface'
 import { Post, PostTranslationSchema } from './interface'
 import { FileDetails } from '@/lib/entity/file/interface'
@@ -56,15 +55,6 @@ export function formatToJalali(dateString: string): string {
   const { jy, jm, jd } = jalaali.toJalaali(date)
   const pad = (n: number) => n.toString().padStart(2, '0')
   return `${jy}/${pad(jm)}/${pad(jd)}`
-}
-
-export function getReadingTime(text: string): number {
-  const stats = readingTime(text)
-  return msToMinutes(stats.time)
-}
-
-function msToMinutes(ms: number): number {
-  return Math.ceil(ms / 60000)
 }
 
 export function createPostHref(post: Post) {
