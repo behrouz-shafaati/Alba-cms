@@ -53,7 +53,7 @@ const SinglePageBlog = ({
       )}
       <div className="flex flex-col md:flex-row items-center justify-center md:justify-between overflow-hidden">
         <PostMetaDataLazy
-          author={post?.user}
+          author={post?.author || post?.user || null}
           createdAt={post.createdAt}
           readingDuration={readingDuration}
         />

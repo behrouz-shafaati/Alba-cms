@@ -7,30 +7,45 @@ export function PageLoadingProgressBarActivator() {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-
-      // نزدیک‌ترین لینک
       const link = target.closest('a')
 
       if (!link) return
 
-      //  اگر data-nprogress="off" داشت → NProgress اجرا نشود
-      if (link.getAttribute('data-nprogress') === 'off') {
-        return
-      }
+      // اگر data-nprogress="off" داشت → NProgress اجرا نشود
+      if (link.getAttribute('data-nprogress') === 'off') return
 
       const href = link.getAttribute('href')
       if (!href) return
 
-      // اگر داخل صفحه نبود، ignore
+      // anchor داخل صفحه
       if (href.startsWith('#')) return
 
-      // اگر لینک external بود، ignore
+      // لینک external
       if (href.startsWith('http')) return
 
-      // اگر کلیدهای modifier بود (ctrl, meta)، ignore
+      // modifier keys
       if (e.ctrlKey || e.metaKey) return
 
-      // اینجا دقیقاً لحظهٔ کلیک است، قبل از تغییر مسیر
+      /**
+       * ✅ شرط جدید:
+       * اگر لینک مقصد == URL فعلی بود → NProgress اجرا نشود
+       */
+      try {
+        const targetUrl = new URL(href, window.location.origin)
+        const currentUrl = new URL(window.location.href)
+
+        const isSameUrl =
+          targetUrl.pathname === currentUrl.pathname &&
+          targetUrl.search === currentUrl.search &&
+          targetUrl.hash === currentUrl.hash
+
+        if (isSameUrl) return
+      } catch {
+        // اگر URL نا‌معتبر بود، احتیاطاً کاری نکن
+        return
+      }
+
+      // ✅ فقط وقتی واقعاً ناوبری داریم
       NProgress.start()
     }
 

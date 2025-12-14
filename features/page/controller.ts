@@ -89,6 +89,7 @@ class controller extends baseController {
     const pageTranslation = getTranslation({
       translations: siteSettings?.pageTranslations || [],
     })
+    console.log('#884725 pageTranslation in build time:', pageTranslation)
     if (pageTranslation?.homePageId == null) return null
     const homePage = await this.findById({ id: pageTranslation.homePageId.id })
     return homePage

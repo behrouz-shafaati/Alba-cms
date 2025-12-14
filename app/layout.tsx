@@ -78,11 +78,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://unpkg.com" />
       </head>
       <body className={iransans.className}>
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var m=document.cookie.match(/theme=(dark|light)/);var t=m?m[1]:'light';if(t==='dark')document.documentElement.classList.add('dark')}catch(e){}})();`,
           }}
-        />
+        /> */}
         <PageLoadingProgressBarActivator />
         <PageLoadingProgressBar />
         <Providers>

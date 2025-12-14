@@ -9,13 +9,11 @@ import postCtrl from '@/features/post/controller'
 import { Post, PostStatus } from '@/features/post/interface'
 import categoryCtrl from '@/features/category/controller'
 import tagCtrl from '@/features/tag/controller'
-import contentJson2PlainText from '@/lib/utils/contentJson2PlainText'
-import getReadingTime from '@/lib/utils/getReadingTime'
 import userCtrl from '@/features/user/controller'
-import replaceLinksInHtml from '@/lib/utils/replaceInternalLinksInHtml'
 import { LinkReplacerConfig } from '@/lib/utils/replaceInternalLinks'
 import replaceLinksInDocument from '@/lib/utils/replaceInternalLinksInTipTap'
 import { sanitizeTipTapContent } from '@/lib/utils/sanitizeTipTapContent'
+import extractExcerptFromContentJson from '@/lib/utils/extractExcerptFromContentJson'
 
 // تنظیمات پیش‌فرض
 const DEFAULT_OPTIONS: MigrationOptions = {
@@ -328,20 +326,22 @@ export default class PostMigration {
       const userResult = await userCtrl.findOne({
         filters: { 'metadata.wpId': wpPost?.author_wpId },
       })
-      console.log('#234876 user author Result:', userResult)
       if (userResult) author = userResult
     }
     const authorName = `${author?.firstName} ${author?.lastName}`
+    const contentJsonAsString = JSON.stringify(contentJson)
+    const excerpt = extractExcerptFromContentJson(contentJsonAsString, 25)
+    console.log('#2348796 post excerpt:', excerpt)
 
     const translations = [
       {
         lang: 'fa', // "fa", "en", "de", ...
         title: wpPost?.title,
         seoTitle: wpPost?.seo?.title || '',
-        excerpt: wpPost?.excerpt || '',
-        metaDescription: wpPost?.seo?.description || '',
+        excerpt,
+        metaDescription: wpPost?.seo?.description || excerpt,
         jsonLd: '',
-        contentJson: JSON.stringify(contentJson) || '',
+        contentJson: contentJsonAsString || '',
       },
     ]
 

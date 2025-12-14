@@ -1,19 +1,18 @@
-'use client';
+'use client'
 
-import * as React from 'react';
-import { Sun, Moon } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu'
 
 export default function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme } = useTheme()
 
   return (
     <DropdownMenu dir="rtl">
@@ -38,5 +37,5 @@ export default function ModeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
