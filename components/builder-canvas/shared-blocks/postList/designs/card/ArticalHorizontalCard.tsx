@@ -50,13 +50,13 @@ const PostHorizontalCard = ({
 
         {/* تصویر */}
         <div className="relative w-full h-full min-h-28 aspect-square md:aspect-[4/3] md:row-span-2 overflow-hidden rounded-sm">
-          {post?.image?.srcSmall && (
+          {post?.image?.srcMedium && (
             <Image
               src={post?.image?.srcMedium || '/image-placeholder-Medium.webp'}
               alt={translationImage?.alt || translationImage?.title}
               fill
               className="object-cover"
-              sizes="(max-width: 640px) 112px, (max-width: 768px) 200px, 300px"
+              sizes="(max-width: 640px) 112px, 200px"
               placeholder="blur"
               blurDataURL={
                 post?.image?.blurDataURL || '/image-placeholder-Small.webp'

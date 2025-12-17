@@ -9,7 +9,8 @@ import { TagPopover } from './tag-popover'
 import { TagList } from './tag-list'
 import { tagVariants } from './tag'
 import { Autocomplete } from './autocomplete'
-import { cn, uuid } from '../utils'
+import { cn } from '../utils'
+import uuid from '@/lib/utils/uuid'
 
 export enum Delimiter {
   Comma = ',',

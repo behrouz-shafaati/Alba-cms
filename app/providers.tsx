@@ -1,7 +1,7 @@
 'use client'
 
 import { ThemeProvider } from '@/components/context/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
+import ToasterLazy from '@/components/ui/toasterLazy'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -16,7 +16,7 @@ export function Providers({ children }: ProvidersProps) {
       disableTransitionOnChange
     >
       {children}
-      <Toaster />
+      <ToasterLazy />
     </ThemeProvider>
   )
 }

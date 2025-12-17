@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs')
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { QueryFind } from './entity/core/interface'

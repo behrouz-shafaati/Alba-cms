@@ -30,7 +30,6 @@ export const blockRegistry = {
   content_post_author_card: ContentPostAuthorCardBlockDef, // کارت نویسنده مطلب
   content_post_comments_header: ContentPostCommentsHeaderBlockDef, // هدر دیدگاه‌های مطلب
   content_category_description: ContentCategoryDescriptionBlockDef, // توضیحات دسته‌بندی
-
   // ...
 }
 

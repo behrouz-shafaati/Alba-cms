@@ -1,6 +1,6 @@
 import React from 'react'
 import pageCtrl from '@/features/page/controller'
-import { SettingsForm } from '@/features/settings/ui/settings-form'
+import SettingsForm from '@/features/settings/ui/form'
 import settingsCtrl from '@/features/settings/controller'
 import { BreadCrumb } from '@/components/breadcrumb'
 import headerCtrl from '@/features/template/controller'
