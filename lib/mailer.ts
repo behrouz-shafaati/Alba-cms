@@ -9,12 +9,12 @@ export async function sendEmail(to: string, subject: string, html: string) {
     translations: settings?.infoTranslations || [],
   })
   const transporter = nodemailer.createTransport({
-    host: settings?.mail_host,
-    port: Number(settings?.mail_port),
+    host: settings?.email?.mail_host,
+    port: Number(settings?.email?.mail_port),
     secure: false, // اگر 465 استفاده می‌کنی true باشه
     auth: {
-      user: settings?.mail_username,
-      pass: settings?.mail_password,
+      user: settings?.email?.mail_username,
+      pass: settings?.email?.mail_password,
     },
   })
   try {

@@ -4,7 +4,7 @@ import ArchivePost from '@/components/archive'
 import RendererRows from '@/components/builder-canvas/pageRenderer/RenderRows'
 import { getSettings } from '@/features/settings/controller'
 import templateCtrl from '@/features/template/controller'
-import { extractFiltersFromParams } from '@/lib/utils'
+import extractFiltersFromParams from '@/lib/utils/extractFiltersFromParams'
 
 type Prop = {
   params: { filters?: string[] }
@@ -34,8 +34,7 @@ export default async function ArchivePage({ params, searchParams }: Prop) {
           editroMode={false}
           content_all={
             <ArchivePost
-              categorySlugs={filters.categories}
-              tagSlugs={filters.tags}
+              filters={filters}
               page={parseInt(page)}
               perPage={parseInt(perPage)}
             />
@@ -46,8 +45,7 @@ export default async function ArchivePage({ params, searchParams }: Prop) {
   }
   return (
     <ArchivePost
-      categorySlugs={filters.categories}
-      tagSlugs={filters.tags}
+      filters={filters}
       page={parseInt(page)}
       perPage={parseInt(perPage)}
     />

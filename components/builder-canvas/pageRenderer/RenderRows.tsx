@@ -98,9 +98,9 @@ const RendererRows = async ({
                       ...computedStyles({
                         ...col.styles,
                         top: 'var(--header-top)',
-                        ['--header-top-mobile' as any]: `${siteSettings?.mobileHeaderHeight}px`,
-                        ['--header-top-tablet' as any]: `${siteSettings?.tabletHeaderHeight}px`,
-                        ['--header-top-desktop' as any]: `${siteSettings?.desktopHeaderHeight}px`,
+                        ['--header-top-mobile' as any]: `${siteSettings?.appearance?.mobileHeaderHeight}px`,
+                        ['--header-top-tablet' as any]: `${siteSettings?.appearance?.tabletHeaderHeight}px`,
+                        ['--header-top-desktop' as any]: `${siteSettings?.appearance?.desktopHeaderHeight}px`,
                       }),
                       ...computedStyles(col.settings),
                     }}

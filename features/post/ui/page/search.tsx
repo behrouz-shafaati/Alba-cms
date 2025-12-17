@@ -32,9 +32,9 @@ export default async function SearchPage({ query = '', postResult }: Props) {
         className="sticky top-[var(--header-top)] flex flex-col items-center gap-4 p-4 bg-background z-30
   [--header-top:var(--header-top-mobile)] sm:[--header-top:var(--header-top-tablet)] md:[--header-top:var(--header-top-desktop)]"
         style={{
-          ['--header-top-mobile' as any]: `${siteSettings?.mobileHeaderHeight}px`,
-          ['--header-top-tablet' as any]: `${siteSettings?.tabletHeaderHeight}px`,
-          ['--header-top-desktop' as any]: `${siteSettings?.desktopHeaderHeight}px`,
+          ['--header-top-mobile' as any]: `${siteSettings?.appearance?.mobileHeaderHeight}px`,
+          ['--header-top-tablet' as any]: `${siteSettings?.appearance?.tabletHeaderHeight}px`,
+          ['--header-top-desktop' as any]: `${siteSettings?.appearance?.desktopHeaderHeight}px`,
         }}
       >
         <Search placeholder="جستجو کنید ..." className="w-full md:w-1/2" />

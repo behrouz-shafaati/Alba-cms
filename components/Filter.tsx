@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Input } from '@/components/ui/input'
 import { CheckboxInput as Checkbox } from '@/components/ui/checkbox-input'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
 import { Option } from '@/types'
 import { Button } from './ui/button'
@@ -114,7 +114,7 @@ export function Filter({
         placeholder={placeholder}
         className="w-full"
       />
-      <ScrollArea className="max-h-64 rounded-md  p-2">
+      <ScrollArea className="h-64 rounded-md  p-2">
         {loading ? (
           <div className="text-sm text-muted-foreground p-2">
             در حال جستجو...
@@ -155,6 +155,7 @@ export function Filter({
             })}
           </div>
         )}
+        <ScrollBar orientation="vertical" />
       </ScrollArea>
       {maxSelected && multiple && (
         <div className="text-xs text-muted-foreground mt-1 text-end">

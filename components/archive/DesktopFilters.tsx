@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Option } from '@/types'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Settings } from '@/features/settings/interface'
+import ActiveFilters from './ActiveFilters'
 
 type Props = {
   siteSettings: Settings
@@ -25,12 +26,13 @@ export function DesktopFilters({
   const searchParams = useSearchParams()
   const page = Number(searchParams.get('page')) || 1
   const perPage = Number(searchParams.get('perPage')) || 10
-  const [selectedCategory, setSelectedCategory] = useState<Option[]>(
-    defaultSelectedCategories || []
-  )
-  const [selectedTag, setSelectedTag] = useState<Option[]>(
-    defaultSelectedTags || []
-  )
+  const [filters, setFilters] = useState<{
+    tags: Option[]
+    categories: Option[]
+  }>({
+    tags: defaultSelectedTags || [],
+    categories: defaultSelectedCategories || [],
+  })
 
   //  نگهداری اولین بار رندر شدن برای جلوگیری از اجرای اولیه‌ی useEffect
   const hasUserChangedFilters = useRef(false)
@@ -60,41 +62,45 @@ export function DesktopFilters({
 
     let showMoreHref = '/archive'
     showMoreHref =
-      selectedTag.length != 0 || selectedCategory.length != 0
+      filters?.tags.length != 0 || filters?.categories.length != 0
         ? showMoreHref +
           '/' +
           buildUrlFromFilters({
-            tags: selectedTag.map((tag) => tag.value),
-            categories: selectedCategory.map((cat) => cat.value),
+            tags: filters.tags.map((tag) => tag.value),
+            categories: filters.categories.map((cat) => cat.value),
           })
         : showMoreHref
 
     const searchPaeams = `?page=${newPage}&perPage=${perPage}`
     router.replace(showMoreHref + searchPaeams, { scroll: false })
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [selectedTag, selectedCategory])
+  }, [filters])
+
+  console.log('#234876 filters?.tags:', filters?.tags)
+  console.log('#234876 tagOptions:', tagOptions)
   return (
     <div
       className="sticky py-2"
-      style={{ top: `${siteSettings?.desktopHeaderHeight}px` }}
+      style={{ top: `${siteSettings?.appearance?.desktopHeaderHeight}px` }}
     >
+      <ActiveFilters initial={filters} />
       <Filter
         options={categoryOptions}
-        defaultValue={selectedCategory}
+        defaultValue={filters?.categories}
         placeholder="جستجو در دسته"
         className="mt-4"
         onChange={(cats) => {
-          setSelectedCategory(cats)
+          setFilters((pre) => ({ ...pre, categories: cats }))
           hasUserChangedFilters.current = true
         }}
       />
       <Filter
         options={tagOptions}
-        defaultValue={selectedTag}
+        defaultValue={filters?.tags}
         placeholder="جستجو در برچسب"
         className="mt-4"
         onChange={(tags) => {
-          setSelectedTag(tags)
+          setFilters((pre) => ({ ...pre, tags }))
           hasUserChangedFilters.current = true
         }}
       />

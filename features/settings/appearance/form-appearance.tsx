@@ -1,32 +1,37 @@
 'use client'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ShieldQuestionIcon } from 'lucide-react'
+import { MessageSquare } from 'lucide-react'
 import { useToast } from '../../../hooks/use-toast'
-import { updateSettings } from '@/features/settings/actions'
+import Text from '../../../components/form-fields/text'
 import SubmitButton from '../../../components/form-fields/submit-button'
-import { Settings } from '../interface'
-import { Option, State } from '@/types'
-import MultipleSelector from '../../../components/form-fields/multiple-selector'
+import { State } from '@/types'
 import { useSession } from '@/components/context/SessionContext'
 import { can } from '@/lib/utils/can.client'
 import AccessDenied from '@/components/access-denied'
-import { Role } from '@/features/role/interface'
-import roleCtrl from '@/features/role/controller'
+import { updateAppearanceSettings } from './actions'
 
 interface FormProps {
   settings: Settings
 }
 
-export const FormUsers: React.FC<FormProps> = ({ settings }) => {
+export const FormAppearance: React.FC<FormProps> = ({ settings }) => {
   const locale = 'fa'
   const { user } = useSession()
-  const loginedUserRoles = user?.roles || []
+  const userRoles = user?.roles || []
 
-  const canModerate = can(loginedUserRoles, 'settings.moderate.any')
+  const canModerate = can(userRoles, 'settings.moderate.any')
   const formRef = useRef<HTMLFormElement>(null)
-  const initialState: State = { message: null, errors: {}, success: true }
-  const [state, dispatch] = useActionState(updateSettings as any, initialState)
+  const initialState: State = {
+    values: settings?.appearance,
+    message: null,
+    errors: {},
+    success: true,
+  }
+  const [state, dispatch] = useActionState(
+    updateAppearanceSettings as any,
+    initialState
+  )
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
@@ -45,21 +50,6 @@ export const FormUsers: React.FC<FormProps> = ({ settings }) => {
       })
   }, [state])
   if (!canModerate) return <AccessDenied />
-
-  const allRoles: Role[] = roleCtrl.getRoles()
-  const roleOptions: Option[] = allRoles.map((role) => ({
-    label: role.title,
-    value: role.slug,
-  }))
-  const userRoles: Option[] = Array.isArray(settings.user?.defaultRoles)
-    ? settings.user?.defaultRoles.map((slug: string) => {
-        const findedRole: Role | undefined = allRoles.find(
-          (role: Role) => role.slug == slug
-        )
-        return { label: findedRole?.title, value: slug }
-      })
-    : []
-
   return (
     <>
       <div className=" p-4 md:p-8 pt-6">
@@ -69,16 +59,37 @@ export const FormUsers: React.FC<FormProps> = ({ settings }) => {
         {/* <Separator /> */}
         <form action={dispatch} ref={formRef} className="space-y-8 w-full">
           <div className="md:grid md:grid-cols-3 gap-8">
-            {/* Roles */}
-            <MultipleSelector
-              title="نقش پیش فرض کاربر"
-              name="defaultRoles"
-              defaultValues={userRoles}
-              placeholder="نقش پیش فرض را انتخاب کنید"
+            {/* desktopHeaderHeight */}
+            <Text
+              title="ارتفاع هدر در دسکتاپ"
+              name="desktopHeaderHeight"
+              defaultValue={state?.values?.desktopHeaderHeight || ''}
+              placeholder="px"
               state={state}
-              defaultSuggestions={roleOptions}
-              icon={<ShieldQuestionIcon className="w-4 h-4" />}
-              className="col-span-3 lg:col-span-1"
+              icon={<MessageSquare className="w-4 h-4" />}
+              description=""
+            />
+
+            {/* desktopHeaderHeight */}
+            <Text
+              title="ارتفاع هدر در تبلت"
+              name="tabletHeaderHeight"
+              defaultValue={state?.values?.tabletHeaderHeight || ''}
+              placeholder="px"
+              state={state}
+              icon={<MessageSquare className="w-4 h-4" />}
+              description=""
+            />
+
+            {/* mobileHeaderHeight */}
+            <Text
+              title="ارتفاع هدر در موبایل"
+              name="mobileHeaderHeight"
+              defaultValue={state?.values?.mobileHeaderHeight || ''}
+              placeholder="px"
+              state={state}
+              icon={<MessageSquare className="w-4 h-4" />}
+              description=""
             />
           </div>
           <SubmitButton />

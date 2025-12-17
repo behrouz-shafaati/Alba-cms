@@ -1,31 +1,37 @@
 'use client'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { MessageSquare } from 'lucide-react'
 import { useToast } from '../../../hooks/use-toast'
-import { updateSettings } from '@/features/settings/actions'
-import Text from '../../../components/form-fields/text'
 import SubmitButton from '../../../components/form-fields/submit-button'
 import { Settings } from '../interface'
 import { State } from '@/types'
-import { getTranslation } from '@/lib/utils'
+import Switch from '@/components/form-fields/switch'
 import { useSession } from '@/components/context/SessionContext'
 import { can } from '@/lib/utils/can.client'
 import AccessDenied from '@/components/access-denied'
+import { updateValidationSettings } from './actions'
 
-interface FormProps {
+interface SettingsFormProps {
   settings: Settings
 }
 
-export const FormAppearance: React.FC<FormProps> = ({ settings }) => {
+export const FormValidation: React.FC<SettingsFormProps> = ({ settings }) => {
   const locale = 'fa'
   const { user } = useSession()
   const userRoles = user?.roles || []
 
   const canModerate = can(userRoles, 'settings.moderate.any')
   const formRef = useRef<HTMLFormElement>(null)
-  const initialState: State = { message: null, errors: {}, success: true }
-  const [state, dispatch] = useActionState(updateSettings as any, initialState)
+  const initialState: State = {
+    message: null,
+    errors: {},
+    success: true,
+    values: settings?.validation,
+  }
+  const [state, dispatch] = useActionState(
+    updateValidationSettings as any,
+    initialState
+  )
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
@@ -43,6 +49,12 @@ export const FormAppearance: React.FC<FormProps> = ({ settings }) => {
         description: state.message,
       })
   }, [state])
+
+  const submitManually = () => {
+    if (formRef.current) {
+      formRef.current.requestSubmit() // بهترین راه
+    }
+  }
   if (!canModerate) return <AccessDenied />
   return (
     <>
@@ -52,38 +64,23 @@ export const FormAppearance: React.FC<FormProps> = ({ settings }) => {
         </div>
         {/* <Separator /> */}
         <form action={dispatch} ref={formRef} className="space-y-8 w-full">
-          <div className="md:grid md:grid-cols-3 gap-8">
-            {/* desktopHeaderHeight */}
-            <Text
-              title="ارتفاع هدر در دسکتاپ"
-              name="desktopHeaderHeight"
-              defaultValue={settings?.desktopHeaderHeight || ''}
-              placeholder="px"
-              state={state}
-              icon={<MessageSquare className="w-4 h-4" />}
-              description=""
+          <div>
+            <Switch
+              name="commentApprovalRequired"
+              title="نمایش دیدگاه‌ها فقط بعد از تأیید/بررسی"
+              defaultChecked={state?.values?.commentApprovalRequired ?? true}
             />
-
-            {/* desktopHeaderHeight */}
-            <Text
-              title="ارتفاع هدر در تبلت"
-              name="tabletHeaderHeight"
-              defaultValue={settings?.tabletHeaderHeight || ''}
-              placeholder="px"
-              state={state}
-              icon={<MessageSquare className="w-4 h-4" />}
-              description=""
+            <Switch
+              name="emailVerificationRequired"
+              title="تایید مالکیت ایمیل کاربران بررسی شود"
+              defaultChecked={state?.values?.emailVerificationRequired ?? false}
             />
-
-            {/* mobileHeaderHeight */}
-            <Text
-              title="ارتفاع هدر در موبایل"
-              name="mobileHeaderHeight"
-              defaultValue={settings?.mobileHeaderHeight || ''}
-              placeholder="px"
-              state={state}
-              icon={<MessageSquare className="w-4 h-4" />}
-              description=""
+            <Switch
+              name="mobileVerificationRequired"
+              title="تایید مالکیت شماره موبایل کاربران بررسی شود"
+              defaultChecked={
+                state?.values?.mobileVerificationRequired ?? false
+              }
             />
           </div>
           <SubmitButton />

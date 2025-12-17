@@ -1,13 +1,14 @@
-import settingsCtrl from '../controller'
-import { FormGeneral } from './form-general'
+'use server'
 import pageCtrl from '@/features/page/controller'
 import { SettingsTabs } from './settings-tab'
-import { FormAppearance } from './form-appearance'
-import { FormValidation } from './form-validation'
-import { FormSMS } from './form-sms'
-import { FormEmail } from './form-email'
-import { FormAD } from './form-ad'
-import { FormUsers } from './form-users'
+import { FormAD } from '../ad/form-ad'
+import { getSettingsAction } from '../actions'
+import { FormAppearance } from '../appearance/form-appearance'
+import { FormGeneral } from '../general/form-general'
+import { FormUsers } from '../users/form-users'
+import { FormValidation } from '../validation/form-validation'
+import { FormEmail } from '../email/form-email'
+import { FormSMS } from '../sms/form-sms'
 import { FormWPEmigration } from '@/lib/emigration/wp/ui/form'
 
 type FormProps = {
@@ -24,7 +25,7 @@ type FormProps = {
 
 export default async function Form({ tab }: FormProps) {
   const [settings, allPages] = await Promise.all([
-    settingsCtrl.findOne({ filters: { type: 'site-settings' } }),
+    getSettingsAction(),
     pageCtrl.findAll({}),
   ])
 
@@ -35,11 +36,11 @@ export default async function Form({ tab }: FormProps) {
         <FormGeneral settings={settings} allPages={allPages.data} />
       )}
       {tab === 'appearance' && <FormAppearance settings={settings} />}
-      {tab === 'ad' && <FormAD settings={settings} />}
+      {tab === 'users' && <FormUsers settings={settings} />}
       {tab === 'validation' && <FormValidation settings={settings} />}
       {tab === 'sms' && <FormSMS settings={settings} />}
       {tab === 'email' && <FormEmail settings={settings} />}
-      {tab === 'users' && <FormUsers settings={settings} />}
+      {tab === 'ad' && <FormAD settings={settings} />}
       {tab === 'wp-emigration' && <FormWPEmigration settings={settings} />}
     </div>
   )

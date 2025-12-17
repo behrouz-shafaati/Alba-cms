@@ -97,7 +97,7 @@ export async function sendVerificationCode({
   user: User
 }) {
   const settings: Settings = (await getSettings()) as Settings
-  if (settings.emailVerificationRequired && !user.emailVerified) {
+  if (settings?.validation?.emailVerificationRequired && !user.emailVerified) {
     const allowSend =
       await verificationCtrl.checkTimePassedRecentVerificationCode(
         user.id,
@@ -118,7 +118,10 @@ export async function sendVerificationCode({
     })
   }
 
-  if (settings.mobileVerificationRequired && !user.mobileVerified) {
+  if (
+    settings?.validation?.mobileVerificationRequired &&
+    !user.mobileVerified
+  ) {
     const allowSend =
       await verificationCtrl.checkTimePassedRecentVerificationCode(
         user.id,

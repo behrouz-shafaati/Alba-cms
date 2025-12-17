@@ -33,9 +33,9 @@ export async function sendSmsVerifyFarazSms(to: string, code: string) {
   const settings: Settings = (await getSettings()) as Settings
   try {
     const base_url = `https://edge.ippanel.com/v1`
-    const from_number = settings?.farazsms?.farazsms_from_number || ''
-    const patternCode = settings?.farazsms?.farazsms_verifyPatternCode || ''
-    const apiKey = settings?.farazsms?.farazsms_apiKey || ''
+    const from_number = settings?.sms?.farazsms?.from_number || ''
+    const patternCode = settings?.sms?.farazsms?.verifyPatternCode || ''
+    const apiKey = settings?.sms?.farazsms?.apiKey || ''
     const response = await axios.post(
       `${base_url}/api/send`,
       {

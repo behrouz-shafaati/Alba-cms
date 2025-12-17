@@ -1,27 +1,25 @@
-import { Create, Id, QueryFind, Update } from '@/lib/entity/core/interface'
-import baseController from '@/lib/entity/core/controller'
-import settingsSchema from './schema'
-import settingsService from './service'
-import { Settings } from './interface'
+import { Create, QueryFind, Update } from '@/lib/entity/core/interface'
+import metadataController from '@/lib/entity/metadata/controller'
+import getTranslation from '@/lib/utils/getTranslation'
 import userCtrl from '../user/controller'
 import postCtrl from '../post/controller'
 import postCommentCtrl from '../post-comment/controller'
-import { getTranslation } from '@/lib/utils'
-import SiteSettingsSingleton from './settingsSingleton'
+import getCachedSettings from './cachedSettings'
+import { revalidateTag } from 'next/cache'
 
-class controller extends baseController {
+class controller extends metadataController {
   /**
    * constructor function for controller.
    *
    * @remarks
    * This method is part of the settingsController class extended of the main parent class baseController.
    *
-   * @param service - settingsService
+   *
    *settingsCtrl
    * @beta
    */
-  constructor(service: any) {
-    super(service)
+  constructor() {
+    super('setting')
   }
 
   standardizationFilters(filters: any): any {
@@ -58,26 +56,22 @@ class controller extends baseController {
     return filters
   }
 
-  async find(payload: QueryFind) {
-    payload.filters = this.standardizationFilters(payload.filters)
-    const result = await super.find(payload)
-    return result
-  }
-
-  async create(payload: Create) {
-    return super.create(payload)
-  }
-
   async findOneAndUpdate(payload: Update) {
     const r = await super.findOneAndUpdate(payload)
-    SiteSettingsSingleton.updateInstance()
+    revalidateTag('site-settings')
   }
 }
 
-const settingsCtrl = new controller(new settingsService(settingsSchema))
+const settingsCtrl = new controller()
 export default settingsCtrl
 
-type Key = 'site_title' | ''
+type Key =
+  | 'site_title'
+  | 'ad'
+  | 'appearance'
+  | 'general'
+  | 'validation'
+  | 'users'
 
 /**
  * Fetch site settings and return either the full settings object
@@ -92,8 +86,7 @@ type Key = 'site_title' | ''
 export const getSettings = async (
   key: Key = ''
 ): Promise<Record<string, unknown> | unknown | null | Settings> => {
-  const settings: Record<string, unknown> =
-    await SiteSettingsSingleton.getInstance()
+  const settings: Record<string, unknown> = await getCachedSettings()
 
   if (!key) {
     return settings

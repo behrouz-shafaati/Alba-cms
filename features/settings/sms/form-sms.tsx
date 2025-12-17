@@ -3,7 +3,6 @@ import { useActionState, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Server, Plug, Mail } from 'lucide-react'
 import { useToast } from '../../../hooks/use-toast'
-import { updateSettings } from '@/features/settings/actions'
 import Text from '../../../components/form-fields/text'
 import SubmitButton from '../../../components/form-fields/submit-button'
 import { Settings } from '../interface'
@@ -11,6 +10,7 @@ import { State } from '@/types'
 import { useSession } from '@/components/context/SessionContext'
 import { can } from '@/lib/utils/can.client'
 import AccessDenied from '@/components/access-denied'
+import { updateSMSSettings } from './actions'
 
 interface SettingsFormProps {
   settings: Settings
@@ -23,8 +23,16 @@ export const FormSMS: React.FC<SettingsFormProps> = ({ settings }) => {
 
   const canModerate = can(userRoles, 'settings.moderate.any')
   const formRef = useRef<HTMLFormElement>(null)
-  const initialState: State = { message: null, errors: {}, success: true }
-  const [state, dispatch] = useActionState(updateSettings as any, initialState)
+  const initialState: State = {
+    message: null,
+    errors: {},
+    success: true,
+    values: settings?.sms?.farazsms,
+  }
+  const [state, dispatch] = useActionState(
+    updateSMSSettings as any,
+    initialState
+  )
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
@@ -40,6 +48,7 @@ export const FormSMS: React.FC<SettingsFormProps> = ({ settings }) => {
         variant: state.success ? 'default' : 'destructive',
         description: state.message,
       })
+    console.log('#234 sms setings state:', state)
   }, [state])
   if (!canModerate) return <AccessDenied />
   return (
@@ -55,8 +64,8 @@ export const FormSMS: React.FC<SettingsFormProps> = ({ settings }) => {
             {/* farazsms_apiKey */}
             <Text
               title="کلید دسترسی"
-              name="farazsms_apiKey"
-              defaultValue={settings?.farazsms?.farazsms_apiKey || ''}
+              name="apiKey"
+              defaultValue={state?.values?.apiKey || ''}
               placeholder=""
               state={state}
               icon={<Server className="w-4 h-4" />}
@@ -65,10 +74,8 @@ export const FormSMS: React.FC<SettingsFormProps> = ({ settings }) => {
             {/* patternCode */}
             <Text
               title="کد پترن وریفای"
-              name="farazsms_verifyPatternCode"
-              defaultValue={
-                settings?.farazsms?.farazsms_verifyPatternCode || ''
-              }
+              name="verifyPatternCode"
+              defaultValue={state?.values?.verifyPatternCode || ''}
               placeholder="مثلا:e23c6ytxkg4f5qc"
               state={state}
               icon={<Plug className="w-4 h-4" />}
@@ -78,8 +85,8 @@ export const FormSMS: React.FC<SettingsFormProps> = ({ settings }) => {
             {/* from_number */}
             <Text
               title="خط مورد استفاده"
-              name="farazsms_from_number"
-              defaultValue={settings?.farazsms?.farazsms_from_number || ''}
+              name="from_number"
+              defaultValue={state?.values?.from_number || ''}
               placeholder="مثلاً: +983000505"
               state={state}
               icon={<Mail className="w-4 h-4" />}

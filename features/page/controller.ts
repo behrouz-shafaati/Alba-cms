@@ -87,17 +87,17 @@ class controller extends baseController {
   async getHomePage(): Promise<Page | null> {
     const siteSettings = await getSettings()
     const pageTranslation = getTranslation({
-      translations: siteSettings?.pageTranslations || [],
+      translations: siteSettings?.general?.translations || [],
     })
     console.log('#884725 pageTranslation in build time:', pageTranslation)
     if (pageTranslation?.homePageId == null) return null
-    const homePage = await this.findById({ id: pageTranslation.homePageId.id })
+    const homePage = await this.findById({ id: pageTranslation.homePageId })
     return homePage
   }
   async getTermsPage() {
     const siteSettings = await getSettings()
     const pageTranslation = getTranslation({
-      translations: siteSettings?.pageTranslations || [],
+      translations: siteSettings?.general?.translations || [],
     })
     if (pageTranslation?.termsPageId == null) return null
     const homePage = await this.findById({ id: pageTranslation.termsPageId })
@@ -106,7 +106,7 @@ class controller extends baseController {
   async getPrivacyPage() {
     const siteSettings = await getSettings()
     const pageTranslation = getTranslation({
-      translations: siteSettings?.pageTranslations || [],
+      translations: siteSettings?.general?.translations || [],
     })
     if (pageTranslation?.privacyPageId == null) return null
     const homePage = await this.findById({ id: pageTranslation.privacyPageId })

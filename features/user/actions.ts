@@ -218,14 +218,14 @@ export async function createUser(prevState: State, formData: FormData) {
     const user = (await getSession())?.user as User
     await can(user.roles, 'user.create')
 
-    if (!siteSettings?.mobileVerificationRequired) {
+    if (!siteSettings?.validation?.mobileVerificationRequired) {
       if (prevUser?.mobile !== rawValues.mobile) {
         await userCtrl.isDuplicateUnverifiedMobileEmail({
           mobile: rawValues.mobile,
         })
       }
     }
-    if (!siteSettings?.emailVerificationRequired) {
+    if (!siteSettings?.validation?.emailVerificationRequired) {
       if (prevUser?.email !== rawValues.email) {
         await userCtrl.isDuplicateUnverifiedMobileEmail({
           email: rawValues.email,
@@ -305,14 +305,14 @@ export async function updateUser(
       prevUser.id !== user.id ? 'user.edit.any' : 'user.edit.own'
     )
 
-    if (!siteSettings?.mobileVerificationRequired) {
+    if (!siteSettings?.validation?.mobileVerificationRequired) {
       if (prevUser?.mobile !== rawValues.mobile) {
         await userCtrl.isDuplicateUnverifiedMobileEmail({
           mobile: rawValues.mobile,
         })
       }
     }
-    if (!siteSettings?.emailVerificationRequired) {
+    if (!siteSettings?.validation?.emailVerificationRequired) {
       if (prevUser?.email !== rawValues.email) {
         await userCtrl.isDuplicateUnverifiedMobileEmail({
           email: rawValues.email,
@@ -383,14 +383,14 @@ export async function updateAccountUserAction(
       user.roles,
       prevUser.id !== user.id ? 'user.edit.any' : 'user.edit.own'
     )
-    if (!siteSettings?.mobileVerificationRequired) {
+    if (!siteSettings?.validation?.mobileVerificationRequired) {
       if (prevUser?.mobile !== rawValues.mobile) {
         await userCtrl.isDuplicateUnverifiedMobileEmail({
           mobile: rawValues.mobile,
         })
       }
     }
-    if (!siteSettings?.emailVerificationRequired) {
+    if (!siteSettings?.validation?.emailVerificationRequired) {
       if (prevUser?.email !== rawValues.email) {
         await userCtrl.isDuplicateUnverifiedMobileEmail({
           email: rawValues.email,
@@ -559,7 +559,7 @@ export async function signUpAction(prevState: State, formData: FormData) {
     const cleanedUserData = {
       ...validatedFields.data,
       image: null,
-      roles: siteSettings?.user?.defaultRoles || ['subscriber'],
+      roles: siteSettings?.users?.defaultRoles || ['subscriber'],
       userName: await userCtrl.generateUniqueUsername(),
     }
     newUser = await userCtrl.create({ params: cleanedUserData })
@@ -588,7 +588,10 @@ export async function signUpAction(prevState: State, formData: FormData) {
     }
   }
   const settings: Settings = (await getSettings()) as Settings
-  if (settings.emailVerificationRequired || settings.mobileVerificationRequired)
+  if (
+    settings?.validation?.emailVerificationRequired ||
+    settings?.validation?.mobileVerificationRequired
+  )
     redirect('/verification?purpose=signup&user=' + newUser?.id)
   redirect('/login')
 }

@@ -68,8 +68,9 @@ class controller extends baseController {
   async verificationRequired({ user }: { user: User }) {
     const settings: Settings = (await getSettings()) as Settings
     if (
-      (settings.emailVerificationRequired && !user.emailVerified) ||
-      (settings.mobileVerificationRequired && !user.mobileVerified)
+      (settings?.validation?.emailVerificationRequired &&
+        !user.emailVerified) ||
+      (settings?.validation?.mobileVerificationRequired && !user.mobileVerified)
     ) {
       return true
     }

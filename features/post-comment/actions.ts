@@ -15,6 +15,7 @@ import { Post } from '../post/interface'
 import { getSettings } from '../settings/controller'
 import { User } from '../user/interface'
 import { can } from '@/lib/utils/can.server'
+import { ValidationSettings } from '../settings/validation/interface'
 
 const FormSchema = z.object({
   contentJson: z.string({}),
@@ -369,12 +370,8 @@ export async function getPostComments(
 }
 
 export async function getPostCommentsForClient(payload: QueryFind) {
-  const commentApprovalRequired = await getSettings('commentApprovalRequired')
-  if (commentApprovalRequired) payload.filters.status = 'approved'
+  const validation: ValidationSettings = await getSettings('validation')
+  if (validation?.commentApprovalRequired) payload.filters.status = 'approved'
   const commentsResult = await getPostComments(payload)
-  console.log(
-    '#@@423984367 commentsResult:',
-    commentsResult?.data[0]?.translations
-  )
   return commentsResult
 }

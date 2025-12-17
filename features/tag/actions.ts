@@ -157,7 +157,8 @@ export async function updateTag(
       }
     }
     const params = await sanitizePostData(validatedFields, id)
-    await tagCtrl.findOneAndUpdate({
+
+    const updateResult = await tagCtrl.findOneAndUpdate({
       filters: id,
       params: params,
     })

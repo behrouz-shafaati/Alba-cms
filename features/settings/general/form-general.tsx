@@ -1,13 +1,10 @@
 'use client'
 import { useActionState, useEffect, useRef, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import { Heading1, Link, MessageSquare } from 'lucide-react'
 import { useToast } from '../../../hooks/use-toast'
-import { updateSettings } from '@/features/settings/actions'
 import Text from '../../../components/form-fields/text'
 import SubmitButton from '../../../components/form-fields/submit-button'
 import { PageContent, PageTranslationSchema } from '@/features/page/interface'
-import { Settings } from '../interface'
 import Combobox from '@/components/form-fields/combobox'
 import { Option, State } from '@/types'
 import { HomeIcon } from 'lucide-react'
@@ -16,6 +13,7 @@ import ProfileUpload from '@/components/form-fields/profile-upload'
 import { useSession } from '@/components/context/SessionContext'
 import { can } from '@/lib/utils/can.client'
 import AccessDenied from '@/components/access-denied'
+import { updateGeneralSettings } from './actions'
 
 interface FormGeneralProps {
   settings: Settings
@@ -32,8 +30,16 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
 
   const canModerate = can(userRoles, 'settings.moderate.any')
   const formRef = useRef<HTMLFormElement>(null)
-  const initialState: State = { message: null, errors: {}, success: true }
-  const [state, dispatch] = useActionState(updateSettings as any, initialState)
+  const initialState: State = {
+    values: settings?.general,
+    message: null,
+    errors: {},
+    success: true,
+  }
+  const [state, dispatch] = useActionState(
+    updateGeneralSettings as any,
+    initialState
+  )
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [imgLoading, setImgLoading] = useState(false)
@@ -42,7 +48,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
   const toastMessage = settings ? ' مطلب بروزرسانی شد' : 'دسته بندی اضافه شد'
   const action = settings ? 'ذخیره تغییرات' : 'ذخیره'
 
-  const pagesOptions: Option[] = allPages.map((p: PageContent) => {
+  const pagesOptions: Option[] = allPages?.map((p: PageContent) => {
     const translation: PageTranslationSchema = getTranslation({
       translations: p.translations,
       locale,
@@ -52,12 +58,11 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
       label: translation?.title,
     }
   })
-
   const siteInfo = getTranslation({
-    translations: settings?.infoTranslations || [],
+    translations: state?.values?.translations || [],
   })
   const pages = getTranslation({
-    translations: settings?.pageTranslations || [],
+    translations: state?.values?.translations || [],
   })
 
   useEffect(() => {
@@ -76,12 +81,15 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
         </div>
         {/* <Separator /> */}
         <form action={dispatch} ref={formRef} className="space-y-8 w-full">
+          <input type="hidden" name="locale" value="fa" readOnly />
           <div className="md:grid md:grid-cols-3 gap-8">
             {/* Site title */}
             <Text
               title="عنوان سایت"
               name="site_title"
-              defaultValue={siteInfo?.site_title || ''}
+              defaultValue={
+                state?.values?.site_title || siteInfo?.site_title || ''
+              }
               placeholder=""
               state={state}
               icon={<Heading1 className="w-4 h-4" />}
@@ -91,7 +99,11 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
             <Text
               title="معرفی کوتاه"
               name="site_introduction"
-              defaultValue={siteInfo?.site_introduction || ''}
+              defaultValue={
+                state?.values?.site_introduction ||
+                siteInfo?.site_introduction ||
+                ''
+              }
               placeholder=""
               state={state}
               icon={<MessageSquare className="w-4 h-4" />}
@@ -101,7 +113,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
             <Text
               title="آدرس سایت"
               name="site_url"
-              defaultValue={settings?.site_url || ''}
+              defaultValue={settings?.general?.site_url || ''}
               placeholder=""
               state={state}
               icon={<Link className="w-4 h-4" />}
@@ -112,7 +124,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
             <Combobox
               title="صفحه نخست"
               name="homePageId"
-              defaultValue={String(pages?.homePageId?.id)}
+              defaultValue={String(pages?.homePageId)}
               options={pagesOptions}
               placeholder=""
               state={state}
@@ -122,7 +134,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
             <Combobox
               title="صفحه قوانین"
               name="termsPageId"
-              defaultValue={String(pages?.termsPageId?.id)}
+              defaultValue={String(pages?.termsPageId)}
               options={pagesOptions}
               placeholder=""
               state={state}
@@ -132,7 +144,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
             <Combobox
               title="صفحه حریم خصوصی"
               name="privacyPageId"
-              defaultValue={String(pages?.privacyPageId?.id)}
+              defaultValue={String(pages?.privacyPageId)}
               options={pagesOptions}
               placeholder=""
               state={state}
@@ -142,7 +154,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({
             <ProfileUpload
               title="نمادک سایت"
               name="favicon"
-              defaultValue={settings?.favicon}
+              defaultValue={settings?.general?.faviconDetails}
               targetFormat="png"
             />
             {/* default header */}

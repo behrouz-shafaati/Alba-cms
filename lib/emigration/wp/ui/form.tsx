@@ -221,14 +221,14 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
             >
               شروع مهاجرت دیدگاه‌های مطالب
             </Button>
-            <Button
+            {/* <Button
               loading={loading}
               type="button"
               role="button"
               onClick={handleTestHtmlToTipTap}
             >
               تست تبدیل HTML به TipTap
-            </Button>
+            </Button> */}
           </div>
 
           <TestConnectionReport data={state?.data} />

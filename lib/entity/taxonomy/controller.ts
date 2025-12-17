@@ -32,7 +32,7 @@ export default class taxonomyController extends baseController {
 
   standardizationFilters(filters: any): any {
     if (typeof filters != 'object') {
-      return { type: this.type }
+      return { id: filters, type: this.type }
     }
     for (const [key, value] of Object.entries(filters)) {
       if (typeof value != 'string') continue
@@ -115,12 +115,15 @@ export default class taxonomyController extends baseController {
   }
 
   async findOneAndUpdate(payload: Update) {
+    console.log(`#44876 update taxonomy payload before:`, payload)
     payload.params = this.makeCleanDataBeforeSave(payload.params)
     payload.filters = this.standardizationFilters(payload.filters)
 
     // Preventing the risk of circular reference
     payload.params.parent =
       payload.params.parent == payload.filters ? null : payload.params.parent
+
+    console.log(`#44876 update taxonomy params:`, payload)
     return super.findOneAndUpdate(payload)
   }
 

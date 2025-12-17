@@ -1,9 +1,7 @@
 'use client'
 import { useActionState, useEffect, useRef, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { Server, Plug, Mail, Link } from 'lucide-react'
+import { Link } from 'lucide-react'
 import { useToast } from '../../../hooks/use-toast'
-import { updateSettings } from '@/features/settings/actions'
 import Text from '../../../components/form-fields/text'
 import SubmitButton from '../../../components/form-fields/submit-button'
 import { Settings } from '../interface'
@@ -15,20 +13,30 @@ import FileUpload from '@/components/form-fields/file-upload'
 import { CampaignTranslation } from '@/features/campaign/interface'
 import { getTranslation } from '@/lib/utils'
 import Select from '@/components/form-fields/select'
+import { updateAdSettings } from './actions'
 
 interface SettingsFormProps {
   settings: Settings
 }
 
 export const FormAD: React.FC<SettingsFormProps> = ({ settings }) => {
+  console.log('#ad form settings:', settings)
   const locale = 'fa'
   const { user } = useSession()
   const userRoles = user?.roles || []
 
   const canModerate = can(userRoles, 'settings.moderate.any')
   const formRef = useRef<HTMLFormElement>(null)
-  const initialState: State = { message: null, errors: {}, success: true }
-  const [state, dispatch] = useActionState(updateSettings as any, initialState)
+  const initialState: State = {
+    values: settings?.ad,
+    message: null,
+    errors: {},
+    success: true,
+  }
+  const [state, dispatch] = useActionState(
+    updateAdSettings as any,
+    initialState
+  )
 
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
@@ -42,7 +50,7 @@ export const FormAD: React.FC<SettingsFormProps> = ({ settings }) => {
   }, [state])
   if (!canModerate) return <AccessDenied />
   const translation: CampaignTranslation = getTranslation({
-    translations: settings?.ad?.translations || [],
+    translations: state?.values?.translations || [],
   })
   const fallbackBehaviorOptions: Option[] = [
     { label: 'نمایش یک بنر تصادفی', value: 'random' },
@@ -59,7 +67,7 @@ export const FormAD: React.FC<SettingsFormProps> = ({ settings }) => {
         {/* <Separator /> */}
         <form action={dispatch} ref={formRef} className="space-y-8 w-full">
           <div className="md:grid md:grid-cols-3 gap-8">
-            <input type="hidden" name="lang" value="fa" readOnly />
+            <input type="hidden" name="locale" value="fa" readOnly />
 
             {/* رفتار در صورت نبود تبلیغ */}
             <Select
@@ -67,7 +75,7 @@ export const FormAD: React.FC<SettingsFormProps> = ({ settings }) => {
               name="fallbackBehavior"
               placeholder="رفتار در صورت نبود تبلیغ"
               options={fallbackBehaviorOptions}
-              defaultValue={settings?.ad?.fallbackBehavior || 'random'}
+              defaultValue={state?.values?.fallbackBehavior || 'random'}
               icon={<Link className="w-4 h-4" />}
             />
 
@@ -75,7 +83,7 @@ export const FormAD: React.FC<SettingsFormProps> = ({ settings }) => {
             <Text
               title="لینک مقصد بنرهای پیش فرض"
               name="targetUrl"
-              defaultValue={settings?.ad?.targetUrl}
+              defaultValue={state?.values?.targetUrl}
               placeholder="لینک مقصد"
               state={state}
               icon={<Link className="w-4 h-4" />}
@@ -105,7 +113,9 @@ export const FormAD: React.FC<SettingsFormProps> = ({ settings }) => {
                     state={state}
                     maxFiles={1}
                     allowedFileTypes={['image']}
-                    defaultValues={defaultValu?.file ? [defaultValu?.file] : []}
+                    defaultValues={
+                      defaultValu?.fileDetails ? [defaultValu?.fileDetails] : []
+                    }
                     onLoading={setLoading}
                   />
                 </section>

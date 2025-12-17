@@ -63,15 +63,18 @@ export class WPClient {
 
     for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
       try {
+        await this.sleep(500)
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), this.timeout)
 
         console.log('[WPClient] Fetching:', url)
 
         const response = await fetch(url, {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'X-Albacms-Key': this.apiKey,
+            'User-Agent':
+              'ALBA-CMS-Migrator/0.1 (https://github.com/behrouz-shafaati/Alba-cms; contact: @behrouz-shafaati)',
             'Content-Type': 'application/json',
           },
           cache: 'no-store',
@@ -239,7 +242,7 @@ export class WPClient {
 
       // Rate limiting - کمی صبر بین batch ها
       if (i + concurrency < wpIds.length) {
-        await this.sleep(100)
+        await this.sleep(1000)
       }
     }
 

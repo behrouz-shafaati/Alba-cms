@@ -8,28 +8,25 @@ import PostHorizontalCard from '../builder-canvas/shared-blocks/postList/designs
 import { MobileFilters } from './MobileFilters'
 import Pagination from '../ui/pagination'
 import { getSettings } from '@/features/settings/controller'
+import ActiveFilters from './ActiveFilters'
 
 export default async function ArchivePost({
   page = 1,
   perPage = 6,
-  categoryIds = [],
-  tagIds = [],
-  categorySlugs = [],
-  tagSlugs = [],
+  filters = {},
 }: {
-  categoryIds?: string[]
-  tagIds?: string[]
-  categorySlugs?: string[]
-  tagSlugs?: string[]
+  filters?: { categories: string[]; tags: string[] }
   page?: number
   perPage?: number
 }) {
+  let categoryIds = []
+  let tagIds = []
   let defaultSelectedCategories: Option[] = []
   let defaultSelectedTags: Option[] = []
-  if (categorySlugs.length || tagSlugs.length) {
+  if (filters?.categories?.length || filters?.tags?.length) {
     const [defaultCategoriesResult, defaultTagsResult] = await Promise.all([
-      getAllCategories({ slug: { $in: categorySlugs } }),
-      getAllTags({ slug: { $in: tagSlugs } }),
+      getAllCategories({ slug: { $in: filters?.categories } }),
+      getAllTags({ slug: { $in: filters?.tags } }),
     ])
     categoryIds = defaultCategoriesResult.data.map((cat: any) => cat.id)
     tagIds = defaultTagsResult.data.map((tag: any) => tag.id)
@@ -65,11 +62,14 @@ export default async function ArchivePost({
     )
   })
 
+  console.log('#234876 defaultSelectedCategories:', defaultSelectedCategories)
+  console.log('#234876 defaultSelectedTags:', defaultSelectedTags)
+
   return (
     <div className="grid grid-cols-4 gap-4 relative">
       <div
         className={`block  px-4 py-2  md:hidden col-span-4 bg-slate-50 dark:bg-slate-950 z-10 sticky`}
-        style={{ top: `${siteSettings?.mobileHeaderHeight}px` }}
+        style={{ top: `${siteSettings?.appearance?.mobileHeaderHeight}px` }}
       >
         <MobileFilters
           allCategories={allCategories}
@@ -88,6 +88,15 @@ export default async function ArchivePost({
         />
       </div>
       <div className="p-2 col-span-4 md:col-span-3 ">
+        <div className="block md:hidden">
+          {' '}
+          <ActiveFilters
+            initial={{
+              tags: defaultSelectedTags,
+              categories: defaultSelectedCategories,
+            }}
+          />
+        </div>
         <div>{postItems}</div>
         <div className="p-4 flex justify-center items-center">
           <Pagination totalPages={result.totalPages} />

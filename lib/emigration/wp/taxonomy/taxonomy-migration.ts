@@ -322,7 +322,7 @@ export default class TaxonomyMigration {
       parent: parentId,
       ancestors: [],
       level: 0,
-      slug: wpTaxonomy.slug,
+      slug: decodeURI(wpTaxonomy.slug),
       translations: {
         lang: 'fa',
         title: wpTaxonomy.name,

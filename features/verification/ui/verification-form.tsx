@@ -128,26 +128,28 @@ function VerificationFormComponent({ settings, user, purpose }: Props) {
           readOnly
           className="hidden"
         />
-        {settings?.emailVerificationRequired && !user.emailVerified && (
-          <OTP
-            title="کد تایید ایمیل"
-            name="emailVerification"
-            state={state}
-            length={6}
-            description={emailDescription}
-          />
-        )}
+        {settings?.validation?.emailVerificationRequired &&
+          !user.emailVerified && (
+            <OTP
+              title="کد تایید ایمیل"
+              name="emailVerification"
+              state={state}
+              length={6}
+              description={emailDescription}
+            />
+          )}
 
-        {settings?.mobileVerificationRequired && !user.mobileVerified && (
-          <OTP
-            title="کد تایید موبایل"
-            name="mobileVerification"
-            placeholder="******"
-            description={mobileDescription}
-            state={state}
-            length={6}
-          />
-        )}
+        {settings?.validation?.mobileVerificationRequired &&
+          !user.mobileVerified && (
+            <OTP
+              title="کد تایید موبایل"
+              name="mobileVerification"
+              placeholder="******"
+              description={mobileDescription}
+              state={state}
+              length={6}
+            />
+          )}
 
         <SubmitButton text="ارسال" className="w-full" />
       </form>
