@@ -179,33 +179,6 @@ export default class TaxonomyMigration {
     return result
   }
 
-  async saveTerm(term: any) {
-    const parent = term.parent
-      ? await Taxonomy.findOne({ wpId: term.parent })
-      : null
-
-    const ancestors =
-      term.ancestors && term.ancestors.length
-        ? await Taxonomy.find({ wpId: { $in: term.ancestors } })
-        : []
-
-    return Taxonomy.findOneAndUpdate(
-      { wpId: term.wpId },
-      {
-        name: term.name,
-        slug: term.slug,
-        taxonomy: term.taxonomy,
-        type: term.albaType,
-        description: term.description,
-        meta: term.meta,
-        translations: term.translations,
-        parent: parent ? parent._id : null,
-        ancestors: ancestors.map((a) => a._id),
-      },
-      { upsert: true, new: true }
-    )
-  }
-
   /**
    * ساخت نتیجه
    */

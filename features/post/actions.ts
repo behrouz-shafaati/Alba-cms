@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import postCtrl from '@/features/post/controller'
 import { redirect } from 'next/navigation'
-import { createPostHref, extractExcerptFromContentJson } from './utils'
+import { createPostHref } from './utils'
 import { getSession } from '@/lib/auth'
 import { Option, Session, State } from '@/types'
 import tagCtrl from '../tag/controller'
@@ -13,6 +13,7 @@ import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
 import { revalidatePath } from 'next/cache'
 import { User } from '../user/interface'
 import { can } from '../../lib/utils/can.server'
+import extractExcerptFromContentJson from '@/lib/utils/extractExcerptFromContentJson'
 
 const FormSchema = z.object({
   title: z.string({}).nullable(),

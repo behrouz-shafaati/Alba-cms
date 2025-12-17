@@ -13,17 +13,12 @@ import {
 } from './types'
 import postCtrl from '@/features/post/controller'
 import { PostComment } from '@/features/post-comment/interface'
-import categoryCtrl from '@/features/category/controller'
-import tagCtrl from '@/features/tag/controller'
-import contentJson2PlainText from '@/lib/utils/contentJson2PlainText'
-import getReadingTime from '@/lib/utils/getReadingTime'
 import userCtrl from '@/features/user/controller'
-import replaceLinksInHtml from '@/lib/utils/replaceInternalLinksInHtml'
 import { LinkReplacerConfig } from '@/lib/utils/replaceInternalLinks'
 import replaceLinksInDocument from '@/lib/utils/replaceInternalLinksInTipTap'
 import { sanitizeTipTapContent } from '@/lib/utils/sanitizeTipTapContent'
 import postCommentCtrl from '@/features/post-comment/controller'
-import { extractExcerptFromContentJson } from '@/features/post/utils'
+import extractExcerptFromContentJson from '@/lib/utils/extractExcerptFromContentJson'
 
 // تنظیمات پیش‌فرض
 const DEFAULT_OPTIONS: MigrationOptions = {

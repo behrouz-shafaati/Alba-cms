@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 import postCommentCtrl from '@/features/post-comment/controller'
-import { createPostHref, extractExcerptFromContentJson } from '../post/utils'
+import { createPostHref } from '../post/utils'
 import { getSession } from '@/lib/auth'
 import { Session, State } from '@/types'
 import { QueryFind, QueryResponse } from '@/lib/entity/core/interface'
@@ -16,6 +16,7 @@ import { getSettings } from '../settings/controller'
 import { User } from '../user/interface'
 import { can } from '@/lib/utils/can.server'
 import { ValidationSettings } from '../settings/validation/interface'
+import extractExcerptFromContentJson from '@/lib/utils/extractExcerptFromContentJson'
 
 const FormSchema = z.object({
   contentJson: z.string({}),
