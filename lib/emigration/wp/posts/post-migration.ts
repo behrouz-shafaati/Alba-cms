@@ -269,16 +269,14 @@ export default class PostMigration {
       newBaseUrl: this.newBaseUrl,
       oldDomains: [this.oldDomain],
     }
-    const contentConvertResult = await HtmlToTiptapjsonConverter.convert(
-      wpPost.content
-    )
-    if (contentConvertResult.success && this.newBaseUrl != '') {
-      const convertedInternalLink = replaceLinksInDocument(
-        contentConvertResult.document,
+    contentJson = await HtmlToTiptapjsonConverter.convert(wpPost.content)
+    if (contentJson?.success && this.newBaseUrl != '') {
+      contentJson = replaceLinksInDocument(
+        contentJson?.document,
         linkReplacerConfig
       )
-      contentJson = sanitizeTipTapContent(convertedInternalLink)
     }
+    contentJson = sanitizeTipTapContent(contentJson?.document ?? contentJson)
 
     // set main image
     if (wpPost?.featured_image?.url) {

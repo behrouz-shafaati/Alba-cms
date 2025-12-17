@@ -261,19 +261,16 @@ export default class PostCommentMigration {
       newBaseUrl: this.newBaseUrl,
       oldDomains: [this.oldDomain],
     }
-    const contentConvertResult = await HtmlToTiptapjsonConverter.convert(
-      wpPostComment.content
-    )
-    if (contentConvertResult.success && this.newBaseUrl != '') {
-      const convertedInternalLink = replaceLinksInDocument(
-        contentConvertResult.document,
+    contentJson = await HtmlToTiptapjsonConverter.convert(wpPostComment.content)
+    if (contentJson.success && this.newBaseUrl != '') {
+      contentJson = replaceLinksInDocument(
+        contentJson.document,
         linkReplacerConfig
       )
-
-      console.log('# html constnet before conver: ', convertedInternalLink)
-      contentJson = sanitizeTipTapContent(convertedInternalLink)
-      console.log('# contentJson before conver: ', contentJson)
     }
+    // console.log('# html constnet before conver: ', contentJson)
+    contentJson = sanitizeTipTapContent(contentJson?.document ?? contentJson)
+    // console.log('# contentJson before conver: ', contentJson)
 
     // set relatred post
     if (wpPostComment?.post_wpId) {
