@@ -54,7 +54,7 @@ export async function startPostMigration(
     Object.fromEntries(formData)
   try {
     const migration = new PostMigration(values, {
-      newBaseUrl: values.newBaseUrl,
+      newBaseUrl: values.newDomain,
       verbose: true,
       ...options,
     })

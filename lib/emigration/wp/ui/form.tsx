@@ -179,6 +179,16 @@ export const FormWPEmigration: React.FC<SettingsFormProps> = ({ settings }) => {
               icon={<Key className="w-4 h-4" />}
               description=""
             />
+            {/* baseUrl */}
+            <Text
+              title="آدرس سایت جدید"
+              name="newDomain"
+              defaultValue={state?.values?.newDomain || ''}
+              placeholder="https://example.com"
+              state={state}
+              icon={<Server className="w-4 h-4" />}
+              description="در صورت تغییر دامنه با پر کردن این فیلد، لینک های داخلی به دامنه ی جدید تغییر می کنند. اگر دامنه قرار نیست تغییر کنید این فیلد را خالی بگذارید."
+            />
           </div>
           <div className="flex flex-row gap-2">
             <Button

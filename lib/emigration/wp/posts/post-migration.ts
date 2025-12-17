@@ -272,7 +272,7 @@ export default class PostMigration {
     const contentConvertResult = await HtmlToTiptapjsonConverter.convert(
       wpPost.content
     )
-    if (contentConvertResult.success) {
+    if (contentConvertResult.success && this.newBaseUrl != '') {
       const convertedInternalLink = replaceLinksInDocument(
         contentConvertResult.document,
         linkReplacerConfig

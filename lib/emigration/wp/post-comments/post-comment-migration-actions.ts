@@ -54,7 +54,7 @@ export async function startPostCommentMigration(
     Object.fromEntries(formData)
   try {
     const migration = new PostCommentMigration(values, {
-      newBaseUrl: values.newBaseUrl,
+      newBaseUrl: values.newDomain,
       verbose: true,
       ...options,
     })
