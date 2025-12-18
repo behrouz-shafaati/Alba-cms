@@ -61,6 +61,7 @@ export const PostListHeroVertical = ({
               primaryVideoEmbedUrl={firstPost.primaryVideoEmbedUrl}
               zoomable={false}
               isLCP={blockData?.settings?.isLCP || false}
+              aspectRatio={16 / 9}
             />
             <PostTitle title={t.title} />
             <PostExcerpt content={t.excerpt} />

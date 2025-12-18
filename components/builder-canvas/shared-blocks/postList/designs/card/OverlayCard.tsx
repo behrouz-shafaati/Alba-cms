@@ -68,7 +68,7 @@ const PostOverlayCard = ({ post, direction = 'row', options }: Props) => {
       {/* محتوای کارت */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-4 text-white transition-all duration-500">
         <h3
-          className={`text-2xl font-semibold leading-6 mb-2 line-clamp-2 group-hover:text-white/90 ${titleClasses} py-2`}
+          className={`text-xl font-semibold leading-8 mb-2 line-clamp-2 group-hover:text-white/90 ${titleClasses} py-2`}
         >
           {translationPost?.title}
         </h3>

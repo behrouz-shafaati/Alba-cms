@@ -41,7 +41,10 @@ const UserNavBlock = ({ blockData, ...props }: props) => {
   if (!session) {
     return (
       <Link href={`/login`} {...props}>
-        <Button variant={'ghost'} className="p-0">
+        <Button
+          variant={'ghost'}
+          className={` ${blockData?.classNames?.manualInputs} p-0`}
+        >
           <CircleUserRound />
         </Button>
       </Link>

@@ -10,14 +10,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Block } from '../../types'
 
-export default function ModeToggle() {
+type props = {
+  blockData: {
+    content: {}
+    type: 'userNav'
+    settings: {}
+  } & Block
+} & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
+
+export default function ModeToggle({ blockData, ...props }: props) {
   const { setTheme } = useTheme()
 
   return (
     <DropdownMenu dir="rtl">
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button
+          variant="ghost"
+          size="icon"
+          className={` ${blockData?.classNames?.manualInputs}`}
+        >
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           {/* <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

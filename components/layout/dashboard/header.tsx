@@ -11,12 +11,14 @@ type props = {
 }
 
 export default function Header({ siteSettings }: props) {
+  console.log('#234870 siteSettings:', siteSettings)
   const siteInfo = getTranslation({
-    translations: siteSettings?.infoTranslations || [],
+    translations: siteSettings?.general?.translations || [],
   })
   const src =
-    siteSettings?.favicon?.srcSmall && siteSettings?.favicon?.srcSmall != ''
-      ? siteSettings?.favicon?.srcSmall
+    siteSettings?.general?.faviconDetails?.srcSmall &&
+    siteSettings?.general?.faviconDetails?.srcSmall != ''
+      ? siteSettings?.general?.faviconDetails?.srcSmall
       : null
   return (
     <div className="fixed top-0 left-0 right-0 supports-backdrop-blur:bg-background/60 border-b bg-background/95 backdrop-blur z-20">
