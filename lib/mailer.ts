@@ -8,6 +8,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
   const siteInfo = getTranslation({
     translations: settings?.infoTranslations || [],
   })
+  console.log('#234 Email settings:', settings?.email)
   const transporter = nodemailer.createTransport({
     host: settings?.email?.mail_host,
     port: Number(settings?.email?.mail_port),

@@ -55,8 +55,9 @@ export function ImageAlba({
           src={displaySrc}
           alt={translation?.alt || translation?.title || ''}
           title={translation?.title || ''}
-          fill
-          className={`object-cover transition-transform duration-200 ${
+          layout="fill"
+          objectFit="cover"
+          className={` transition-transform duration-200 ${
             zoomable ? 'cursor-zoom-in' : ''
           }`}
           quality={70}

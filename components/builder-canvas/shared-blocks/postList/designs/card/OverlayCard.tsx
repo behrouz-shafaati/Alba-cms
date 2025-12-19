@@ -52,9 +52,11 @@ const PostOverlayCard = ({ post, direction = 'row', options }: Props) => {
       <Image
         src={post?.image?.srcMedium || '/image-placeholder-Medium.webp'}
         alt={translationImage?.alt || translationImage?.title || ''}
-        fill
-        className="object-cover transition-transform duration-700 group-hover:scale-110"
+        layout="fill"
+        objectFit="cover"
+        className="transition-transform duration-700 group-hover:scale-110"
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1280px"
+        quality={80}
         priority={isLCP} // برای تصویر LCP
         loading={isLCP ? 'eager' : 'lazy'}
         fetchPriority={isLCP ? 'high' : 'auto'}
