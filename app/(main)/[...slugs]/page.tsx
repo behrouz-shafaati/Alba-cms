@@ -39,9 +39,9 @@ interface PageProps {
   }>
 }
 
-// export async function generateStaticParams() {
-//   return postCtrl.generateStaticParams()
-// }
+export async function generateStaticParams() {
+  return postCtrl.generateStaticParams()
+}
 
 // ✅ Cache کردن کوئری پست - فقط یک بار اجرا میشه
 const getPostBySlug = cache(async (slug: string) => {

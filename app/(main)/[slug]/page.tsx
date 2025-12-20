@@ -7,9 +7,9 @@ import pageCtrl from '@/features/page/controller'
 import { pickLocale, SUPPORTED_LANGUAGE } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 
-// export async function generateStaticParams() {
-//   return pageCtrl.generateStaticParams()
-// }
+export async function generateStaticParams() {
+  return pageCtrl.generateStaticParams()
+}
 
 interface PageProps {
   params: { lang?: string; slug: string }

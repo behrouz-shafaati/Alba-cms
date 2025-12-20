@@ -20,9 +20,9 @@ interface PageProps {
   }>
 }
 
-// export async function generateStaticParams() {
-//   return categoryCtrl.generateStaticParams()
-// }
+export async function generateStaticParams() {
+  return categoryCtrl.generateStaticParams()
+}
 
 export async function generateMetadata({
   params,
