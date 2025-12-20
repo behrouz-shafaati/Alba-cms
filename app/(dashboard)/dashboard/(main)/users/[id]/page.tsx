@@ -3,7 +3,7 @@ import { BreadCrumb } from '@/components/breadcrumb'
 import React from 'react'
 import userCtrl from '@/features/user/controller'
 import { notFound } from 'next/navigation'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 
 interface PageProps {
   params: Promise<{ id: string }>

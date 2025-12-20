@@ -1,5 +1,3 @@
-// import { cookies } from 'next/headers'
-// import { decrypt } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { getPostComments } from '@/features/post-comment/actions'
 
@@ -11,13 +9,6 @@ export async function GET(req: Request) {
     if (!postId) {
       return NextResponse.json({ error: 'postId is required' }, { status: 400 })
     }
-
-    //   const cookieStore = await cookies()
-    // const session = cookieStore.get('session')?.value
-    // if (!session) {
-    //   return Response.json(null)
-    // }
-    // return Response.json(await decrypt(session))
 
     const commentsResult = await getPostComments({
       filters: { post: postId },

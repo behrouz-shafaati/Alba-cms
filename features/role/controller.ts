@@ -113,6 +113,7 @@ class controller {
         description:
           'می‌تواند مطالب خود را ایجاد و ویرایش کند، اما نمی‌تواند آنها را منتشر یا حذف کند.',
         permissions: [
+          'dashboard.view.any',
           'user.edit.own',
           'postComment.create',
           'post.view.own',

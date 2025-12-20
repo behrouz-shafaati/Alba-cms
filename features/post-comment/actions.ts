@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import postCommentCtrl from '@/features/post-comment/controller'
 import { createPostHref } from '../post/utils'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import { Session, State } from '@/types'
 import { QueryFind, QueryResponse } from '@/lib/entity/core/interface'
 import { PostComment, PostCommentTranslationSchema } from './interface'

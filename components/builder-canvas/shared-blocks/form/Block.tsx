@@ -3,7 +3,7 @@ import React from 'react'
 import { Block } from '../../../builder-canvas/types'
 import Form from './Form'
 import { getForms } from '@/features/form/actions'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import RendererRows from '../../../builder-canvas/pageRenderer/RenderRows'
 import { FormTranslationSchema } from '@/features/form/interface'
 

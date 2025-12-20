@@ -7,7 +7,7 @@ import LastPosts from '@/features/post/ui/last-alticles'
 import { getStats } from '@/features/settings/controller'
 import { can } from '@/lib/utils/can.client'
 import { FileText, MessageSquare, User } from 'lucide-react'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import LastForms from '@/features/form/ui/last-forms'
 
 export default async function page() {

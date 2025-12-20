@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { getSession, logout } from '@/lib/auth'
+import { getSession, logout } from '@/lib/auth/get-session'
 import { can } from '@/lib/utils/can.server'
 import { Session } from '@/types'
 import Link from 'next/link'

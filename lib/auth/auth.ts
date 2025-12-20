@@ -1,9 +1,9 @@
-'use server'
+import 'server-only'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { redirect } from 'next/navigation'
-import { decrypt, encrypt } from './utils'
-import { Session } from '@/types'
+import { encrypt } from './encrypt'
+import { decrypt } from './decrypt'
 
 const durationOfSessionValidity = 60 * 60 * 12 * 1000 // 12 ساعت به میلی‌ثانیه
 
@@ -12,18 +12,6 @@ export async function logout() {
   const cookieStore = await cookies()
   cookieStore.set('session', '', { expires: new Date(0) })
   redirect('/login')
-}
-
-export async function getSession(): Promise<Session> {
-  try {
-    const cookieStore = await cookies()
-    const session = cookieStore.get('session')?.value
-    if (!session) return { user: { roles: ['guest'] } }
-    return await decrypt(session)
-  } catch (err) {
-    console.error('❌ cookies() called outside request context', err)
-    return { user: { roles: ['guest'] } }
-  }
 }
 
 export async function updateSession(request: NextRequest) {

@@ -6,11 +6,11 @@ import { redirect } from 'next/navigation'
 import { Option, Session, State } from '@/types'
 import { Category, CategoryTranslationSchema } from './interface'
 import { createCatrgoryBreadcrumb, slugify } from '@/lib/utils'
-import { getSession } from '@/lib/auth'
 import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
 import { revalidatePath } from 'next/cache'
 import { User } from '../user/interface'
 import { can } from '@/lib/utils/can.server'
+import { getSession } from '@/lib/auth/get-session'
 
 const FormSchema = z.object({
   title: z.string({}).min(1, { message: 'لطفا عنوان را وارد کنید.' }),

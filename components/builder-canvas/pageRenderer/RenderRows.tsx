@@ -9,7 +9,6 @@ import {
 } from '../utils/styleUtils'
 import RenderBlock from './RenderBlock'
 import { Settings } from '@/features/settings/interface'
-import { registerAllBlocks } from '@/lib/block/register-all-blocks.server'
 
 type Props = {
   siteSettings: Settings
@@ -30,8 +29,6 @@ const RendererRows = async ({
   searchParams = {},
   ...rest
 }: Props) => {
-  // فقط در سرور اجرا می‌شود
-  registerAllBlocks()
   // فیلتر کردن propsهایی که content_ شروع میشن
   const contents = Object.entries(rest)
     .filter(([key]) => key.startsWith('content_'))

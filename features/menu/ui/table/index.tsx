@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react'
 import { columns } from './columns'
 import { QueryResponse } from '@/lib/entity/core/interface'
 import GroupAction from './group-action'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import { User } from '@/features/user/interface'
 import { can } from '@/lib/utils/can.server'
 

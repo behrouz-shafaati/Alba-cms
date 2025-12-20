@@ -8,7 +8,7 @@ import {
   FileDetailsPayload,
   FileTranslationSchema,
 } from './interface'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import { Session } from '@/types'
 import postCtrl from '@/features/post/controller'
 // import imgurClient from "./imgur";

@@ -8,7 +8,7 @@ import { QueryResponse } from '@/lib/entity/core/interface'
 import GroupAction from './group-action'
 import { Post } from '../../interface'
 import { postUrl } from '../../utils'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import { User } from '@/features/user/interface'
 import { can } from '@/lib/utils/can.server'
 

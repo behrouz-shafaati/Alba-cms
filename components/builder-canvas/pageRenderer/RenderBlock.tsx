@@ -1,5 +1,5 @@
 'use server'
-import { getBlockRegistry } from '@/lib/block/singletonBlockRegistry'
+import { getBlocksSafe } from '@/lib/block/singletonBlockRegistry'
 import { Block } from '../types'
 import { combineClassNames, getVisibilityClass } from '../utils/styleUtils'
 import { Settings } from '@/features/settings/interface'
@@ -23,7 +23,7 @@ const RenderBlock = async ({
   searchParams = {},
   ...rest
 }: RenderBlockProp) => {
-  const blocks = await getBlockRegistry() // برای محتوا دار بودن این برای رسیدن به این کامپوننت هیچ کامپوننتی نباید از use client‌ استفاده کرده باشد
+  const blocks = getBlocksSafe() // برای محتوا دار بودن این برای رسیدن به این کامپوننت هیچ کامپوننتی نباید از use client‌ استفاده کرده باشد
 
   const visibility = item.styles?.visibility
   const className = getVisibilityClass(visibility)

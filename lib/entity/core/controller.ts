@@ -17,7 +17,7 @@ import {
 } from './interface'
 // import logController from "@entity/log/controller";
 import { MongooseBulkWriteResult, Types } from 'mongoose'
-import { getSession } from '@/middleware'
+import { getSession } from '@/lib/auth/get-session'
 // import { logEvents } from "@/middleware/logEvents";
 // import getPaginationFiltersFromQuery from "@/utils/getPagenationFiltersFromQuery";
 

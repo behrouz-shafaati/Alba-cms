@@ -35,8 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
   // اطلاعات رو از دیتابیس می‌گیریم
   const settings = (await getSettings()) as Settings
   const info = getTranslation({
-    translations: settings?.infoTranslations || [],
+    translations: settings?.general?.translations || [],
   })
+  const favIcon = settings?.general?.faviconDetails
   return {
     title: `${info?.site_title} | ${info?.site_introduction}` || 'ALBA CMS',
     description: info?.site_introduction || 'Default Description',
@@ -44,16 +45,16 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: [
         {
           media: '(prefers-color-scheme: light)',
-          url: settings?.favicon?.srcSmall || '/alba-black.svg',
-          href: settings?.favicon?.srcSmall || '/alba-black.svg',
+          url: favIcon?.srcSmall || '/alba-black.svg',
+          href: favIcon?.srcSmall || '/alba-black.svg',
           sizes: '16x16',
           type: 'image/x-icon',
           rel: 'icon',
         },
         {
           media: '(prefers-color-scheme: dark)',
-          url: settings?.favicon?.srcSmall || '/alba-white.svg',
-          href: settings?.favicon?.srcSmall || '/alba-white.svg',
+          url: favIcon?.srcSmall || '/alba-white.svg',
+          href: favIcon?.srcSmall || '/alba-white.svg',
           sizes: '16x16',
           type: 'image/x-icon',
           rel: 'icon',
@@ -64,7 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 ;<link rel="icon" href="/alba-white.svg" sizes="any" />
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

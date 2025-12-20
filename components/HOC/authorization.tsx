@@ -1,29 +1,29 @@
-import { RoleSlugs, Session } from '@/types';
-import AccessDenied from '../access-denied';
-import { haveAccess } from '@/lib/utils';
-import { navItems } from '../layout/dashboard/navItems';
-import { getSession } from '@/lib/auth';
+import { RoleSlugs, Session } from '@/types'
+import AccessDenied from '../access-denied'
+import { haveAccess } from '@/lib/utils'
+import { navItems } from '../layout/dashboard/navItems'
+import { getSession } from '@/lib/auth/get-session'
 
 interface AuthorizationProps {
-  children: React.ReactNode;
-  routeSlug: string;
+  children: React.ReactNode
+  routeSlug: string
 }
 
 const Authorization: React.FC<AuthorizationProps> = async ({
   children,
   routeSlug = null,
 }) => {
-  if (routeSlug === null) return <>{children}</>;
-  const session = (await getSession()) as Session;
+  if (routeSlug === null) return <>{children}</>
+  const session = (await getSession()) as Session
 
   const AuthorizedRoles: RoleSlugs[] =
-    navItems.find((item) => item.slug === routeSlug)?.authorized || [];
+    navItems.find((item) => item.slug === routeSlug)?.authorized || []
 
-  const Authorized = haveAccess(session?.user?.roles, AuthorizedRoles);
+  const Authorized = haveAccess(session?.user?.roles, AuthorizedRoles)
 
-  if (!Authorized) return <AccessDenied />;
+  if (!Authorized) return <AccessDenied />
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-export default Authorization;
+export default Authorization

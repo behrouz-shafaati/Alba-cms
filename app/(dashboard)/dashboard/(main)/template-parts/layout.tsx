@@ -2,8 +2,8 @@ import Authorization from '@/components/HOC/authorization'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'قالب‌ها',
-  description: 'مدیریت قالب‌ها',
+  title: 'قطعه قالب',
+  description: 'مدیریت قطعه قالب‌ها',
 }
 
 interface PagesLayoutProps {

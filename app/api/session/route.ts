@@ -1,5 +1,5 @@
+import { decrypt } from '@/lib/auth/decrypt'
 import { cookies } from 'next/headers'
-import { decrypt } from '@/lib/utils'
 
 export async function GET() {
   const cookieStore = await cookies()

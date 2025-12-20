@@ -5,7 +5,6 @@ import { revalidatePath } from 'next/cache'
 import formCtrl from '@/features/form/controller'
 import { redirect } from 'next/navigation'
 import { Session, State } from '@/types'
-import { getSession } from '@/lib/auth'
 import { QueryFind, QueryResult } from '@/lib/entity/core/interface'
 import { Form, FormField } from './interface'
 import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
@@ -13,6 +12,7 @@ import { User } from '../user/interface'
 import { can } from '@/lib/utils/can.server'
 import { PostTranslationSchema } from '../post/interface'
 import { extractFieldsFromFormContent } from './utils'
+import { getSession } from '@/lib/auth/get-session'
 
 const FormSchema = z.object({
   contentJson: z.string({}),

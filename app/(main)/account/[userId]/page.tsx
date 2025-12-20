@@ -5,7 +5,7 @@ import postCtrl from '@/features/post/controller'
 import { getSettings } from '@/features/settings/controller'
 import templateCtrl from '@/features/template/controller'
 import { UserAccount } from '@/features/user/ui/UserAccount'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import RendererTemplate from '@/components/builder-canvas/templateRender/RenderTemplate.server'
 
 interface PageProps {

@@ -2,8 +2,8 @@ import Authorization from '@/components/HOC/authorization'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'دسته بندی ها',
-  description: 'مدیریت دسته بندی های فروشگاه',
+  title: 'فهرست ها',
+  description: 'مدیریت فهرست ها',
 }
 
 interface MenusLayoutProps {

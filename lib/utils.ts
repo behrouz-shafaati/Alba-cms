@@ -1,7 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 import { QueryFind } from './entity/core/interface'
-import { jwtVerify, SignJWT } from 'jose'
 
 /**
  * Utility function for conditionally combining and merging Tailwind CSS class names.
@@ -30,34 +28,7 @@ import { jwtVerify, SignJWT } from 'jose'
  * @returns {string} The merged string of class names with Tailwind conflicts resolved.
  */
 export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs))
-}
-
-const secretKey = 'secret'
-const key = new TextEncoder().encode(secretKey)
-
-export async function encrypt(payload: any) {
-  return await new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime('7d')
-    .sign(key)
-}
-
-export async function decrypt(input: string): Promise<any> {
-  try {
-    const { payload } = await jwtVerify(input, key, {
-      algorithms: ['HS256'],
-    })
-    return payload
-  } catch (error: any) {
-    if (error.name === 'TokenExpiredError') {
-      console.log('Token has expired. Please generate a new one.')
-    } else {
-      console.log('Token verification failed:', error.message)
-    }
-    return null
-  }
+  return clsx(inputs)
 }
 
 export const haveAccess = (

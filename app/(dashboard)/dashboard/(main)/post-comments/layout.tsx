@@ -2,8 +2,8 @@ import Authorization from '@/components/HOC/authorization'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'مطالب',
-  description: 'مدیریت مطالب ',
+  title: 'دیدگاه ها',
+  description: 'مدیریت دیدگاه ها ',
 }
 
 interface CategoriesLayoutProps {

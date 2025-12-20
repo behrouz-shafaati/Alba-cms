@@ -1,7 +1,6 @@
 // export const dynamic = 'force-dynamic'
 // export const dynamic = 'auto'
 export const dynamic = 'force-static'
-import React from 'react'
 import templateCtrl from '@/features/template/controller'
 import type { Metadata } from 'next'
 import CategoryPostList from '@/features/category/ui/component/CategoryPostList'
@@ -21,9 +20,9 @@ interface PageProps {
   }>
 }
 
-export async function generateStaticParams() {
-  return categoryCtrl.generateStaticParams()
-}
+// export async function generateStaticParams() {
+//   return categoryCtrl.generateStaticParams()
+// }
 
 export async function generateMetadata({
   params,

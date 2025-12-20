@@ -11,12 +11,12 @@ import { getSettings } from '../settings/controller'
 import { Settings } from '../settings/interface'
 import verificationCtrl from '../verification/controller'
 import { cookies } from 'next/headers'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/get-session'
 import { User } from './interface'
 import { can } from '@/lib/utils/can.server'
 import verifyPassword from '@/lib/utils/verifyPassword'
 import hashPassword from '@/lib/utils/hashPassword'
-import { encrypt } from '@/lib/utils'
+import { encrypt } from '@/lib/auth/encrypt'
 
 const FormSchema = z.object({
   firstName: z
