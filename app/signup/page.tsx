@@ -13,11 +13,12 @@ export const metadata: Metadata = {
 export default async function AuthenticationPage() {
   const siteSettings = await getSettingsAction()
   const pageTranslation = getTranslation({
-    translations: siteSettings?.pageTranslations || [],
+    translations: siteSettings?.general?.translations || [],
   })
   const infoTranslation = getTranslation({
-    translations: siteSettings?.infoTranslations || [],
+    translations: siteSettings?.general?.translations || [],
   })
+  const logo = siteSettings?.general?.faviconDetails
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -61,7 +62,7 @@ export default async function AuthenticationPage() {
           termsPageHref={`/${pageTranslation?.termsPageId?.slug || `#`}`}
           privacyPageHref={`/${pageTranslation?.privacyPageId?.slug || `#`}`}
           site_title={infoTranslation?.site_title || ''}
-          logo={siteSettings?.favicon || null}
+          logo={logo || null}
         />
       </div>
     </div>

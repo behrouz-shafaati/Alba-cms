@@ -139,6 +139,8 @@ async function sanitizeSettingsData(validatedFields: any) {
         id: file?.id,
         srcSmall: file?.srcSmall,
         srcMedium: file?.srcMedium,
+        width: file?.width,
+        height: file?.height,
       },
     },
   }

@@ -45,7 +45,7 @@ const nextConfig = {
   },
   compiler: {
     // 👇 کد جاوااسکریپت مدرن‌تر و کوچیک‌تر
-    // removeConsole: process.env.NODE_ENV === 'production', // باعث میشه همه console.log ها در Production حذف بشن
+    removeConsole: process.env.NODE_ENV === 'production', // باعث میشه همه console.log ها در Production حذف بشن
   },
   // فشرده‌سازی
   compress: true,
