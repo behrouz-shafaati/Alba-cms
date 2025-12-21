@@ -49,7 +49,6 @@ export const PostListHeroVertical = ({
           grid-cols-1
           md:grid-cols-[2fr_1fr]
           gap-4
-                  /* ارتفاع ثابت در دسکتاپ */
         "
       >
         {/* ستون اصلی — همیشه ستون مرجع ارتفاع */}
@@ -77,20 +76,18 @@ export const PostListHeroVertical = ({
             overflow-y-auto
           "
         > */}
-        <ScrollArea className="h-500 h-[680px]">
-          <div className="divide-y divide-border">
-            {restPosts.map((p) => (
-              <PostHorizontalCard
-                key={p.id}
-                post={p}
-                options={{
-                  showExcerpt:
-                    blockData?.settings?.showExcerpt == true ? true : false,
-                }}
-              />
-            ))}
-          </div>
-        </ScrollArea>
+        <div className="divide-y divide-border">
+          {restPosts.slice(0, 4).map((p) => (
+            <PostHorizontalCard
+              key={p.id}
+              post={p}
+              options={{
+                showExcerpt:
+                  blockData?.settings?.showExcerpt == true ? true : false,
+              }}
+            />
+          ))}
+        </div>
         {/* </div> */}
       </div>
     </div>

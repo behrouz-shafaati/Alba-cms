@@ -13,14 +13,19 @@ type PostCoverProps = {
 export const PostTags = ({ tags, styles = {}, ...props }: PostCoverProps) => {
   return (
     <div style={styles} {...props}>
-      <div className="text-sm text-gray-500 mb-8 flex gap-2">
+      <div className="text-sm text-gray-500 mb-8 flex flex-wrap gap-2">
         {tags.map((t) => {
           const translation = getTranslation({ translations: t.translations })
           return (
-            <Button variant="outline" size="sm" key={t.id} className="p-0">
+            <Button
+              variant="outline"
+              size="sm"
+              key={t.id}
+              className="inline-flex w-fit p-0 !justify-start"
+            >
               <FastLink
                 href={`/archive/tags/${t.slug}`}
-                className="flex gap-1 h-full px-2 items-center"
+                className="flex gap-1 px-2 items-center"
               >
                 {t?.icon && t?.icon != '' && (
                   <IconRenderer name={t.icon} className={`w-5 h-5`} />

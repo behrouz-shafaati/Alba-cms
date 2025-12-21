@@ -86,6 +86,8 @@ class controller {
         break
       }
       case 'page':
+        finalPathes = ['/', ...pathes]
+        break
       case 'postComment':
       case 'formSubmission':
         finalPathes = [...pathes]
@@ -106,21 +108,25 @@ class controller {
     // 🔥 ذخیره لاگ در فایل root/revalidate-log.txt
     // -------------------------------------------------
 
-    const filePath = path.join(process.cwd(), 'revalidate-log.txt')
+    // const filePath = path.join(process.cwd(), 'revalidate-log.txt')
 
-    const logData = {
-      timestamp: new Date().toISOString(), // زمان دقیق
-      feature,
-      slugsReceived: slug,
-      finalPathes,
-    }
+    // const logData = {
+    //   timestamp: new Date().toISOString(), // زمان دقیق
+    //   feature,
+    //   slugsReceived: slug,
+    //   finalPathes,
+    // }
 
-    const logLine = JSON.stringify(logData, null, 2) + '\n\n'
+    // const logLine = JSON.stringify(logData, null, 2) + '\n\n'
 
-    // appendFile غیر همزمان و بدون بلاک کردن Node
-    fs.appendFile(filePath, logLine, (err) => {
-      if (err) console.error('⚠ Error writing log:', err)
-    })
+    // // appendFile غیر همزمان و بدون بلاک کردن Node
+    // fs.appendFile(filePath, logLine, (err) => {
+    //   if (err) console.error('⚠ Error writing log:', err)
+    // })
+
+    // -------------------------------------------------
+    // 🔥 پایان ذخیره لاگ در فایل  root/revalidate-log.txt
+    // -------------------------------------------------
 
     return finalPathes
   }

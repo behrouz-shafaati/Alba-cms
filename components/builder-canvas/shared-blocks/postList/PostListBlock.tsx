@@ -80,7 +80,7 @@ export default async function PostListBlock({
   const [result] = await Promise.all([
     getPosts({
       filters,
-      pagination: { page: 1, perPage: settings?.countOfPosts || 6 },
+      pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
     }),
   ])
   const posts = result.data

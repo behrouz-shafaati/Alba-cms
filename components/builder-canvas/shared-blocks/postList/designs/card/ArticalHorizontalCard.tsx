@@ -35,14 +35,22 @@ const PostHorizontalCard = ({
     {}
   return (
     <FastLink key={post?.id} href={post?.href || '#'}>
-      <div className="grid grid-cols-[1fr_7rem] md:grid-cols-[1fr_200px] items-center md:items-start border-b py-2 gap-2">
+      <div className="grid grid-cols-[1fr_7rem] md:grid-cols-[1fr_100px]  xl:grid-cols-[1fr_200px] items-center md:items-start border-b py-2 gap-2">
         {/* عنوان و توضیح */}
         <div className="p-2">
           <h3 className="text-sm font-semibold mb-1 leading-5 min-h-[2.5rem] line-clamp-2">
             {highlightText(translationPost.title, query)}
           </h3>
           {options?.showExcerpt != false && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 m-0 hidden md:block">
+            <p
+              className="text-sm text-gray-600 dark:text-gray-400 m-0 hidden md:block"
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
               {highlightText(translationPost?.excerpt, query)}
             </p>
           )}

@@ -2,20 +2,13 @@ export const PostListBlockSchema = {
   title: '',
   type: 'object',
   properties: {
-    countOfPosts: {
-      type: 'number',
-      title: 'تعداد مطالب',
-      default: 8,
-      minimum: 1,
-    },
     listDesign: {
       type: 'string',
       title: 'طرح لیست',
-      // enum: ['column', 'row', 'hero', 'spotlight'],
       oneOf: [
         { const: 'row', title: 'ردیفی' },
         { const: 'column', title: 'ستونی' },
-        { const: 'heroVertical', title: 'قهرمان عمودی ' },
+        { const: 'heroVertical', title: 'قهرمان عمودی' },
         { const: 'heroHorizontal', title: 'قهرمان افقی' },
         { const: 'spotlight', title: 'برجسته' },
       ],
@@ -23,14 +16,23 @@ export const PostListBlockSchema = {
     },
   },
   required: ['listDesign'],
+
   allOf: [
+    // 🔹 row / column
     {
-      // حالت column / row (بدون تغییر)
       if: {
-        properties: { listDesign: { enum: ['column', 'row'] } },
+        properties: {
+          listDesign: { enum: ['row', 'column'] },
+        },
       },
       then: {
         properties: {
+          countOfPosts: {
+            type: 'number',
+            title: 'تعداد مطالب',
+            default: 5,
+            minimum: 1,
+          },
           cardDesign: {
             type: 'string',
             title: 'طرح کارت',
@@ -52,7 +54,6 @@ export const PostListBlockSchema = {
             title: 'تبلیغ پس از چند مطلب (aspect: 4/1)',
             default: 0,
             minimum: 0,
-            description: `aspect: 4/1`,
           },
         },
         allOf: [
@@ -74,27 +75,48 @@ export const PostListBlockSchema = {
           },
         ],
       },
+    },
 
-      // ⭐⭐ حالت hero + spotlight (فقط نمایش showExcerpt) ⭐⭐
-      else: {
-        if: {
-          properties: {
-            listDesign: {
-              enum: ['heroVertical', 'heroHorizontal', 'spotlight'],
-            },
+    // 🔹 spotlight (فقط countOfPosts)
+    {
+      if: {
+        properties: {
+          listDesign: { const: 'spotlight' },
+        },
+      },
+      then: {
+        properties: {
+          countOfPosts: {
+            type: 'number',
+            title: 'تعداد مطالب',
+            default: 5,
+            minimum: 1,
+          },
+          showExcerpt: {
+            type: 'boolean',
+            title: 'نمایش گزیده',
+            default: true,
           },
         },
-        then: {
-          properties: {
-            showExcerpt: {
-              type: 'boolean',
-              title: 'نمایش گزیده',
-              default: true,
-            },
+      },
+    },
+
+    // 🔹 hero
+    {
+      if: {
+        properties: {
+          listDesign: {
+            enum: ['heroVertical', 'heroHorizontal'],
           },
         },
-        else: {
-          properties: {},
+      },
+      then: {
+        properties: {
+          showExcerpt: {
+            type: 'boolean',
+            title: 'نمایش گزیده',
+            default: true,
+          },
         },
       },
     },
