@@ -6,7 +6,7 @@ import { getTranslation } from './utils'
 export async function sendEmail(to: string, subject: string, html: string) {
   const settings: Settings = (await getSettings()) as Settings
   const siteInfo = getTranslation({
-    translations: settings?.infoTranslations || [],
+    translations: settings?.general?.translations || [],
   })
   console.log('#234 Email settings:', settings?.email)
   const transporter = nodemailer.createTransport({
@@ -20,11 +20,12 @@ export async function sendEmail(to: string, subject: string, html: string) {
   })
   try {
     const info = await transporter.sendMail({
-      from: `${siteInfo?.site_title} <${settings?.mail_username}>`,
+      from: `${siteInfo?.site_title} <${settings?.email?.mail_username}>`,
       to,
       subject,
       html,
     })
+    console.log('#2655 send Email info', info)
     console.log('Email sent: %s', info.messageId)
     return info
   } catch (error) {
