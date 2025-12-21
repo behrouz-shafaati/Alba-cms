@@ -12,6 +12,7 @@ import fileCtrl from '@/lib/entity/file/controller'
 import AccordionRenderLazy from '../tiptap-renderers/AccordionRenderLazy'
 // import AdSlotBlock from '@/components/builder-canvas/shared-blocks/AdSlot/AdSlotBlock'
 import AdSlotBlockLazy from '@/components/builder-canvas/shared-blocks/AdSlot/AdSlotBlockLazy'
+import toNumber from '@/lib/utils/toNumber'
 
 // تابع کمکی: جمع‌آوری همه‌ی نودهای accordion (ترتیب درختی)
 function collectAccordions(node: TNode | undefined, out: TNode[] = []) {
