@@ -191,13 +191,14 @@ export default async function EnhanceHtmlForNext({
                 style={{
                   ...computedStyles({
                     ['--header-top-mobile' as any]: `${
-                      siteSettings?.appearance?.mobileHeaderHeight + 8
+                      toNumber(siteSettings?.appearance?.mobileHeaderHeight) + 8
                     }px`,
                     ['--header-top-tablet' as any]: `${
-                      siteSettings?.appearance?.tabletHeaderHeight + 8
+                      toNumber(siteSettings?.appearance?.tabletHeaderHeight) + 8
                     }px`,
                     ['--header-top-desktop' as any]: `${
-                      siteSettings?.appearance?.desktopHeaderHeight + 8
+                      toNumber(siteSettings?.appearance?.desktopHeaderHeight) +
+                      8
                     }px`,
                     scrollMarginTop: 'var(--header-top)',
                   }),
