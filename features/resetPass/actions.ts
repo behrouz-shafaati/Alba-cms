@@ -15,8 +15,16 @@ const resetPassVerifyCodeFormSchema = z.object({
   userId: z.string({}),
   purpose: z.string({}),
   identifier: z.string({}),
-  verification: z.string({}),
-  password: z.string({}),
+  verification: z
+    .string({
+      required_error: 'لطفا کد تایید را وارد کنید.',
+    })
+    .min(1, { message: 'لطفا کد تایید را وارد کنید.' }),
+  password: z
+    .string({
+      required_error: 'لطفا رمز ورود را وارد کنید.',
+    })
+    .min(6, { message: 'رمز ورود حداقل ۶ رقم باشد' }),
   confirmPassword: z.string({}),
 })
 

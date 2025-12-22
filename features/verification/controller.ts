@@ -9,7 +9,6 @@ import { Settings } from '../settings/interface'
 import { getSettings } from '../settings/controller'
 import mongoose from 'mongoose'
 import userCtrl from '../user/controller'
-import { z } from 'zod'
 import { getMailTemplate, sendEmail } from '@/lib/mailer'
 import { getTranslation, toMinutes } from '@/lib/utils'
 
@@ -406,7 +405,7 @@ class controller extends baseController {
     }
     const settings = (await getSettings()) as Settings
     const siteInfo = getTranslation({
-      translations: settings?.infoTranslations || [],
+      translations: settings?.general?.translations || [],
     })
     const { doc, plainCode } = await verificationCtrl.createVerificationCode({
       userId,
@@ -505,7 +504,7 @@ class controller extends baseController {
   }) {
     const settings = (await getSettings()) as Settings
     const siteInfo = getTranslation({
-      translations: settings?.infoTranslations || [],
+      translations: settings?.general?.translations || [],
     })
     const { doc, plainCode } = await verificationCtrl.createVerificationCode({
       userId: user.id,

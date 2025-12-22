@@ -71,27 +71,24 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-// فرض: hashPassword(password: string) => Promise<string>
 userSchema.pre('findOneAndUpdate', async function (next) {
   try {
-    const update = this.getUpdate()
+    const update = this.getUpdate() as any
     if (!update) return next()
 
-    // مقدار ممکنه مستقیم در update.password باشه یا داخل update.$set.password
-    const rawPassword = update.password ?? update.$set?.password
-    if (!rawPassword) return next()
+    // همیشه با $set کار کن
+    update.$set = update.$set || {}
 
-    const hashed = await hashPassword(rawPassword)
+    // ===== password =====
+    const rawPassword = update.password ?? update.$set.password
+    if (rawPassword) {
+      update.$set.password = await hashPassword(rawPassword)
+      delete update.password
+    }
 
-    // جایگزینی مقدار هَشد شده در همان ساختارِ آپدیت
-    if (update.password) {
-      update.password = hashed
-    } else {
-      update.$set = {
-        ...(update.$set || {}),
-        password: hashed,
-        email: update.$set.email.toLowerCase(),
-      }
+    // ===== email =====
+    if (typeof update.$set.email === 'string') {
+      update.$set.email = update.$set.email.toLowerCase()
     }
 
     this.setUpdate(update)
