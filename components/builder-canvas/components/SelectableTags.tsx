@@ -29,31 +29,32 @@ import { Dispatch, SetStateAction, useState } from 'react'
 export default function SelectableTags({
   items,
   className = '',
-  setSelectedTag,
+  onTagChange,
 }: {
-  items: { label: string; slug: string }[]
+  items: { label: string; value: string }[]
   className?: string
-  setSelectedTag?: Dispatch<SetStateAction<string>>
+  onTagChange?: (tagId: string) => Promise<void>
 }) {
   const [selected, setSelected] = useState('')
 
-  let selectedTagExistInItems = items.some((item) => item.slug === selected)
+  let selectedTagExistInItems = items.some((item) => item.value === selected)
 
+  console.log('#23098 items in selected tags:', items)
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {items?.map((item, index) => (
         <Badge
           key={index}
           onClick={() => {
-            setSelectedTag?.(item.slug)
-            setSelected(item.slug)
+            onTagChange?.(item.value)
+            setSelected(item.value)
           }}
           variant="outline"
           className={cn(
-            'p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer px-4',
+            '!p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer !px-4',
             {
               'bg-primary text-white':
-                (selectedTagExistInItems && item.slug === selected) ||
+                (selectedTagExistInItems && item.value === selected) ||
                 (!selectedTagExistInItems && index == 0),
             }
           )}

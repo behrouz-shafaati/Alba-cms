@@ -1,13 +1,12 @@
 'use client'
 // کامپوننت نمایشی بلاک
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { MoveLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import PostItems from '../card/PostItems'
 import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
-import { getTagAction } from '@/features/tag/actions'
 import { getPosts } from '@/features/post/actions'
 import { FastLink } from '@/components/FastLink'
 
@@ -35,6 +34,9 @@ type PostListProps = {
   } & Block
 } & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
 
+const INITIAL_COUNT = 6
+const STEP = 5
+
 const PostListColumn = ({
   posts: initialPosts,
   showMoreHref,
@@ -49,42 +51,67 @@ const PostListColumn = ({
   props.className = props?.className
     ? `${props?.className} w-full h-auto max-w-full`
     : 'w-full h-auto max-w-full'
-
-  const firstLoad = useRef(true)
   const [loading, setLoading] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT)
   const [posts, setPosts] = useState(initialPosts)
-  const [selectedTag, setSelectedTag] = useState('')
+  const [isPending, startTransition] = useTransition()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (firstLoad.current === true) {
-        firstLoad.current = false
-        return
-      }
-      setLoading(true)
-      let _filters
-      if (selectedTag != '') {
-        const tag = await getTagAction({ slug: selectedTag })
-        _filters = { ...filters, tags: [tag.id] }
-      } else {
-        _filters = filters
-      }
-      const [result] = await Promise.all([
-        getPosts({
-          filters: _filters,
-          pagination: { page: 1, perPage: settings?.countOfPosts || 6 },
-        }),
-      ])
-      const posts = result.data
-      setPosts(posts)
-      setLoading(false)
+  // -------------------------------
+  // 1️⃣ فیلتر سمت سرور
+  const onTagChange = async (tagId: string) => {
+    setLoading(true)
+    let _filters
+    if (tagId != '') {
+      _filters = { ...filters, tags: [tagId] }
+    } else {
+      _filters = filters
     }
-    fetchData()
-  }, [selectedTag])
+    const [result] = await Promise.all([
+      getPosts({
+        filters: _filters,
+        pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
+      }),
+    ])
+    const posts = result.data
+    setPosts(posts)
+    setLoading(false)
+  }
+
+  // -------------------------------
+  // 2️⃣ Load More خودکار (idle + scroll)
+  useEffect(() => {
+    if (visibleCount >= posts.length) return
+
+    const loadMore = () => {
+      startTransition(() => {
+        setVisibleCount((v) => Math.min(v + STEP, posts.length))
+      })
+    }
+
+    // idle callback
+    let idleId: number | null = null
+    if ('requestIdleCallback' in window) {
+      idleId = requestIdleCallback(loadMore)
+    }
+
+    // scroll fallback
+    const onScroll = () => {
+      const nearBottom =
+        window.innerHeight + window.scrollY > document.body.offsetHeight - 300
+      if (nearBottom) loadMore()
+    }
+
+    window.addEventListener('scroll', onScroll)
+
+    return () => {
+      if (idleId) cancelIdleCallback(idleId)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [visibleCount, posts.length])
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
-    queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
+    queryParamLS = [{ label: 'تازه‌ها', value: '' }, ...queryParamLS]
   return (
     <div
       className=" relative w-full min-h-10  overflow-hidden "
@@ -100,13 +127,13 @@ const PostListColumn = ({
       <div className="px-2">
         <SelectableTags
           items={queryParamLS}
-          setSelectedTag={setSelectedTag}
+          onTagChange={onTagChange}
           className="p-2"
         />
         <div className={`mt-2 `}>
           <div className="grid grid-cols-1 gap-2">
             <PostItems
-              posts={posts}
+              posts={posts.slice(0, visibleCount)}
               blockData={blockData}
               randomMap={randomMap}
               loading={loading}

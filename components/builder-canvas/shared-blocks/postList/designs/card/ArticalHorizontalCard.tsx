@@ -33,13 +33,20 @@ const PostHorizontalCard = ({
     ) ||
     post.image?.translations[0] ||
     {}
+
+  const title = query
+    ? highlightText(translationPost.title, query)
+    : translationPost.title
+  const excerpt = query
+    ? highlightText(translationPost?.excerpt, query)
+    : translationPost?.excerpt
   return (
     <FastLink key={post?.id} href={post?.href || '#'}>
       <div className="grid grid-cols-[1fr_7rem] md:grid-cols-[1fr_100px]  xl:grid-cols-[1fr_200px] items-center md:items-start border-b py-2 gap-2">
         {/* عنوان و توضیح */}
         <div className="p-2">
           <h3 className="text-sm font-semibold mb-1 leading-5 min-h-[2.5rem] line-clamp-2">
-            {highlightText(translationPost.title, query)}
+            {title}
           </h3>
           {options?.showExcerpt != false && (
             <p
@@ -51,7 +58,7 @@ const PostHorizontalCard = ({
                 overflow: 'hidden',
               }}
             >
-              {highlightText(translationPost?.excerpt, query)}
+              {excerpt}
             </p>
           )}
         </div>

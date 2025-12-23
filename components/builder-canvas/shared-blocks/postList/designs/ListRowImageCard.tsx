@@ -1,17 +1,11 @@
 'use client'
 // کامپوننت نمایشی بلاک
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { ArrowLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-// import PostItems from '../card/PostItems'
-// import { getPosts } from '@/features/post/actions'
-// import { getTagAction } from '@/features/tag/actions'
-// import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
-// import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
-// import { usePathname, useRouter } from 'next/navigation'
 import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
 import { getPosts } from '@/features/post/actions'
 import { getTagAction } from '@/features/tag/actions'
@@ -79,44 +73,31 @@ export const PostListRowImageCard = ({
   //     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   //   })
   // }
-
-  const firstLoad = useRef(true)
   const [loading, setLoading] = useState(false)
-  const [selectedTag, setSelectedTag] = useState('')
   const [posts, setPosts] = useState(initialPosts)
-  //   const posts = initialPosts
-  //   const loading = false
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (firstLoad.current === true) {
-        firstLoad.current = false
-        return
-      }
-      setLoading(true)
-      let _filters
-      if (selectedTag != '') {
-        const tag = await getTagAction({ slug: selectedTag })
-        _filters = { ...filters, tags: [tag.id] }
-      } else {
-        _filters = filters
-      }
-      const [result] = await Promise.all([
-        getPosts({
-          filters: _filters,
-          pagination: { page: 1, perPage: settings?.countOfPosts || 6 },
-        }),
-      ])
-      const posts = result.data
-      setPosts(posts)
-      setLoading(false)
+  const onTagChange = async (tagId: string) => {
+    setLoading(true)
+    let _filters
+    if (tagId != '') {
+      _filters = { ...filters, tags: [tagId] }
+    } else {
+      _filters = filters
     }
-    fetchData()
-  }, [selectedTag])
+    const [result] = await Promise.all([
+      getPosts({
+        filters: _filters,
+        pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
+      }),
+    ])
+    const posts = result.data
+    setPosts(posts)
+    setLoading(false)
+  }
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
-    queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
+    queryParamLS = [{ label: 'تازه‌ها', value: '' }, ...queryParamLS]
 
   return (
     <div
@@ -140,7 +121,7 @@ export const PostListRowImageCard = ({
       <div>
         <SelectableTags
           items={queryParamLS}
-          setSelectedTag={setSelectedTag}
+          onTagChange={onTagChange}
           className="p-2"
         />
         {/* <QueryParamLinks

@@ -1,6 +1,6 @@
 'use client'
 // کامپوننت نمایشی بلاک
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { ArrowLeft } from 'lucide-react'
@@ -50,41 +50,31 @@ export const PostListRow = ({
     ? `${props?.className} w-full h-auto max-w-full`
     : 'w-full h-auto max-w-full'
 
-  const firstLoad = useRef(true)
   const [loading, setLoading] = useState(false)
   const [posts, setPosts] = useState(initialPosts)
-  const [selectedTag, setSelectedTag] = useState('')
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (firstLoad.current === true) {
-        firstLoad.current = false
-        return
-      }
-      setLoading(true)
-      let _filters
-      if (selectedTag != '') {
-        const tag = await getTagAction({ slug: selectedTag })
-        _filters = { ...filters, tags: [tag.id] }
-      } else {
-        _filters = filters
-      }
-      const [result] = await Promise.all([
-        getPosts({
-          filters: _filters,
-          pagination: { page: 1, perPage: settings?.countOfPosts || 6 },
-        }),
-      ])
-      const posts = result.data
-      setPosts(posts)
-      setLoading(false)
+  const onTagChange = async (tagId: string) => {
+    setLoading(true)
+    let _filters
+    if (tagId != '') {
+      _filters = { ...filters, tags: [tagId] }
+    } else {
+      _filters = filters
     }
-    fetchData()
-  }, [selectedTag])
+    const [result] = await Promise.all([
+      getPosts({
+        filters: _filters,
+        pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
+      }),
+    ])
+    const posts = result.data
+    setPosts(posts)
+    setLoading(false)
+  }
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
-    queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
+    queryParamLS = [{ label: 'تازه‌ها', value: '' }, ...queryParamLS]
   return (
     <div
       className=" relative w-full min-h-10  overflow-hidden "
@@ -107,7 +97,7 @@ export const PostListRow = ({
       <div>
         {/* <SelectableTags
           items={queryParamLS}
-          setSelectedTag={setSelectedTag}
+          onTagChange={onTagChange}
           className="p-2"
         /> */}
         <QueryParamLinks items={queryParamLS} className="p-2" paramKey="tag" />

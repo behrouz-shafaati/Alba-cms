@@ -1,5 +1,5 @@
 import { Post } from '@/features/post/interface'
-import React from 'react'
+import React, { memo } from 'react'
 import PostOverlayCard from './OverlayCard'
 import AdSlotBlock from '../../../AdSlot/AdSlotBlock'
 import VerticalPostCardSkeleton from '@/components/post/skeleton/vertical-card-skeleton'
@@ -18,12 +18,12 @@ type Props = {
   loading?: boolean
 }
 
-export default function PostItems({
+const PostItems = ({
   posts = [],
   blockData,
   randomMap = [],
   loading = false,
-}: Props) {
+}: Props) => {
   const { id, content, settings } = blockData
 
   const advertisingAfter = blockData?.settings?.advertisingAfter || 0
@@ -159,3 +159,5 @@ export default function PostItems({
     </>
   )
 }
+
+export default memo(PostItems)

@@ -1,17 +1,12 @@
 'use client'
 // کامپوننت نمایشی بلاک
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { ArrowLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import PostItems from '../card/PostItems'
-// import { getPosts } from '@/features/post/actions'
-// import { getTagAction } from '@/features/tag/actions'
-// import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
-// import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
-// import { usePathname, useRouter } from 'next/navigation'
 import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
 import { getPosts } from '@/features/post/actions'
 import { getTagAction } from '@/features/tag/actions'
@@ -55,61 +50,32 @@ export const PostListRow = ({
     ? `${props?.className} w-full h-auto max-w-full`
     : 'w-full h-auto max-w-full'
 
-  // const router = useRouter()
-  // const pathname = usePathname()
-  // const [isPending, startTransition] = useTransition()
-
-  // const handleTagChange = (tagSlug: string) => {
-  //   startTransition(() => {
-  //     // URL رو تغییر بده و Next.js خودش Server Component رو دوباره render میکنه
-  //     const params = new URLSearchParams(searchParams)
-
-  //     if (tagSlug) {
-  //       params.set('tag', tagSlug)
-  //     } else {
-  //       params.delete('tag')
-  //     }
-
-  //     router.push(`${pathname}?${params.toString()}`, { scroll: false })
-  //   })
-  // }
-
-  const firstLoad = useRef(true)
   const [loading, setLoading] = useState(false)
-  const [selectedTag, setSelectedTag] = useState('')
   const [posts, setPosts] = useState(initialPosts)
   // const posts = initialPosts
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (firstLoad.current === true) {
-        firstLoad.current = false
-        return
-      }
-      setLoading(true)
-      let _filters
-      if (selectedTag != '') {
-        const tag = await getTagAction({ slug: selectedTag })
-        _filters = { ...filters, tags: [tag.id] }
-      } else {
-        _filters = filters
-      }
-      const [result] = await Promise.all([
-        getPosts({
-          filters: _filters,
-          pagination: { page: 1, perPage: settings?.countOfPosts || 6 },
-        }),
-      ])
-      const posts = result.data
-      setPosts(posts)
-      setLoading(false)
+  const onTagChange = async (tagId: string) => {
+    setLoading(true)
+    let _filters
+    if (tagId != '') {
+      _filters = { ...filters, tags: [tagId] }
+    } else {
+      _filters = filters
     }
-    fetchData()
-  }, [selectedTag])
+    const [result] = await Promise.all([
+      getPosts({
+        filters: _filters,
+        pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
+      }),
+    ])
+    const posts = result.data
+    setPosts(posts)
+    setLoading(false)
+  }
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
-    queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
+    queryParamLS = [{ label: 'تازه‌ها', value: '' }, ...queryParamLS]
   return (
     <div
       className=" relative w-full min-h-10  overflow-hidden "
@@ -132,7 +98,7 @@ export const PostListRow = ({
       <div>
         <SelectableTags
           items={queryParamLS}
-          setSelectedTag={setSelectedTag}
+          onTagChange={onTagChange}
           className="p-2"
         />
         {/* <QueryParamLinks
