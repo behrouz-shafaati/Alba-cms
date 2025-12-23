@@ -119,7 +119,8 @@ export default async function Page({ params, searchParams }: PageProps) {
   const resolvedParams = await params
   const { slugs } = resolvedParams
   const slug = slugs[slugs.length - 1]
-
+  console.log('#3hy6 slugs ...slugs:', slugs)
+  console.log('#3hy6 slug in ...slugs:', decodeURIComponent(slug))
   // const resolvedSearchParams = {}
   const resolvedSearchParams = await searchParams
   // const { tag } = resolvedSearchParams

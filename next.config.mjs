@@ -2,6 +2,7 @@
 import bundleAnalyzer from '@next/bundle-analyzer'
 
 const nextConfig = {
+  trailingSlash: true,
   // فعال کردن Output Standalone برای عملکرد بهتر
   // output: 'standalone',
   images: {

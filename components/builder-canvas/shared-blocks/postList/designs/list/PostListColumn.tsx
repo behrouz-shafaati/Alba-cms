@@ -1,13 +1,13 @@
-'use client'
+// 'use client'
 // کامپوننت نمایشی بلاک
-import React, { useState } from 'react'
+import React from 'react'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { MoveLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import PostItems from '../card/PostItems'
-import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
-import { getPosts } from '@/features/post/actions'
+// import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
+// import { getPosts } from '@/features/post/actions'
 import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {
@@ -35,7 +35,8 @@ type PostListProps = {
 } & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
 
 const PostListColumn = ({
-  posts: initialPosts,
+  // posts: initialPosts,
+  posts,
   showMoreHref,
   blockData,
   searchParams = {},
@@ -48,29 +49,30 @@ const PostListColumn = ({
   props.className = props?.className
     ? `${props?.className} w-full h-auto max-w-full`
     : 'w-full h-auto max-w-full'
-  const [loading, setLoading] = useState(false)
-  const [posts, setPosts] = useState(initialPosts)
+  const loading = false
+  // const [loading, setLoading] = useState(false)
+  // const [posts, setPosts] = useState(initialPosts)
 
   // -------------------------------
   // 1️⃣ فیلتر سمت سرور
-  const onTagChange = async (tagId: string) => {
-    setLoading(true)
-    let _filters
-    if (tagId != '') {
-      _filters = { ...filters, tags: [tagId] }
-    } else {
-      _filters = filters
-    }
-    const [result] = await Promise.all([
-      getPosts({
-        filters: _filters,
-        pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
-      }),
-    ])
-    const posts = result.data
-    setPosts(posts)
-    setLoading(false)
-  }
+  // const onTagChange = async (tagId: string) => {
+  //   setLoading(true)
+  //   let _filters
+  //   if (tagId != '') {
+  //     _filters = { ...filters, tags: [tagId] }
+  //   } else {
+  //     _filters = filters
+  //   }
+  //   const [result] = await Promise.all([
+  //     getPosts({
+  //       filters: _filters,
+  //       pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
+  //     }),
+  //   ])
+  //   const posts = result.data
+  //   setPosts(posts)
+  //   setLoading(false)
+  // }
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
@@ -88,11 +90,11 @@ const PostListColumn = ({
         </div>
       </div>
       <div className="px-2">
-        <SelectableTags
+        {/* <SelectableTags
           items={queryParamLS}
           onTagChange={onTagChange}
           className="p-2"
-        />
+        /> */}
         <div className={`mt-2 `}>
           <div className="grid grid-cols-1 gap-2">
             <PostItems
