@@ -1,6 +1,6 @@
 'use client'
 // کامپوننت نمایشی بلاک
-import React, { useEffect, useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { MoveLeft } from 'lucide-react'
@@ -54,7 +54,16 @@ const PostListColumn = ({
   const [loading, setLoading] = useState(false)
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT)
   const [posts, setPosts] = useState(initialPosts)
-  const [isPending, startTransition] = useTransition()
+  const [hasMore, setHasMore] = useState(true)
+  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+
+  const loadMore = () => {
+    if (visibleCount >= posts.length) {
+      setHasMore(false)
+      return
+    }
+    setVisibleCount((v) => Math.min(v + STEP, posts.length))
+  }
 
   // -------------------------------
   // 1️⃣ فیلتر سمت سرور
@@ -78,36 +87,26 @@ const PostListColumn = ({
   }
 
   // -------------------------------
-  // 2️⃣ Load More خودکار (idle + scroll)
   useEffect(() => {
-    if (visibleCount >= posts.length) return
+    if (!loadMoreRef.current || loading || !hasMore) return
 
-    const loadMore = () => {
-      startTransition(() => {
-        setVisibleCount((v) => Math.min(v + STEP, posts.length))
-      })
-    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          loadMore()
+        }
+      },
+      {
+        root: null, // viewport
+        rootMargin: '300px', // قبل از رسیدن
+        threshold: 0,
+      }
+    )
 
-    // idle callback
-    let idleId: number | null = null
-    if ('requestIdleCallback' in window) {
-      idleId = requestIdleCallback(loadMore)
-    }
+    observer.observe(loadMoreRef.current)
 
-    // scroll fallback
-    const onScroll = () => {
-      const nearBottom =
-        window.innerHeight + window.scrollY > document.body.offsetHeight - 300
-      if (nearBottom) loadMore()
-    }
-
-    window.addEventListener('scroll', onScroll)
-
-    return () => {
-      if (idleId) cancelIdleCallback(idleId)
-      window.removeEventListener('scroll', onScroll)
-    }
-  }, [visibleCount, posts.length])
+    return () => observer.disconnect()
+  }, [loading, hasMore])
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
@@ -138,6 +137,10 @@ const PostListColumn = ({
               randomMap={randomMap}
               loading={loading}
             />
+            {/* 🔥 Sentinel */}
+            {hasMore && (
+              <div ref={loadMoreRef} className="h-1 w-full" aria-hidden />
+            )}
           </div>
           <FastLink
             href={showMoreHref}
