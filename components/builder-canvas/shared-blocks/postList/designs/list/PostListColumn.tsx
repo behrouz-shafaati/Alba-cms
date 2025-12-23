@@ -9,6 +9,7 @@ import PostItems from '../card/PostItems'
 // import SelectableTags from '@/components/builder-canvas/components/SelectableTags'
 // import { getPosts } from '@/features/post/actions'
 import { FastLink } from '@/components/FastLink'
+import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
 
 type PostListProps = {
   posts: Post[]
@@ -95,6 +96,12 @@ const PostListColumn = ({
           onTagChange={onTagChange}
           className="p-2"
         /> */}
+        <QueryParamLinks
+          items={queryParamLS}
+          className="p-2"
+          paramKey="tag"
+          searchParams={searchParams}
+        />
         <div className={`mt-2 `}>
           <div className="grid grid-cols-1 gap-2">
             <PostItems

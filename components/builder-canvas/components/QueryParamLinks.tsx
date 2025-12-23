@@ -32,35 +32,35 @@ export default function QueryParamLinks({
   paramKey = 'param',
   items,
   className = '',
-}: // searchParams,
-{
+  searchParams = {},
+}: {
   paramKey?: string
   items: { label: string; value: string }[]
   className?: string
   searchParams?: any
 }) {
-  const [selectedTag, setSelectedTag] = useState('')
-
-  let selectedTagExistInItems = items.some((item) => item.value === selectedTag)
+  let selectedTagExistInItems = items.some(
+    (item) => item.value === searchParams?.tag
+  )
 
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {items?.map((item, index) => (
         <FastLink
-          href={`?${paramKey}=${item.value}`}
+          href={`_sp_${paramKey}=${item.value}`}
           key={item.value}
           scroll={false}
           data-nprogress="off"
-          onClick={() => setSelectedTag(item.value)}
         >
           <Badge
             key={item.value}
             variant="outline"
             className={cn(
-              'p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer px-4',
+              '!p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer !px-4',
               {
                 'bg-primary text-white':
-                  (selectedTagExistInItems && item.value === selectedTag) ||
+                  (selectedTagExistInItems &&
+                    item.value === searchParams?.tag) ||
                   (!selectedTagExistInItems && index == 0),
               }
             )}

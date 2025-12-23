@@ -2,48 +2,24 @@ export const dynamic = 'force-static'
 // export const dynamicParams = false // صفحه ی جدید با ری ولیدت هم نشان داده نمی شود
 export const revalidate = 86400 // 24 hours
 // export const dynamic = 'force-dynamic'
-import { PageRenderer } from '@/components/builder-canvas/pageRenderer'
-import pageCtrl from '@/features/page/controller'
-import { pickLocale, SUPPORTED_LANGUAGE } from '@/lib/utils'
-import { notFound } from 'next/navigation'
-
-// export async function generateStaticParams() {
-//   return pageCtrl.generateStaticParams()
-// }
+import isSearchParams from '@/lib/utils/isSearchParams'
+import resolveSearchParams from '@/lib/utils/resolveSearchParams'
+import HomePage from '@/pages/Home'
+import SinglePage from '@/pages/SinglePage'
 
 interface PageProps {
   params: { lang?: string; slug: string }
-  searchParams: Promise<{
-    tag?: string
-  }>
 }
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function Page({ params }: PageProps) {
+  let resolvedSearchParams = {}
   const { lang = 'fa', slug: encodeSlug } = await params
   const slug = decodeURIComponent(encodeSlug)
+  const flgSearchParam = isSearchParams(slug)
 
-  // const resolvedSearchParams = {}
-  const resolvedSearchParams = await searchParams
-  // const { tag } = resolvedSearchParams
-  // زبان پیش‌فرض
-  const locale = pickLocale(lang)
-
-  const [pageResult] = await Promise.all([
-    pageCtrl.find({ filters: { slug: slug } }),
-  ])
-
-  if (pageResult?.data.length == 0) {
-    notFound()
+  if (flgSearchParam) {
+    resolvedSearchParams = resolveSearchParams(slug)
+    return <HomePage searchParams={resolvedSearchParams} />
   }
-
-  // this is a page
-  if (pageResult?.data[0])
-    return (
-      <PageRenderer
-        page={pageResult?.data[0]}
-        locale={locale}
-        searchParams={resolvedSearchParams}
-        pageSlug={slug || ''}
-      />
-    )
+  return <SinglePage pageSlug={slug} />
 }

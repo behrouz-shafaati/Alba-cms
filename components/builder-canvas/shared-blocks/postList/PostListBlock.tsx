@@ -43,28 +43,38 @@ export default async function PostListBlock({
 
   console.log('#234897 in list block render')
 
-  // const selectedTag = searchParams?.tag
-  const selectedTag = searchParams?.tag
-    ? searchParams?.tag
+  // tggs
+  // ----------------------------
+  // 1️⃣ تعیین selectedTagId
+  // ----------------------------
+  // اگر searchParams.tag موجود باشد → از آن استفاده می‌کنیم
+  // در غیر این صورت:
+  //   - اگر showNewest فعال باشد → رشته خالی
+  //   - در غیر این صورت → از اولین tag موجود در content استفاده می‌کنیم
+  const selectedTagId = searchParams?.tag
+    ? searchParams.tag
     : settings?.showNewest
     ? ''
-    : content?.tags?.[0].slug || ''
-  const flgSelectedTagExistInBlock = Array.isArray(content?.tags)
+    : content?.tags?.[0]?.value || ''
 
-  let filters = {}
-    ? /*======== tag filter ========*/
-      searchParams?.tag
-    : settings?.showNewest == true
-    ? ''
-    : content?.tags?.[0]?.slug || ''
-    ? content.tags.some((tag) => tag.slug === selectedTag)
-    : false
-  if (selectedTag != '' && flgSelectedTagExistInBlock) {
-    const tag = await getTagAction({ slug: selectedTag })
+  // ----------------------------
+  // 3️⃣ ایجاد filters اولیه
+  // ----------------------------
+  let filters: any = {} // مقدار اولیه خالی
 
-    filters = { ...filters, tags: [tag.id] }
+  // ======== tag filter ========
+  // اگر searchParams.tag موجود باشد → فیلتر بر اساس آن
+  if (searchParams?.tag) {
+    filters = { tags: [searchParams.tag] }
+
+    // در غیر این صورت اگر content.tags حداقل یک tag داشته باشد
+  } else if (content?.tags?.[0]?.value) {
+    // بررسی می‌کنیم selectedTagId در content.tags موجود باشد
+    const tagExists = content.tags.some((tag) => tag.value === selectedTagId)
+    if (tagExists) {
+      filters = { tags: [selectedTagId] }
+    }
   }
-
   /*======== category filter ========*/
   const categoryIds =
     content?.categories?.map((category: Option) => category.value) || {}
