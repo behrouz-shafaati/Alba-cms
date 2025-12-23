@@ -61,19 +61,17 @@ export default async function PostListBlock({
   // 3️⃣ ایجاد filters اولیه
   // ----------------------------
   let filters: any = {} // مقدار اولیه خالی
-
+  let tagExistsInWidget = false
+  tagExistsInWidget = content?.tags?.some((tag) => tag.value === selectedTagId)
   // ======== tag filter ========
   // اگر searchParams.tag موجود باشد → فیلتر بر اساس آن
-  if (searchParams?.tag) {
+  if (searchParams?.tag && tagExistsInWidget) {
     filters = { tags: [searchParams.tag] }
 
     // در غیر این صورت اگر content.tags حداقل یک tag داشته باشد
-  } else if (content?.tags?.[0]?.value) {
+  } else if (content?.tags?.[0]?.value && tagExistsInWidget) {
     // بررسی می‌کنیم selectedTagId در content.tags موجود باشد
-    const tagExists = content.tags.some((tag) => tag.value === selectedTagId)
-    if (tagExists) {
-      filters = { tags: [selectedTagId] }
-    }
+    filters = { tags: [selectedTagId] }
   }
   /*======== category filter ========*/
   const categoryIds =
