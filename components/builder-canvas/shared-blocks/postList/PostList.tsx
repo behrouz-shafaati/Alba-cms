@@ -8,9 +8,9 @@ import { PostListHeroVertical } from './designs/list/PostListHeroVertical'
 import { PostListSpotlight } from './designs/list/PostListSpotlight'
 import { PostListHeroHorizontal } from './designs/list/PostListHeroHorizontal'
 // import PostListRowLazy from './designs/list/PostListRowLazy'
-// import PostListColumnLazy from './designs/list/PostListColumnLazy'
 import PostListRow from './designs/list/PostListRow'
-import PostListColumn from './designs/list/PostListColumn'
+// import PostListColumn from './designs/list/PostListColumn'
+import PostListColumnLazy from './designs/list/PostListColumnLazy'
 
 type PostListProps = {
   posts: Post[]
@@ -77,7 +77,7 @@ export const PostList = async ({
   switch (settings?.listDesign) {
     case 'column':
       return (
-        <PostListColumn
+        <PostListColumnLazy
           posts={posts}
           blockData={blockData}
           showMoreHref={showMoreHref}

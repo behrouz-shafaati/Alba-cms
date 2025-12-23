@@ -1,7 +1,7 @@
 'use client'
+import { FastLink } from '@/components/FastLink'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
 import { useState } from 'react'
 
 /**
@@ -32,38 +32,42 @@ export default function QueryParamLinks({
   paramKey = 'param',
   items,
   className = '',
-  onTagSelect,
-}: // selectedTag,
-// searchParams,
+}: // searchParams,
 {
   paramKey?: string
-  items: { label: string; slug: string }[]
+  items: { label: string; value: string }[]
   className?: string
   searchParams?: any
-  onTagSelect?: (slug: string) => void // callback از parent
-  selectedTag?: string
 }) {
   const [selectedTag, setSelectedTag] = useState('')
-  let selectedTagExistInItems = items.some((item) => item.slug === selectedTag)
+
+  let selectedTagExistInItems = items.some((item) => item.value === selectedTag)
 
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {items?.map((item, index) => (
-        <Badge
-          key={item.slug}
-          onClick={() => setSelectedTag(item.slug)}
-          variant="outline"
-          className={cn(
-            'p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer px-4',
-            {
-              'bg-primary text-white':
-                (selectedTagExistInItems && item.slug === selectedTag) ||
-                (!selectedTagExistInItems && index == 0),
-            }
-          )}
+        <FastLink
+          href={`?${paramKey}=${item.value}`}
+          key={item.value}
+          scroll={false}
+          data-nprogress="off"
+          onClick={() => setSelectedTag(item.value)}
         >
-          {item.label}
-        </Badge>
+          <Badge
+            key={item.value}
+            variant="outline"
+            className={cn(
+              'p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer px-4',
+              {
+                'bg-primary text-white':
+                  (selectedTagExistInItems && item.value === selectedTag) ||
+                  (!selectedTagExistInItems && index == 0),
+              }
+            )}
+          >
+            {item.label}
+          </Badge>
+        </FastLink>
       ))}
     </div>
   )
