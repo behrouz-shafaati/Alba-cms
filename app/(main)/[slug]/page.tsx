@@ -4,8 +4,8 @@ export const revalidate = 86400 // 24 hours
 // export const dynamic = 'force-dynamic'
 import isSearchParams from '@/lib/utils/isSearchParams'
 import resolveSearchParams from '@/lib/utils/resolveSearchParams'
-import HomePage from '@/pages/Home'
-import SinglePage from '@/pages/SinglePage'
+import HomePage from '@/app/pageComponents/Home'
+import SinglePage from '@/app/pageComponents/SinglePage'
 
 interface PageProps {
   params: { lang?: string; slug: string }

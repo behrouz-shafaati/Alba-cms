@@ -1,3 +1,4 @@
+import 'server-only'
 import AlbaFallback from '@/components/AlbaFallback'
 import { PageRenderer } from '@/components/builder-canvas/pageRenderer'
 import pageCtrl from '@/features/page/controller'
