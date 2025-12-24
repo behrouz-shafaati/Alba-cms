@@ -5,8 +5,7 @@ import { Option } from '@/types'
 import { getPosts } from '@/features/post/actions'
 import { getCategoryAction } from '@/features/category/actions'
 import PostList from './PostList'
-import { getTagAction } from '@/features/tag/actions'
-import { buildUrlFromFilters } from '@/lib/utils'
+import { revalidateTag } from 'next/cache'
 
 type PostListBlockProps = {
   widgetName: string
@@ -84,6 +83,28 @@ export default async function PostListBlock({
     if (categoryIds?.length > 0)
       filters = { categories: categoryIds, ...filters }
   }
+  // const params = new URLSearchParams()
+
+  // filters?.tags?.forEach((tagId) => {
+  //   params.append('tagIds', tagId)
+  // })
+
+  // filters?.categories?.forEach((categoryId) => {
+  //   params.append('categoryIds', categoryId)
+  // })
+
+  // params.set('page', String(1))
+  // params.set('perPage', String(settings?.countOfPosts || 5))
+  // const url = `${
+  //   process.env.NEXT_PUBLIC_SITE_URL
+  // }/api/posts?${params.toString()}`
+  // const res = await fetch(url, {
+  //   next: { tags: ['posts', '_sp_', '_sp_posts'] },
+  // })
+
+  // const data = await res.json()
+
+  // console.log('#2394876 in fetchPost:', data)
 
   const [result] = await Promise.all([
     getPosts({

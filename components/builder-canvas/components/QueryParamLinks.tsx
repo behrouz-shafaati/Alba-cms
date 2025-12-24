@@ -39,9 +39,8 @@ export default function QueryParamLinks({
   className?: string
   searchParams?: any
 }) {
-  let selectedTagExistInItems = items.some(
-    (item) => item.value === searchParams?.tag
-  )
+  const [selected, setSelected] = useState(searchParams?.[paramKey])
+  let selectedTagExistInItems = items.some((item) => item.value === selected)
 
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
@@ -51,6 +50,7 @@ export default function QueryParamLinks({
           key={item.value}
           scroll={false}
           data-nprogress="off"
+          onClick={() => setSelected(item.value)}
         >
           <Badge
             key={item.value}
@@ -59,8 +59,7 @@ export default function QueryParamLinks({
               '!p-2 text-xs text-gray-600 dark:text-gray-100 font-normal cursor-pointer !px-4',
               {
                 'bg-primary text-white':
-                  (selectedTagExistInItems &&
-                    item.value === searchParams?.tag) ||
+                  (selectedTagExistInItems && item.value === selected) ||
                   (!selectedTagExistInItems && index == 0),
               }
             )}

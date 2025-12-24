@@ -10,7 +10,7 @@ import tagCtrl from '../tag/controller'
 import { QueryFind, QueryResult } from '@/lib/entity/core/interface'
 import { Post, PostTranslationSchema } from './interface'
 import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { User } from '../user/interface'
 import { can } from '../../lib/utils/can.server'
 import extractExcerptFromContentJson from '@/lib/utils/extractExcerptFromContentJson'
@@ -90,6 +90,8 @@ export async function createPost(prevState: State, formData: FormData) {
       // این تابع باید یا در همین فایل سرور اکشن یا از طریق api فراخوانی شود. پس محلش نباید تغییر کند.
       revalidatePath(slug)
     }
+
+    revalidateTag('posts')
   } catch (error: any) {
     if (error.message === 'Forbidden') {
       return {
@@ -224,6 +226,7 @@ export async function deletePostsAction(ids: string[]) {
       // این تابع باید یا در همین فایل سرور اکشن یا از طریق api فراخوانی شود. پس محلش نباید تغییر کند.
       revalidatePath(slug)
     }
+    revalidateTag('posts')
     return {
       success: true,
     }

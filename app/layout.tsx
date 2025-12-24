@@ -6,9 +6,9 @@ import { getSettings } from '@/features/settings/controller'
 import { Settings } from '@/features/settings/interface'
 import { getTranslation } from '@/lib/utils'
 import { PageLoadingProgressBar } from '@/components/loading-page-progress-bar'
-import { PageLoadingProgressBarActivator } from '@/components/loading-page-progress-bar-activator'
 import { HydrationDebug } from '@/components/debug/HydrationDebug'
 import { Providers } from './providers'
+import { Suspense } from 'react'
 
 const iransans = localFont({
   src: [
@@ -84,8 +84,9 @@ export default async function RootLayout({
             __html: `(function(){try{var m=document.cookie.match(/theme=(dark|light)/);var t=m?m[1]:'light';if(t==='dark')document.documentElement.classList.add('dark')}catch(e){}})();`,
           }}
         /> */}
-        <PageLoadingProgressBarActivator />
-        <PageLoadingProgressBar />
+        <Suspense fallback={null}>
+          <PageLoadingProgressBar />
+        </Suspense>
         <Providers>
           <main>{children}</main>
           <HydrationDebug />

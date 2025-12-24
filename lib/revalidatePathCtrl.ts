@@ -1,9 +1,7 @@
 import categoryCtrl from '@/features/category/controller'
 import pageCtrl from '@/features/page/controller'
 import postCtrl from '@/features/post/controller'
-
-import fs from 'fs'
-import path from 'path'
+import { revalidateTag } from 'next/cache'
 
 export type RevalidatePathProp = {
   feature:
