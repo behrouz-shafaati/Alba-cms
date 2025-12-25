@@ -1,5 +1,5 @@
 // کامپوننت نمایشی بلاک
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Block } from '../../types'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
@@ -77,15 +77,17 @@ export const PostList = async ({
   switch (settings?.listDesign) {
     case 'column':
       return (
-        <PostListColumn
-          posts={posts}
-          blockData={blockData}
-          showMoreHref={showMoreHref}
-          searchParams={searchParams}
-          randomMap={randomMap}
-          filters={filters}
-          {...props}
-        />
+        <Suspense fallback={<h2>Loading...</h2>}>
+          <PostListColumn
+            posts={posts}
+            blockData={blockData}
+            showMoreHref={showMoreHref}
+            searchParams={searchParams}
+            randomMap={randomMap}
+            filters={filters}
+            {...props}
+          />
+        </Suspense>
       )
     case 'heroVertical':
       return (
