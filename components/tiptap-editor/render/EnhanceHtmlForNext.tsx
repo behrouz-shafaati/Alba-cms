@@ -93,7 +93,7 @@ export default async function EnhanceHtmlForNext({
   return (
     <div className="prose max-w-none">
       {parse(HTML_string, {
-        replace(domNode) {
+        replace: (domNode) => {
           // console.log('#324 domNode.name: ', domNode.name)
           if (domNode instanceof Element && domNode.name === 'img') {
             const id = domNode.attribs.id
