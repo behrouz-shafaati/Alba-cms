@@ -7,9 +7,8 @@ import { MoveLeft } from 'lucide-react'
 import { Block } from '@/components/builder-canvas/types'
 import PostItems from '../card/PostItems'
 import SelectableTags from '@/components/builder-canvas/shared-blocks/postList/SelectableTags'
-import { getPosts } from '@/features/post/actions'
+import { getSlimPostsForPostListAction } from '@/features/post/actions'
 import { FastLink } from '@/components/FastLink'
-// import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
 
 type PostListProps = {
   posts: Post[]
@@ -64,12 +63,12 @@ const PostListColumn = ({
     } else {
       _filters = filters
     }
-    const [result] = await Promise.all([
-      getPosts({
+    const result = await getSlimPostsForPostListAction({
+      payload: {
         filters: _filters,
         pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
-      }),
-    ])
+      },
+    })
     const posts = result.data
     setPosts(posts)
     setLoading(false)

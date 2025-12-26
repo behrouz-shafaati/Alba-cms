@@ -1,5 +1,5 @@
-import ThemeModeSwitchLazy from './ThemeModeSwitchLazy'
+import ThemeModeSwitch from './ThemeModeSwitch'
 
 export const serverRenderThemeModeSwitchDef = {
-  Renderer: ThemeModeSwitchLazy,
+  Renderer: ThemeModeSwitch,
 }
