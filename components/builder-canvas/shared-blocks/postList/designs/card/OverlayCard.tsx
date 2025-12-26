@@ -4,7 +4,6 @@ import { FileTranslationSchema } from '@/lib/entity/file/interface'
 import { timeAgo } from '@/lib/utils'
 import { CalendarPlus, MessageCircleMore } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 type Props = {
   post: Post
@@ -56,7 +55,7 @@ const PostOverlayCard = ({ post, direction = 'row', options }: Props) => {
         objectFit="cover"
         className="transition-transform duration-700 group-hover:scale-110"
         sizes="260px"
-        quality={80}
+        quality={75}
         priority={isLCP} // برای تصویر LCP
         loading={isLCP ? 'eager' : 'lazy'}
         fetchPriority={isLCP ? 'high' : 'auto'}

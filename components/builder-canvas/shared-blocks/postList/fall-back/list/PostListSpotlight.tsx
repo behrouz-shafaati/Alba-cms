@@ -4,11 +4,10 @@ import { Option } from '@/types'
 import { getTranslation } from '@/lib/utils'
 import { Block } from '@/components/builder-canvas/types'
 import PostOverlayCard from '../card/OverlayCard'
+import { Skeleton } from '@/components/ui/skeleton'
+import PostOverlayCardSkeleton from '../../designs/card/skeleton/OverlayCardSkeleton'
 
 type PostListProps = {
-  posts: Post[]
-  showMoreHref: string
-  postItems: any
   blockData: {
     id: string
     type: 'postList'
@@ -22,23 +21,14 @@ type PostListProps = {
       autoplay: boolean
       autoplayDelay: number
     }
-  } & Block
-} & React.HTMLAttributes<HTMLDivElement>
+  }
+}
 
-export const PostListSpotlight = ({
-  posts,
-  showMoreHref,
-  postItems,
-  blockData,
-  ...props
-}: PostListProps) => {
-  if (!posts?.length) return null
+const PostListSpotlightFallback = ({ blockData }: PostListProps) => {
   const { settings, content } = blockData
-  const firstPost = posts[0]
-  const otherPosts = posts.slice(1)
 
   return (
-    <div {...props}>
+    <div>
       {content?.title && (
         <div className="flex flex-row justify-between pb-2 ">
           <div className="py-4">
@@ -48,29 +38,27 @@ export const PostListSpotlight = ({
           </div>
         </div>
       )}
+
       <div className="w-full flex flex-col gap-6 ">
         {/* ---- Featured (اولی) ---- */}
-        <PostOverlayCard
-          post={firstPost}
-          direction="column"
-          options={settings}
-        />
+        <PostOverlayCardSkeleton direction="column" options={settings} />
 
         {/* ---- Grid پایین ---- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {otherPosts.map((post) => {
-            const t = getTranslation({ translations: post.translations })
-            return (
-              <PostOverlayCard
-                key={post.id}
-                post={post}
-                direction="column"
-                options={settings}
-              />
-            )
-          })}
+          {new Array(settings?.countOfPosts - 1 || 6)
+            .fill({})
+            .map((_, index) => {
+              return (
+                <PostOverlayCardSkeleton
+                  key={index}
+                  direction="column"
+                  options={settings}
+                />
+              )
+            })}
         </div>
       </div>
     </div>
   )
 }
+export default PostListSpotlightFallback

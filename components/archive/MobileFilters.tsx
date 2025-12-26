@@ -1,11 +1,12 @@
 'use client'
-import { buildUrlFromFilters, getTranslation } from '@/lib/utils'
 import { Filter } from '../Filter'
 import { useEffect, useRef, useState } from 'react'
 import { Option } from '@/types'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DrawerWidget } from '../DrawerWidget'
 import { Badge } from '../ui/badge'
+import getTranslation from '@/lib/utils/getTranslation'
+import { buildUrlFromFilters } from '@/lib/utils/buildUrlFromFilters'
 
 type Props = {
   allCategories: any

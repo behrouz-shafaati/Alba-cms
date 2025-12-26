@@ -1,9 +1,8 @@
 'use client'
+import { buildUrlFromFilters } from '@/lib/utils/buildUrlFromFilters'
 import { Option } from '@/types'
 import { Trash, X } from 'lucide-react'
 import Link from 'next/link'
-import { Badge } from '../ui/badge'
-import { buildUrlFromFilters } from '@/lib/utils'
 
 type Props = {
   initial: {

@@ -1,15 +1,15 @@
 // کامپوننت نمایشی بلاک
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Block } from '../../types'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
-import { buildUrlFromFilters } from '@/lib/utils'
 import { PostListHeroVertical } from './designs/list/PostListHeroVertical'
 import { PostListSpotlight } from './designs/list/PostListSpotlight'
 import { PostListHeroHorizontal } from './designs/list/PostListHeroHorizontal'
 // import PostListRowLazy from './designs/list/PostListRowLazy'
 import PostListRow from './designs/list/PostListRow'
 import PostListColumn from './designs/list/PostListColumn'
+import { buildUrlFromFilters } from '@/lib/utils/buildUrlFromFilters'
 // import PostListColumnLazy from './designs/list/PostListColumnLazy'
 
 type PostListProps = {
@@ -77,17 +77,15 @@ export const PostList = async ({
   switch (settings?.listDesign) {
     case 'column':
       return (
-        <Suspense fallback={<h2>Loading...</h2>}>
-          <PostListColumn
-            posts={posts}
-            blockData={blockData}
-            showMoreHref={showMoreHref}
-            searchParams={searchParams}
-            randomMap={randomMap}
-            filters={filters}
-            {...props}
-          />
-        </Suspense>
+        <PostListColumn
+          posts={posts}
+          blockData={blockData}
+          showMoreHref={showMoreHref}
+          searchParams={searchParams}
+          randomMap={randomMap}
+          filters={filters}
+          {...props}
+        />
       )
     case 'heroVertical':
       return (

@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-const ArticalHorizontalCardSkeleton = () => {
+const PostHorizontalCardSkeleton = () => {
   const locale = 'fa'
 
   return (
@@ -27,4 +27,4 @@ const ArticalHorizontalCardSkeleton = () => {
   )
 }
 
-export default ArticalHorizontalCardSkeleton
+export default PostHorizontalCardSkeleton

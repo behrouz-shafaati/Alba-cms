@@ -1,14 +1,9 @@
 import React from 'react'
-import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
-import { Block } from '@/components/builder-canvas/types'
-import PostOverlayCard from '../card/OverlayCard'
-import VerticalPostCard from '@/components/post/vertical-card'
+import PostOverlayCardSkeleton from '../../designs/card/skeleton/OverlayCardSkeleton'
+import VerticalPostCardSkeleton from '@/components/post/skeleton/vertical-card-skeleton'
 
 type PostListProps = {
-  posts: Post[]
-  showMoreHref: string
-  postItems: any
   blockData: {
     id: string
     type: 'postList'
@@ -22,28 +17,19 @@ type PostListProps = {
       autoplay: boolean
       autoplayDelay: number
     }
-  } & Block
-} & React.HTMLAttributes<HTMLDivElement>
+  }
+}
 
-export const PostListHeroHorizontal = ({
-  posts,
-  showMoreHref,
-  postItems,
-  blockData,
-  ...props
-}: PostListProps) => {
+const PostListHeroHorizontalFallback = ({ blockData }: PostListProps) => {
   const { settings } = blockData
-  const firstPost = posts[0]
 
   return (
-    <div className="container mx-auto p-4" {...props}>
+    <div className="container mx-auto p-4">
       {/* Layout: desktop: 2col | mobile: stacked */}
       <div className="flex flex-col">
         {/* Right column — active item */}
         <div className=" w-full h-fit overflow-hidden">
-          <PostOverlayCard
-            key={firstPost.id}
-            post={firstPost}
+          <PostOverlayCardSkeleton
             options={{
               showExcerpt: false,
               titleClasses: '!text-4xl',
@@ -66,15 +52,8 @@ export const PostListHeroHorizontal = ({
             }}
           ></div>
           <div className="relative flex flex-col md:flex-row gap-2 justify-center ">
-            {posts.slice(1, 5).map((post) => (
-              <VerticalPostCard
-                key={post.id}
-                post={post}
-                options={{
-                  showExcerpt: settings?.showExcerpt == true ? true : false,
-                }}
-                className={'shadow'}
-              />
+            {Array.from({ length: 4 }).map((_, index) => (
+              <VerticalPostCardSkeleton key={index} />
             ))}
           </div>
         </div>
@@ -82,3 +61,5 @@ export const PostListHeroHorizontal = ({
     </div>
   )
 }
+
+export default PostListHeroHorizontalFallback

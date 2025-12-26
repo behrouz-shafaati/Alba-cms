@@ -20,5 +20,5 @@ export async function GET(req: Request) {
     pagination: { page, perPage },
   })
 
-  return Response.json(result.data)
+  return Response.json(result)
 }

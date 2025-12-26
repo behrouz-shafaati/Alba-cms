@@ -7,13 +7,13 @@ import LeftSliderButton from '@/components/ui/left-slider-button'
 import RightSliderButton from '@/components/ui/right-slider-button'
 import { Option } from '@/types'
 import { Badge } from '@/components/ui/badge'
-import { CalendarPlus, ChevronLeft } from 'lucide-react'
-import { buildUrlFromFilters, timeAgo } from '@/lib/utils'
+import { ChevronLeft } from 'lucide-react'
 import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel'
 import { Block } from '@/components/builder-canvas/types'
 import VerticalPostCard from '@/components/post/vertical-card'
 import Autoplay from 'embla-carousel-autoplay'
 import { FastLink } from '@/components/FastLink'
+import { buildUrlFromFilters } from '@/lib/utils/buildUrlFromFilters'
 
 type BlogPostSliderProps = {
   options?: EmblaOptionsType

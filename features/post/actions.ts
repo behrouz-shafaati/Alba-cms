@@ -10,10 +10,13 @@ import tagCtrl from '../tag/controller'
 import { QueryFind, QueryResult } from '@/lib/entity/core/interface'
 import { Post, PostTranslationSchema } from './interface'
 import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache'
 import { User } from '../user/interface'
 import { can } from '../../lib/utils/can.server'
 import extractExcerptFromContentJson from '@/lib/utils/extractExcerptFromContentJson'
+import getTranslation from '@/lib/utils/getTranslation'
+import fs from 'fs/promises'
+import path from 'path'
 
 const FormSchema = z.object({
   title: z.string({}).nullable(),
@@ -178,6 +181,7 @@ export async function updatePost(
       // این تابع باید یا در همین فایل سرور اکشن یا از طریق api فراخوانی شود. پس محلش نباید تغییر کند.
       revalidatePath(slug)
     }
+    revalidateTag('posts')
     return { message: 'فایل با موفقیت بروز رسانی شد', success: true, values }
   } catch (error: any) {
     if (error.message === 'Forbidden') {
@@ -325,4 +329,101 @@ export async function getPosts(payload: QueryFind): Promise<QueryResult> {
     ...payload,
     filters: { ...filters, status: 'published' },
   })
+}
+
+export const getSlimPostsForPostListAction = async ({
+  payload,
+  lang = 'fa',
+}: {
+  payload: QueryFind
+  lang?: 'fa'
+}): Promise<QueryResult> => {
+  const cacheKey = ['posts', JSON.stringify(payload)]
+
+  return unstable_cache(
+    async () => {
+      const filters: Record<string, any> = { ...(payload.filters ?? {}) }
+
+      if (
+        !Array.isArray(filters.categories) ||
+        filters.categories.length === 0
+      ) {
+        delete filters.categories
+      }
+
+      if (!Array.isArray(filters.tags) || filters.tags.length === 0) {
+        delete filters.tags
+      }
+
+      const result = await postCtrl.find({
+        ...payload,
+        filters: {
+          ...filters,
+          status: 'published',
+        },
+      })
+
+      const slimResult = {
+        ...result,
+        data: result.data.map((post: Post) => {
+          const postTranslation = getTranslation({
+            translations: post.translations,
+          })
+          const imageTranslation = getTranslation({
+            translations: post?.image?.translations,
+          })
+          return {
+            id: post.id,
+            translations: [
+              {
+                lang,
+                title: postTranslation?.title,
+                excerpt: postTranslation?.excerpt,
+                metaDescription: postTranslation?.metaDescription,
+                readingTime: postTranslation?.readingTime,
+              },
+            ],
+            slug: post.slug,
+            image: {
+              translations: [imageTranslation],
+              srcSmall: post?.image?.srcSmall,
+              srcMedium: post?.image?.srcMedium,
+              srcLarge: post?.image?.srcLarge,
+              width: post?.image?.width,
+              height: post?.image?.height,
+              blurDataURL: post?.image?.blurDataURL,
+            },
+            createdAt: post.createdAt,
+            href: post?.href || '#',
+          }
+        }),
+      }
+
+      // 🔍 DEBUG: ذخیره در فایل
+      // try {
+      //   const debugDir = path.join(process.cwd(), '.debug')
+      //   await fs.mkdir(debugDir, { recursive: true })
+
+      //   const filePath = path.join(debugDir, `posts-${Date.now()}.json`)
+
+      //   const json = JSON.stringify(slimResult, null, 2)
+
+      //   await fs.writeFile(filePath, json, 'utf8')
+
+      //   console.log(
+      //     '[getPosts] slimResult size:',
+      //     Buffer.byteLength(json, 'utf8'),
+      //     'bytes'
+      //   )
+      // } catch (err) {
+      //   console.error('[getPosts] debug write failed', err)
+      // }
+
+      return slimResult
+    },
+    cacheKey,
+    {
+      tags: ['posts'],
+    }
+  )()
 }

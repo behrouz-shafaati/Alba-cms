@@ -1,11 +1,11 @@
 // کامپوننت نمایشی بلاک
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Block } from '../../types'
 import { Option } from '@/types'
-import { getPosts } from '@/features/post/actions'
 import { getCategoryAction } from '@/features/category/actions'
 import PostList from './PostList'
-import { revalidateTag } from 'next/cache'
+import PostListFallback from './fall-back/PostListFallback'
+import { getSlimPostsForPostListAction } from '@/features/post/actions'
 
 type PostListBlockProps = {
   widgetName: string
@@ -83,6 +83,8 @@ export default async function PostListBlock({
     if (categoryIds?.length > 0)
       filters = { categories: categoryIds, ...filters }
   }
+
+  /*======== Fetch posts ========*/
   // const params = new URLSearchParams()
 
   // filters?.tags?.forEach((tagId) => {
@@ -99,74 +101,43 @@ export default async function PostListBlock({
   //   process.env.NEXT_PUBLIC_SITE_URL
   // }/api/posts?${params.toString()}`
   // const res = await fetch(url, {
-  //   next: { tags: ['posts', '_sp_', '_sp_posts'] },
+  //   next: { tags: ['posts'] },
   // })
 
-  // const data = await res.json()
+  // const postResult = await res.json()
 
-  // console.log('#2394876 in fetchPost:', data)
-
-  const [result] = await Promise.all([
-    getPosts({
+  const postResult = await getSlimPostsForPostListAction({
+    payload: {
       filters,
       pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
-    }),
-  ])
-  const posts = result.data
+    },
+  })
+
+  // const [result] = await Promise.all([
+  //   getPosts({
+  //     filters,
+  //     pagination: { page: 1, perPage: settings?.countOfPosts || 5 },
+  //   }),
+  // ])
+
+  const posts = postResult?.data
   const randomMap = posts.map(() => Math.random() < 0.1)
-
-  // let queryParams = content?.tags || []
-  // if (settings?.showNewest == true)
-  //   queryParams = [{ label: 'تازه‌ها', slug: '' }, ...queryParams]
-
-  // const tagSlugs = content?.tags?.map((tag: Option) => tag.slug) || []
-  // const categorySlugs =
-  //   content?.categories?.map((category: Option) => category.slug) || []
-  // let showMoreHref = '/archive'
-
-  // if (tagSlugs.length > 0)
-  //   showMoreHref = showMoreHref + '/' + buildUrlFromFilters({ tags: tagSlugs })
-
-  // if (content?.usePageCategory && categorySlug) {
-  //   showMoreHref =
-  //     showMoreHref + '/' + buildUrlFromFilters({ categories: [categorySlug] })
-  // } else {
-  //   if (categorySlugs.length > 0)
-  //     showMoreHref =
-  //       showMoreHref + '/' + buildUrlFromFilters({ categories: categorySlugs })
-  // }
-
-  // if (
-  //   (!settings?.listDesign || settings?.listDesign == 'row') &&
-  //   (!settings?.cardDesign || settings?.cardDesign == 'image-card')
-  // ) {
-  //   console.log('### Rendering ListRowImageCard design ###')
-  //   const PostListRowImageCard = (await import('./designs/ListRowImageCard'))
-  //     .default
-  //   return (
-  //     <PostListRowImageCard
-  //       posts={posts}
-  //       blockData={blockData}
-  //       categorySlug={categorySlug}
-  //       randomMap={randomMap}
-  //       searchParams={searchParams}
-  //       filters={filters}
-  //       showMoreHref={showMoreHref}
-  //       {...props}
-  //     />
-  //   )
-  // }
-
   return (
-    <PostList
-      posts={posts}
-      blockData={blockData}
-      pageSlug={pageSlug}
-      categorySlug={categorySlug}
-      randomMap={randomMap}
-      searchParams={searchParams}
-      filters={filters}
-      {...props}
-    />
+    <Suspense
+      fallback={
+        <PostListFallback blockData={blockData} randomMap={randomMap} />
+      }
+    >
+      <PostList
+        posts={posts}
+        blockData={blockData}
+        pageSlug={pageSlug}
+        categorySlug={categorySlug}
+        randomMap={randomMap}
+        searchParams={searchParams}
+        filters={filters}
+        {...props}
+      />
+    </Suspense>
   )
 }

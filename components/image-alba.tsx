@@ -60,7 +60,7 @@ export function ImageAlba({
           className={` transition-transform duration-200 ${
             zoomable ? 'cursor-zoom-in' : ''
           }`}
-          quality={70}
+          quality={75}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, (max-width: 1536px) 1080px, 1920px"
           // onClick={openZoom}
           priority={isLCP} // برای تصویر LCP
@@ -441,7 +441,7 @@ export function ImageAlba({
 //           className={`object-cover transition-transform duration-200 ${
 //             zoomable ? 'cursor-zoom-in' : ''
 //           }`}
-//           quality={70}
+//           quality={75}
 //           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, (max-width: 1536px) 1080px, 1920px"
 //           onClick={openZoom}
 //           priority={isLCP} // برای تصویر LCP

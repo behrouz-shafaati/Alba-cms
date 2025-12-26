@@ -73,7 +73,6 @@ class controller {
     let finalPathes: string[] = []
 
     switch (feature) {
-      case 'post':
       case 'menu':
       case 'category':
       case 'template':
@@ -86,6 +85,7 @@ class controller {
       case 'page':
         finalPathes = ['/', ...pathes]
         break
+      case 'post':
       case 'postComment':
       case 'formSubmission':
         finalPathes = [...pathes]

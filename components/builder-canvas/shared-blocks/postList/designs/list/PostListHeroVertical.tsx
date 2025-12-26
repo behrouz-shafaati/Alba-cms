@@ -7,7 +7,6 @@ import getTranslation from '@/lib/utils/getTranslation'
 import { Post } from '@/features/post/interface'
 import { Option } from '@/types'
 import { Block } from '@/components/builder-canvas/types'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { FastLink } from '@/components/FastLink'
 
 type PostListProps = {

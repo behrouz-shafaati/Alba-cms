@@ -58,7 +58,7 @@ const PostImageCard = ({ post, options, isLCP = false }: Props) => {
               }
               loading="lazy"
               decoding="async"
-              quality={80}
+              quality={75}
             /> */}
             {post?.image && (
               <Image
@@ -72,7 +72,7 @@ const PostImageCard = ({ post, options, isLCP = false }: Props) => {
                 objectFit="cover"
                 placeholder="blur"
                 blurDataURL={post?.image?.blurDataURL || ''}
-                quality={80}
+                quality={75}
                 priority={isLCP}
                 fetchPriority={isLCP ? 'high' : 'auto'}
                 loading={isLCP ? 'eager' : 'lazy'}

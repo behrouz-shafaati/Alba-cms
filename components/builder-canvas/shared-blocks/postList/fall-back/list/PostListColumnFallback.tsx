@@ -1,17 +1,14 @@
 // کامپوننت نمایشی بلاک
-import React, { Suspense } from 'react'
-import { Post } from '@/features/post/interface'
+import React from 'react'
 import { Option } from '@/types'
 import { MoveLeft } from 'lucide-react'
-import { Block } from '@/components/builder-canvas/types'
-import QueryParamLinks from '@/components/builder-canvas/components/QueryParamLinks'
 import { FastLink } from '@/components/FastLink'
+import SelectableTagsFallBack from '../SelectableTagsFallback'
+import PostItemsFallBack from '../../designs/card/skeleton/PostItemsFallBack'
+import { buildUrlFromFilters } from '@/lib/utils/buildUrlFromFilters'
 
 type PostListProps = {
-  posts: Post[]
-  postItems: any
-  showMoreHref: string
-  searchParams?: any
+  randomMap: boolean[]
   blockData: {
     id: string
     type: 'postList'
@@ -27,28 +24,31 @@ type PostListProps = {
       autoplay: boolean
       autoplayDelay: number
     }
-  } & Block
-} & React.HTMLAttributes<HTMLParagraphElement> // ✅ اجازه‌ی دادن onclick, className و ...
+  }
+}
 
-export const PostListColumn = ({
-  posts,
-  postItems,
-  showMoreHref,
-  blockData,
-  searchParams = {},
-  ...props
-}: PostListProps) => {
-  const locale = 'fa'
-  const { content, settings } = blockData
-  props.className = props?.className
-    ? `${props?.className} w-full h-auto max-w-full`
-    : 'w-full h-auto max-w-full'
+const PostListColumnFallback = ({ blockData, randomMap }: PostListProps) => {
+  const { id, content, settings } = blockData
 
-  // const { onClick, ...restProps } = props
+  const tagSlugs = content?.tags?.map((tag: Option) => tag.slug) || []
+  const categorySlugs =
+    content?.categories?.map((category: Option) => category.slug) || []
+  let showMoreHref = '/archive'
+
+  if (tagSlugs.length > 0)
+    showMoreHref = showMoreHref + '/' + buildUrlFromFilters({ tags: tagSlugs })
+
+  if (content?.usePageCategory) {
+    showMoreHref = showMoreHref + '/' + buildUrlFromFilters({ categories: [] })
+  } else {
+    if (categorySlugs.length > 0)
+      showMoreHref =
+        showMoreHref + '/' + buildUrlFromFilters({ categories: categorySlugs })
+  }
 
   let queryParamLS = content?.tags || []
   if (settings?.showNewest == true)
-    queryParamLS = [{ label: 'تازه‌ها', slug: '' }, ...queryParamLS]
+    queryParamLS = [{ label: 'تازه‌ها', value: '' }, ...queryParamLS]
   return (
     <div
       className=" relative w-full min-h-10  overflow-hidden "
@@ -62,16 +62,11 @@ export const PostListColumn = ({
         </div>
       </div>
       <div className="px-2">
-        <Suspense fallback={<div>در حال بارگذاری...</div>}>
-          <QueryParamLinks
-            items={queryParamLS}
-            className="p-2"
-            paramKey="tag"
-            searchParams={searchParams}
-          />
-        </Suspense>
+        <SelectableTagsFallBack items={queryParamLS} className="p-2" />
         <div className={`mt-2 `}>
-          <div className="grid grid-cols-1 gap-2">{postItems}</div>
+          <div className="grid grid-cols-1 gap-2">
+            <PostItemsFallBack blockData={blockData} randomMap={randomMap} />
+          </div>
           <FastLink
             href={showMoreHref}
             className="text-xs text-gray-600 dark:text-gray-300 font-normal flex flex-row items-center gap-2 w-full text-center justify-center p-4"
@@ -84,3 +79,5 @@ export const PostListColumn = ({
     </div>
   )
 }
+
+export default PostListColumnFallback
