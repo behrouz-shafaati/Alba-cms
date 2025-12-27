@@ -1,14 +1,17 @@
-import { getPosts } from '@/features/post/actions'
-import { getAllCategories } from '@/features/category/actions'
+import { getSlimPostsForPostListAction } from '@/features/post/actions'
+import {
+  getAllCategories,
+  getAllCategoriesSlimAction,
+} from '@/features/category/actions'
 import { DesktopFilters } from './DesktopFilters'
-import { getAllTags } from '@/features/tag/actions'
+import { getAllTags, getAllTagsSlimAction } from '@/features/tag/actions'
 import { Option } from '@/types'
 import { getTranslation } from '@/lib/utils'
 import PostHorizontalCard from '../builder-canvas/shared-blocks/postList/designs/card/ArticalHorizontalCard'
 import { MobileFilters } from './MobileFilters'
 import Pagination from '../ui/pagination'
-import { getSettings } from '@/features/settings/controller'
 import ActiveFilters from './ActiveFilters'
+import { getSettingsAction } from '@/features/settings/actions'
 
 export default async function ArchivePost({
   page = 1,
@@ -43,13 +46,15 @@ export default async function ArchivePost({
     }))
   }
   const [siteSettings, result, allCategories, allTags] = await Promise.all([
-    getSettings(),
-    getPosts({
-      filters: { categories: categoryIds, tags: tagIds },
-      pagination: { page, perPage },
+    getSettingsAction(),
+    getSlimPostsForPostListAction({
+      payload: {
+        filters: { categories: categoryIds, tags: tagIds },
+        pagination: { page, perPage },
+      },
     }),
-    getAllCategories(),
-    getAllTags(),
+    getAllCategoriesSlimAction({}),
+    getAllTagsSlimAction({}),
   ])
   const posts = result.data
   const postItems = posts.map((post) => {

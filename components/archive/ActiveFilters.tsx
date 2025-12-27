@@ -56,7 +56,10 @@ export default function ActiveFilters({ initial }: Props) {
       <div>
         {categories.map((cat) => {
           return (
-            <div className="inline-flex flex-row border p-2 bg-secondary text-gray-800 dark:text-gray-100 gap-2 w-auto rounded-full items-center text-xs m-1 font-light">
+            <div
+              key={cat?.id}
+              className="inline-flex flex-row border p-2 bg-secondary text-gray-800 dark:text-gray-100 gap-2 w-auto rounded-full items-center text-xs m-1 font-light"
+            >
               <span>دسته: {cat.label}</span>
               <Link
                 href={createHref('categories', cat.value)}
@@ -70,7 +73,10 @@ export default function ActiveFilters({ initial }: Props) {
         })}
         {tags.map((tag) => {
           return (
-            <div className="inline-flex flex-row border p-2 bg-secondary text-gray-800 dark:text-gray-100 gap-2 w-auto rounded-full items-center text-xs m-1 font-light">
+            <div
+              key={tag?.id}
+              className="inline-flex flex-row border p-2 bg-secondary text-gray-800 dark:text-gray-100 gap-2 w-auto rounded-full items-center text-xs m-1 font-light"
+            >
               <span>برچسب: {tag.label}</span>
               <Link
                 href={createHref('categories', tag.value)}

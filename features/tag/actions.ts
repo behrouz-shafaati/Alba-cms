@@ -7,10 +7,11 @@ import { Option, Session, State } from '@/types'
 import { Tag, TagTranslationSchema } from './interface'
 import { getSession } from '@/lib/auth/get-session'
 import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_cache } from 'next/cache'
 import { User } from '../user/interface'
 import { can } from '@/lib/utils/can.server'
 import { slugify } from '@/lib/utils'
+import stableHash from 'stable-hash'
 
 const FormSchema = z.object({
   title: z.string({}).min(1, { message: 'لطفا عنوان را وارد کنید.' }),
@@ -227,6 +228,41 @@ export async function deleteTagsAction(ids: string[]) {
 export async function getAllTags(filters: any = {}) {
   return tagCtrl.findAll({ filters })
 }
+
+export async function getAllTagsSlimAction({
+  payload,
+  lang = 'fa',
+}: {
+  payload?: { filters: any }
+  lang?: 'fa'
+}) {
+  const cacheKy = ['tag', stableHash(payload), lang]
+  try {
+    return await unstable_cache(
+      async () => {
+        return tagCtrl.findAllSlim({
+          payload: { filters: payload?.filters || {} },
+          lang,
+        })
+      },
+      cacheKy,
+      {
+        tags: ['tags'],
+      }
+    )()
+  } catch (error) {
+    // fallback امن: اگر cache fail شد
+    console.warn(
+      '[getAllTagsSlimAction] unstable_cache failed, fallback to direct call',
+      error
+    )
+    return tagCtrl.findAllSlim({
+      payload: { filters: payload?.filters || {} },
+      lang,
+    })
+  }
+}
+
 export async function getTagAction({ slug }: { slug: string }) {
   const tagResult = await tagCtrl.find({ filters: { slug } })
   return tagResult.data[0] || null

@@ -7,10 +7,12 @@ import { Option, Session, State } from '@/types'
 import { Category, CategoryTranslationSchema } from './interface'
 import { createCatrgoryBreadcrumb, slugify } from '@/lib/utils'
 import revalidatePathCtrl from '@/lib/revalidatePathCtrl'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_cache } from 'next/cache'
 import { User } from '../user/interface'
 import { can } from '@/lib/utils/can.server'
 import { getSession } from '@/lib/auth/get-session'
+import stableHash from 'stable-hash'
+import getTranslation from '@/lib/utils/getTranslation'
 
 const FormSchema = z.object({
   title: z.string({}).min(1, { message: 'لطفا عنوان را وارد کنید.' }),
@@ -228,6 +230,39 @@ export async function deleteCategorysAction(ids: string[]) {
 
 export async function getAllCategories(filters: any = {}) {
   return categoryCtrl.findAll({ filters })
+}
+export async function getAllCategoriesSlimAction({
+  payload,
+  lang = 'fa',
+}: {
+  payload?: { filters: any }
+  lang?: 'fa'
+}) {
+  const cacheKy = ['category', stableHash(payload), lang]
+  try {
+    return await unstable_cache(
+      async () => {
+        return categoryCtrl.findAllSlim({
+          payload: { filters: payload?.filters || {} },
+          lang,
+        })
+      },
+      cacheKy,
+      {
+        tags: ['categories'],
+      }
+    )()
+  } catch (error) {
+    // fallback امن: اگر cache fail شد
+    console.warn(
+      '[getAllCategoriesSlimAction] unstable_cache failed, fallback to direct call',
+      error
+    )
+    return categoryCtrl.findAllSlim({
+      payload: { filters: payload?.filters || {} },
+      lang,
+    })
+  }
 }
 
 export async function getCategoryAction({ slug }: { slug: string }) {

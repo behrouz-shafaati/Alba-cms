@@ -11,6 +11,7 @@ import taxonomyService from './service'
 import { slugify } from '@/lib/utils'
 import { Taxonomy, TaxonomyType, WpTaxonomyType } from './interface'
 import { buildTaxonomyHref } from './utils'
+import getTranslation from '@/lib/utils/getTranslation'
 
 export default class taxonomyController extends baseController {
   private type: TaxonomyType
@@ -101,6 +102,37 @@ export default class taxonomyController extends baseController {
       ...payload,
       filters: this.standardizationFilters(payload.filters),
     })
+  }
+
+  async findAllSlim({
+    payload,
+    lang,
+  }: {
+    payload: QueryFind
+    lang: 'fa'
+  }): Promise<QueryResponse<any>> {
+    const result = await super.findAll({
+      ...payload,
+      filters: this.standardizationFilters(payload.filters),
+    })
+
+    const slimResult = {
+      ...result,
+      data: result.data.map((taxonomy: Taxonomy) => {
+        const translation = getTranslation({
+          translations: taxonomy.translations,
+          locale: lang,
+        })
+        return {
+          id: taxonomy.id,
+          translations: [{ lang, title: translation.title }],
+          slug: taxonomy.slug,
+          icon: taxonomy?.icon,
+        }
+      }),
+    }
+
+    return slimResult
   }
 
   async create(payload: Create) {
