@@ -2,6 +2,7 @@
 
 // // export const dynamic = 'auto'
 export const dynamic = 'force-static'
+export const revalidate = false
 // export const dynamic = 'force-dynamic'
 
 import React, { cache } from 'react'
@@ -26,11 +27,9 @@ import { getSettings } from '@/features/settings/controller'
 import DefaultSinglePageBlog from '@/features/post/ui/page/single'
 import RendererTemplate from '@/components/builder-canvas/templateRender/RenderTemplate.server'
 import getTranslation from '@/lib/utils/getTranslation'
-// import PostCommentList from '@/features/post-comment/ui/list'
 import TableOfContents from '@/components/post/table-of-contents'
 import PostCommentListLazy from '@/features/post-comment/ui/list/PostCommentListLazy'
 import getReadingTime from '@/lib/utils/getReadingTime'
-// import TableOfContentsLazy from '@/components/post/table-of-contents-lazy'
 
 interface PageProps {
   params: Promise<{ slugs: string[] }>

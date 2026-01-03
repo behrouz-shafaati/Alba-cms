@@ -42,7 +42,7 @@ export function UserNav({ widgetName, blockData, user, ...props }: props) {
         {...res}
       >
         <DropdownMenu dir="rtl">
-          <DropdownMenuTrigger asChild className="cursor-pointer">
+          <DropdownMenuTrigger asChild className="cursor-pointer mx-2 my-[6px]">
             <Image
               src={user?.image?.srcSmall || defaultAvatar}
               height={24}

@@ -9,7 +9,6 @@ import { getSession } from '@/lib/auth/get-session'
 import { can } from '@/lib/utils/can.server'
 import { User } from '@/features/user/interface'
 import { Appearance } from './interface'
-import fileCtrl from '@/lib/entity/file/controller'
 
 const METADATA_KEY = 'appearance'
 

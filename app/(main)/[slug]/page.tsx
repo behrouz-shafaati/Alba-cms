@@ -1,6 +1,6 @@
 export const dynamic = 'force-static'
 // export const dynamicParams = false // صفحه ی جدید با ری ولیدت هم نشان داده نمی شود
-export const revalidate = 86400 // 24 hours
+export const revalidate = false
 // export const dynamic = 'force-dynamic'
 import isSearchParams from '@/lib/utils/isSearchParams'
 import resolveSearchParams from '@/lib/utils/resolveSearchParams'

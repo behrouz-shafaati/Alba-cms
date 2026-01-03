@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import ComboboxInput from '../ui/combobox-input'
 import { useDebouncedCallback } from 'use-debounce'
-import { Trash } from 'lucide-react'
 
 export type Option = {
   value: string

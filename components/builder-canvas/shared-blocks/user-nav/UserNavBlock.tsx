@@ -33,7 +33,7 @@ const UserNavBlock = ({ blockData, ...props }: props) => {
   console.log('#session:', session)
   if (loading) {
     return (
-      <div {...props} className="">
+      <div {...props} className="px-2 py-[6px]">
         <Skeleton className="h-6 w-6 rounded-full" />
       </div>
     )

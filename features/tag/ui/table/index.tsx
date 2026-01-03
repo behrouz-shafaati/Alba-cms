@@ -23,7 +23,7 @@ export default async function TagTable({ query, page }: TagsTableProps) {
     filters = { ...filters, user: user.id }
   }
 
-  const canCreate = await can(user.roles, 'post.create', false)
+  const canCreate = await can(user.roles, 'tag.create', false)
 
   const findResult: QueryResponse<Tag> = await TagCtrl.find({
     filters,

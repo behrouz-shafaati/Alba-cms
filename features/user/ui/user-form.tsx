@@ -75,7 +75,7 @@ export const UserForm: React.FC<ProductFormProps> = ({
   const [loading, setLoading] = useState(false)
   const [imgLoading, setImgLoading] = useState(false)
 
-  const translation = getTranslation({ translations: user.translations })
+  const translation = getTranslation({ translations: user?.translations })
   const [about, setAbout] = useState(translation?.about || '')
   useEffect(() => {
     if (state.message && state.message !== null)
